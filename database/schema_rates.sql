@@ -1,0 +1,12 @@
+USE DB_PARCHEGGIAMO;
+
+INSERT INTO tbl_rates (HOURS_ID, VEHICLE_TYPE_ID, FEE) VALUES
+(1, 1, 300),
+(1, 2, 500),
+(1, 3, 750),
+(1, 4, 800),
+
+(2, 1, 500),
+(2, 2, 800),
+(2, 3, 1100),
+(2, 4, 1300);
