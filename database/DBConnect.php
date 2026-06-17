@@ -2,253 +2,260 @@
 
 define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 
-class SearchService
-{
-    public function searchAccounts($filterBy, $search, $page = 1, $limit = 10)
-    {
-        try {
-            $connect = DB_CONNECT;
+// class AccountModel {
+//     private static ?AccountModel $instance = null;
+//     private mysqli $connect;
+//     private const TABLE = 'tbl_accounts'; 
 
-            $offset = ($page - 1) * $limit;
-            $searchInject = "$search%";
+//     private function __construct()
+//     {
+//         $this->connect = DB_CONNECT;
+//     }
 
-            $query = "
-            SELECT *
-            FROM tbl_accounts
-            WHERE " . $filterBy . " like ?
-            LIMIT ? OFFSET ?
-            ";
+//     public static function getInstance(): AccountModel
+//     {
+//         if (self::$instance === null) {
+//             self::$instance = new AccountModel();
+//         }
 
-            $stmt = $connect->prepare($query);
+//         return self::$instance;
+//     }
 
-            $stmt->bind_param(
-                "sii",
-                $searchInject,
-                $limit,
-                $offset
-            );
+// public function searchAccounts($filterBy, $search, $page = 1, $limit = 10)
+//     {
+//         try {
+//             $connect = DB_CONNECT;
 
-            $stmt->execute();
+//             $offset = ($page - 1) * $limit;
+//             $searchInject = "$search%";
 
-            $results = $stmt->get_result();
-            $rows = $results->fetch_all(MYSQLI_ASSOC);
+//             $query = "
+//             SELECT *
+//             FROM tbl_accounts
+//             WHERE " . $filterBy . " like ?
+//             LIMIT ? OFFSET ?
+//             ";
 
-            $countQuery = "
-            SELECT COUNT(*) as total
-            FROM tbl_accounts
-            WHERE $filterBy LIKE ?
-            ";
+//             $stmt = $connect->prepare($query);
 
-            $countStmt = $connect->prepare($countQuery);
-            $countStmt->bind_param('s', $searchInject);
-            $countStmt->execute();
+//             $stmt->bind_param(
+//                 "sii",
+//                 $searchInject,
+//                 $limit,
+//                 $offset
+//             );
 
-            $total = $countStmt->get_result()->fetch_assoc()['total'];
+//             $stmt->execute();
 
-            return [
-                'status' => true,
-                'message' => 'Searched Account Successfully!',
-                'results' => [
-                    'rows' => $rows,
-                    'page' => $page,
-                    'limit' => $limit,
-                    'totalPages' => ceil($total / $limit),
-                    'totalItems' => $total
-                ]
-            ];
-        } catch (Exception $err) {
-            return [
-                'status' => false,
-                'message' => $err->getMessage(),
-                'results' => []
-            ];
-        };
-    }
+//             $results = $stmt->get_result();
+//             $rows = $results->fetch_all(MYSQLI_ASSOC);
 
-    public function searchVehicles($filterBy, $search, $searchDataType, $page = 1, $limit = 10) {}
+//             $countQuery = "
+//             SELECT COUNT(*) as total
+//             FROM tbl_accounts
+//             WHERE $filterBy LIKE ?
+//             ";
 
-    public function searchHistory() {}
-}
+//             $countStmt = $connect->prepare($countQuery);
+//             $countStmt->bind_param('s', $searchInject);
+//             $countStmt->execute();
 
-class AccountService
-{
-    private const TABLE = 'tbl_accounts';
+//             $total = $countStmt->get_result()->fetch_assoc()['total'];
 
-    public function createAccount($name, $username, $email_address, $gender, $phone, $password, $account_type = 'client', $licence = null)
-    {
-        try {
-            $connect = DB_CONNECT;
-            $query = "
-            INSERT INTO " . self::TABLE . "
-            (name, username, email_address, gender, phone, password, account_type, licence)
-            VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?)
-            ";
+//             return [
+//                 'status' => true,
+//                 'message' => 'Searched Account Successfully!',
+//                 'results' => [
+//                     'rows' => $rows,
+//                     'page' => $page,
+//                     'limit' => $limit,
+//                     'totalPages' => ceil($total / $limit),
+//                     'totalItems' => $total
+//                 ]
+//             ];
+//         } catch (Exception $err) {
+//             return [
+//                 'status' => false,
+//                 'message' => $err->getMessage(),
+//                 'results' => []
+//             ];
+//         };
+//     }
 
-            $stmt = $connect->prepare($query);
+//     public function createAccount($name, $username, $email_address, $gender, $phone, $password, $account_type = 'client', $licence = null)
+//     {
+//         try {
+//             $query = "
+//             INSERT INTO " . self::TABLE . "
+//             (name, username, email_address, gender, phone, password, account_type, licence)
+//             VALUES
+//             (?, ?, ?, ?, ?, ?, ?, ?)
+//             ";
 
-            $stmt->bind_param(
-                "ssssisss",
-                $name,
-                $username,
-                $email_address,
-                $gender,
-                $phone,
-                $password,
-                $account_type,
-                $licence
-            );
+//             $stmt = $this->connect->prepare($query);
 
-            $success = $stmt->execute();
+//             $stmt->bind_param(
+//                 "ssssisss",
+//                 $name,
+//                 $username,
+//                 $email_address,
+//                 $gender,
+//                 $phone,
+//                 $password,
+//                 $account_type,
+//                 $licence
+//             );
 
-            return [
-                'status' => $success,
-                'message' => $success
-                    ? 'Created an account successfully'
-                    : 'Failed to create account',
-                'results' => [
-                    'uid' => $connect->insert_id,
-                    'username' => $username,
-                    'account_type' => $account_type,
-                ]
-            ];
-        } catch (Exception $err) {
-            return [
-                'status' => false,
-                'message' => $err->getMessage(),
-                'results' => []
-            ];
-        };
-    }
+//             $success = $stmt->execute();
 
-    public function editAccount($uid, $name, $username, $email_address, $gender, $phone, $password, $account_type = 'client', $licence = null)
-    {
-        try {
-            $connect = DB_CONNECT;
-            $query = "
-            UPDATE " . self::TABLE . "
-            SET
-                name = ?,
-                username = ?,
-                email_address = ?,
-                gender = ?,
-                phone = ?,
-                password = ?,
-                account_type = ?,
-                licence = ?
-            WHERE uid = ?   
-            ";
+//             return [
+//                 'status' => $success,
+//                 'message' => $success
+//                     ? 'Created an account successfully'
+//                     : 'Failed to create account',
+//                 'results' => [
+//                     'uid' => $this->connect->insert_id,
+//                     'username' => $username,
+//                     'account_type' => $account_type,
+//                 ]
+//             ];
+//         } catch (Exception $err) {
+//             return [
+//                 'status' => false,
+//                 'message' => $err->getMessage(),
+//                 'results' => []
+//             ];
+//         };
+//     }
 
-            $stmt = $connect->prepare($query);
+//     public function editAccount($uid, $name, $username, $email_address, $gender, $phone, $password, $account_type = 'client', $licence = null)
+//     {
+//         try {
+//             $connect = DB_CONNECT;
+//             $query = "
+//             UPDATE " . self::TABLE . "
+//             SET
+//                 name = ?,
+//                 username = ?,
+//                 email_address = ?,
+//                 gender = ?,
+//                 phone = ?,
+//                 password = ?,
+//                 account_type = ?,
+//                 licence = ?
+//             WHERE uid = ?   
+//             ";
 
-            $stmt->bind_param(
-                "ssssisssi",
-                $name,
-                $username,
-                $email_address,
-                $gender,
-                $phone,
-                $password,
-                $account_type,
-                $licence,
-                $uid
-            );
+//             $stmt = $connect->prepare($query);
 
-            $status = $stmt->execute();
+//             $stmt->bind_param(
+//                 "ssssisssi",
+//                 $name,
+//                 $username,
+//                 $email_address,
+//                 $gender,
+//                 $phone,
+//                 $password,
+//                 $account_type,
+//                 $licence,
+//                 $uid
+//             );
 
-            return [
-                'status' => $status && $stmt->affected_rows >= 0,
-                'message' => $status
-                    ? "Edited $username successfully"
-                    : "Edit failed",
-                'results' => [
-                    'uid' => $uid,
-                    'username' => $username,
-                    'account_type' => $account_type,
-                    'rows_affected' => $stmt->affected_rows
-                ]
-            ];
-        } catch (Exception $err) {
-            return [
-                'status' => false,
-                'message' => $err->getMessage(),
-                'results' => []
-            ];
-        };
-    }
+//             $status = $stmt->execute();
 
-    public function deleteAccount($uid)
-    {
-        try {
-            $connect = DB_CONNECT;
-            $query = "
-            DELETE
-            FROM " . self::TABLE . "
-            WHERE uid = ?
-            ";
+//             return [
+//                 'status' => $status && $stmt->affected_rows >= 0,
+//                 'message' => $status
+//                     ? "Edited $username successfully"
+//                     : "Edit failed",
+//                 'results' => [
+//                     'uid' => $uid,
+//                     'username' => $username,
+//                     'account_type' => $account_type,
+//                     'rows_affected' => $stmt->affected_rows
+//                 ]
+//             ];
+//         } catch (Exception $err) {
+//             return [
+//                 'status' => false,
+//                 'message' => $err->getMessage(),
+//                 'results' => []
+//             ];
+//         };
+//     }
 
-            $stmt = $connect->prepare($query);
+//     public function deleteAccount($uid)
+//     {
+//         try {
+//             $connect = DB_CONNECT;
+//             $query = "
+//             DELETE
+//             FROM " . self::TABLE . "
+//             WHERE uid = ?
+//             ";
 
-            $stmt->bind_param(
-                "i",
-                $uid
-            );
+//             $stmt = $connect->prepare($query);
 
-            $stmt->execute();
+//             $stmt->bind_param(
+//                 "i",
+//                 $uid
+//             );
 
-            $status = $stmt->affected_rows > 0;
+//             $stmt->execute();
 
-            return [
-                'status' => $status,
-                'message' => $status
-                    ? "Deleted UID: $uid successfully"
-                    : "No account found for UID: $uid",
-                'results' => [
-                    'uid' => $uid
-                ]
-            ];
-        } catch (Exception $err) {
-            return [
-                'status' => false,
-                'message' => $err->getMessage(),
-                'results' => []
-            ];
-        };
-    }
+//             $status = $stmt->affected_rows > 0;
 
-    public function uploadLicence($uid, $licence)
-    {
-        try {
-            $connect = DB_CONNECT;
-            $query = "
-            UPDATE " . self::TABLE . "
-            SET licence = ?
-            WHERE uid = ?
-            ";
+//             return [
+//                 'status' => $status,
+//                 'message' => $status
+//                     ? "Deleted UID: $uid successfully"
+//                     : "No account found for UID: $uid",
+//                 'results' => [
+//                     'uid' => $uid
+//                 ]
+//             ];
+//         } catch (Exception $err) {
+//             return [
+//                 'status' => false,
+//                 'message' => $err->getMessage(),
+//                 'results' => []
+//             ];
+//         };
+//     }
 
-            $stmt = $connect->prepare($query);
+//     public function uploadLicence($uid, $licence)
+//     {
+//         try {
+//             $connect = DB_CONNECT;
+//             $query = "
+//             UPDATE " . self::TABLE . "
+//             SET licence = ?
+//             WHERE uid = ?
+//             ";
 
-            $stmt->bind_param('si', $licence, $uid);
+//             $stmt = $connect->prepare($query);
 
-            $status = $stmt->execute();
+//             $stmt->bind_param('si', $licence, $uid);
 
-            return [
-                'status' => $status && $stmt->affected_rows >= 0,
-                'message' => $status
-                    ? "Licence updated successfully for UID: $uid"
-                    : "Update failed for UID: $uid",
-                'results' => [
-                    'uid' => $uid
-                ]
-            ];
-        } catch (Exception $err) {
-            return [
-                'status' => false,
-                'message' => $err->getMessage(),
-                'results' => []
-            ];
-        }
-    }
-}
+//             $status = $stmt->execute();
+
+//             return [
+//                 'status' => $status && $stmt->affected_rows >= 0,
+//                 'message' => $status
+//                     ? "Licence updated successfully for UID: $uid"
+//                     : "Update failed for UID: $uid",
+//                 'results' => [
+//                     'uid' => $uid
+//                 ]
+//             ];
+//         } catch (Exception $err) {
+//             return [
+//                 'status' => false,
+//                 'message' => $err->getMessage(),
+//                 'results' => []
+//             ];
+//         }
+//     }
+// }
 
 class VehicleService {}
