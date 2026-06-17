@@ -4,7 +4,7 @@ class AccountModel
 {
     private static ?AccountModel $instance = null;
     private mysqli $connect;
-    private const TABLE = 'tbl_accounts';
+    public const TABLE = 'tbl_accounts';
 
     private function __construct()
     {

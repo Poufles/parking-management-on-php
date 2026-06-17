@@ -6,7 +6,7 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 // {
 //     private static ?AccountModel $instance = null;
 //     private mysqli $connect;
-//     private const TABLE = 'tbl_accounts';
+//     public const TABLE = 'tbl_accounts';
 
 //     private function __construct()
 //     {
@@ -73,7 +73,7 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //             SELECT COUNT(*) as total
 //             FROM tbl_accounts
 //             $where
-//         ";
+//             ";
 
 //             $countStmt = $this->connect->prepare($countQuery);
 
@@ -107,13 +107,14 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //         }
 //     }
 
-//     public function loginAccount($username, $password) {
+//     public function loginAccount($username, $password)
+//     {
 //         try {
 //             $query = "
 //             SELECT uid, username, password, account_type
 //             FROM " . self::TABLE . "
 //             WHERE username = ?
-//             "; 
+//             ";
 
 //             $stmt = $this->connect->prepare($query);
 //             $stmt->bind_param("s", $username);
@@ -351,7 +352,7 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 // {
 //     private static ?VehicleModel $instance = null;
 //     private mysqli $connect;
-//     private const TABLE = 'tbl_accounts';
+//     public const TABLE = 'tbl_vehicles';
 
 //     private function __construct()
 //     {
@@ -370,93 +371,279 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //     public function searchVehicles($filterBy, $search, $page = 1, $limit = 10)
 //     {
 //         try {
-//             $connect = DB_CONNECT;
-
 //             $offset = ($page - 1) * $limit;
-//             $searchValue = $search . "%";
 
-//             $query = "
-//         SELECT
-//             v.vehicle_id as vehicle_id,
-//             a.name as name,
-//             v.plate_number as plate_number,
-//             vt.vehicle_type as vehicle_type
-//         FROM tbl_vehicles v
-//         INNER JOIN tbl_accounts a
-//             ON v.uid = a.uid
-//         INNER JOIN tbl_vehicle_types vt
-//             ON v.vehicle_type_id = vt.vehicle_type_id
-//         ";
+//             $allowedFilters = [
+//                 'username',
+//                 'plate_number',
+//                 'vehicle_type'
+//             ];
 
-//             if (empty($filterBy)) {
-//                 $query .= "
-//             WHERE
-//                 a.username LIKE ?
+//             $where = "";
+//             $params = [];
+//             $types = "";
+
+//             if (!empty($search)) {
+
+//                 $searchInject = "%" . $search . "%";
+
+//                 if (!empty($filterBy) && in_array($filterBy, $allowedFilters)) {
+
+//                     switch ($filterBy) {
+//                         case 'username':
+//                             $column = 'a.username';
+//                             break;
+
+//                         case 'plate_number':
+//                             $column = 'v.plate_number';
+//                             break;
+
+//                         case 'vehicle_type':
+//                             $column = 'vt.vehicle_type';
+//                             break;
+//                     }
+
+//                     $where = "WHERE {$column} LIKE ?";
+//                     $params[] = $searchInject;
+//                     $types .= "s";
+//                 } else {
+
+//                     $where = "
+//                 WHERE a.username LIKE ?
 //                 OR v.plate_number LIKE ?
 //                 OR vt.vehicle_type LIKE ?
-//             ";
-//             } else {
-//                 switch ($filterBy) {
-//                     case 'username':
-//                         $column = 'a.username';
-//                         break;
+//                 ";
 
-//                     case 'plate_number':
-//                         $column = 'v.plate_number';
-//                         break;
+//                     $params = [
+//                         $searchInject,
+//                         $searchInject,
+//                         $searchInject
+//                     ];
 
-//                     case 'vehicle_type':
-//                         $column = 'vt.vehicle_type';
-//                         break;
-
-//                     default:
-//                         throw new Exception("Invalid filter.");
+//                     $types .= "sss";
 //                 }
-
-//                 $query .= " WHERE {$column} LIKE ? ";
 //             }
 
-//             $query .= " LIMIT ? OFFSET ? ";
+//             $query = "
+//             SELECT
+//                 v.vehicle_id as vehicle_id,
+//                 a.uid as uid,
+//                 a.name as name,
+//                 v.plate_number as plate_number,
+//                 vt.vehicle_type as vehicle_type
+//             FROM ". self::TABLE ." v
+//             INNER JOIN ". AccountModel::getInstance()::TABLE ." a
+//                 ON v.uid = a.uid
+//             INNER JOIN tbl_vehicle_types vt
+//                 ON v.vehicle_type_id = vt.vehicle_type_id
+//             $where
+//             LIMIT ? OFFSET ?
+//             ";
 
-//             $stmt = $connect->prepare($query);
+//             $params[] = $limit;
+//             $params[] = $offset;
+//             $types .= "ii";
 
-//             if (empty($filterBy)) {
-//                 $stmt->bind_param(
-//                     "sssii",
-//                     $searchValue,
-//                     $searchValue,
-//                     $searchValue,
-//                     $limit,
-//                     $offset
-//                 );
-//             } else {
-//                 $stmt->bind_param(
-//                     "sii",
-//                     $searchValue,
-//                     $limit,
-//                     $offset
-//                 );
+//             $stmt = $this->connect->prepare($query);
+//             $stmt->bind_param($types, ...$params);
+
+//             $stmt->execute();
+//             $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+//             // Count query
+//             $countQuery = "
+//             SELECT COUNT(*) AS total
+//             FROM tbl_vehicles v
+//             INNER JOIN ". AccountModel::getInstance()::TABLE ." a
+//                 ON v.uid = a.uid
+//             INNER JOIN tbl_vehicle_types vt
+//                 ON v.vehicle_type_id = vt.vehicle_type_id
+//             $where
+//             ";
+
+//             $countStmt = $this->connect->prepare($countQuery);
+
+//             $countParams = array_slice($params, 0, -2);
+//             $countTypes = substr($types, 0, -2);
+
+//             if (!empty($countParams)) {
+//                 $countStmt->bind_param($countTypes, ...$countParams);
 //             }
 
-//             $success = $stmt->execute();
-
-//             if (!$success) {
-//                 throw new Exception($stmt->error);
-//             }
-
-//             $result = $stmt->get_result();
+//             $countStmt->execute();
+//             $total = $countStmt->get_result()->fetch_assoc()['total'];
 
 //             return [
 //                 'status' => true,
-//                 'message' => 'Vehicles retrieved successfully.',
+//                 'message' => 'Vehicles fetched successfully',
 //                 'results' => [
-//                     'rows' => $result->fetch_all(MYSQLI_ASSOC),
+//                     'rows' => $rows,
+//                     'page' => $page,
+//                     'limit' => $limit,
+//                     'totalPages' => ceil($total / $limit),
+//                     'totalItems' => $total
 //                 ]
 //             ];
-//         } catch (Exception $e) {
+//         } catch (Exception $err) {
 //             return [
 //                 'status' => false,
-//                 'message' => $e->getMessage()
+//                 'message' => $err->getMessage(),
+//                 'results' => []
+//             ];
+//         }
+//     }
+// }
+
+// class ParkingModel
+// {
+//     private static ?ParkingModel $instance = null;
+//     private mysqli $connect;
+//     public const TABLE = 'tbl_slots';
+
+//     private function __construct()
+//     {
+//         $this->connect = DB_CONNECT;
+//     }
+
+//     public static function getInstance(): ParkingModel
+//     {
+//         if (self::$instance === null) {
+//             self::$instance = new ParkingModel();
+//         }
+
+//         return self::$instance;
+//     }
+
+//     public function searchParkingSlots($filterBy, $search, $page = 1, $limit = 10)
+//     {
+//         try {
+//             $offset = ($page - 1) * $limit;
+
+//             $allowedFilters = [
+//                 'slot_id',
+//                 'plate_number',
+//                 'username',
+//                 'vehicle_type'
+//             ];
+
+//             $where = "";
+//             $params = [];
+//             $types = "";
+
+//             if (!empty($search)) {
+//                 $searchInject = "%" . $search . "%";
+
+//                 if (!empty($filterBy) && in_array($filterBy, $allowedFilters)) {
+//                     switch ($filterBy) {
+//                         case 'slot_id':
+//                             $column = 's.slot_id';
+//                             break;
+//                         case 'plate_number':
+//                             $column = 'v.plate_number';
+//                             break;
+//                         case 'username':
+//                             $column = 'a.username';
+//                             break;
+//                         case 'vehicle_type':
+//                             $column = 'vt.vehicle_type';
+//                             break;
+//                     }
+
+//                     $where = "WHERE {$column} LIKE ?";
+//                     $params[] = $searchInject;
+//                     $types .= "s";
+//                 } else {
+//                     $where = "
+//                     WHERE s.slot_id LIKE ?
+//                        OR v.plate_number LIKE ?
+//                        OR a.username LIKE ?
+//                        OR vt.vehicle_type LIKE ?
+//                 ";
+
+//                     $params = [
+//                         $searchInject,
+//                         $searchInject,
+//                         $searchInject,
+//                         $searchInject
+//                     ];
+//                     $types .= "ssss";
+//                 }
+//             }
+
+//             $query = "
+//             SELECT
+//                 CONCAT(s.level, ' - ', s.section, s.slot_number) as slot_id,
+//                 s.level,
+//                 s.section,
+//                 s.slot_number,
+//                 s.vehicle_id,
+//                 s.time_in,
+//                 s.time_out,
+//                 v.plate_number,
+//                 a.username,
+//                 a.name,
+//                 vt.vehicle_type,
+//                 CASE 
+//                     WHEN s.vehicle_id IS NOT NULL AND s.time_out IS NULL THEN 'occupied'
+//                     WHEN s.vehicle_id IS NOT NULL THEN 'completed'
+//                     ELSE 'available'
+//                 END as status
+//             FROM tbl_slots s
+//             LEFT JOIN " . VehicleModel::getInstance()::TABLE . " v ON s.vehicle_id = v.vehicle_id
+//             LEFT JOIN " . AccountModel::getInstance()::TABLE . " a ON v.uid = a.uid
+//             LEFT JOIN tbl_vehicle_types vt ON v.vehicle_type_id = vt.vehicle_type_id
+//             $where
+//             ORDER BY s.level, s.section, s.slot_number
+//             LIMIT ? OFFSET ?
+//             ";
+
+//             $params[] = $limit;
+//             $params[] = $offset;
+//             $types .= "ii";
+
+//             $stmt = $this->connect->prepare($query);
+//             $stmt->bind_param($types, ...$params);
+
+//             $stmt->execute();
+//             $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+//             $countQuery = "
+//             SELECT COUNT(*) AS total
+//             FROM tbl_slots s
+//             LEFT JOIN " . VehicleModel::getInstance()::TABLE . " v ON s.vehicle_id = v.vehicle_id
+//             LEFT JOIN " . AccountModel::getInstance()::TABLE . " a ON v.uid = a.uid
+//             LEFT JOIN tbl_vehicle_types vt ON v.vehicle_type_id = vt.vehicle_type_id
+//             $where
+//             ";
+
+//             $countStmt = $this->connect->prepare($countQuery);
+
+//             $countParams = array_slice($params, 0, -2);
+//             $countTypes = substr($types, 0, -2);
+
+//             if (!empty($countParams)) {
+//                 $countStmt->bind_param($countTypes, ...$countParams);
+//             }
+
+//             $countStmt->execute();
+//             $total = $countStmt->get_result()->fetch_assoc()['total'];
+
+//             return [
+//                 'status' => true,
+//                 'message' => 'Parking slots fetched successfully',
+//                 'results' => [
+//                     'rows' => $rows,
+//                     'page' => $page,
+//                     'limit' => $limit,
+//                     'totalPages' => ceil($total / $limit),
+//                     'totalItems' => $total
+//                 ]
+//             ];
+//         } catch (Exception $err) {
+//             return [
+//                 'status' => false,
+//                 'message' => $err->getMessage(),
+//                 'results' => []
 //             ];
 //         }
 //     }

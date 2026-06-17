@@ -69,6 +69,33 @@ return [
         'page' => 'manage-vehicles',
         'title' => TITLE . "Manage Vehicles"
     ],
+    'admin/parking-slots' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/parking-slots.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/ParkingModel.php"
+        ],
+        'action' => 'ParkingSlotsController',
+        'view' => __DIR__ . "/../app/views/admin/parking-slots.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'parking-slots',
+        'title' => TITLE . "Parking Slots"
+    ],
+    'admin/rates' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/manage-rates.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+        ],
+        'action' => 'ManageRatesController',
+        'view' => __DIR__ . "/../app/views/admin/manage-rates.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'manage-rates',
+        'title' => TITLE . "Manage Rates"
+    ],
     'error404' => [
         'controller' => __DIR__ . "/../app/controllers/pages/error-404.php",
         'action' => 'Error404Controller',

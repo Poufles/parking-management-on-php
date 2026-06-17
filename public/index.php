@@ -52,8 +52,15 @@ $response = $action();
         </div>
         <div class="block">
             <span>Vehicles</span>
-            <a href="<?= APP_URL . "client/vehicles" ?>">Show Client Vehicles</a>
-
+            <a href="<?= APP_URL . "client/vehicles" ?>">Vehicles (Client View)</a>
+        </div>
+        <div class="block">
+            <span>Parking Slots</span>
+            <a href="<?= APP_URL . "admin/parking-slots" ?>">Parking Slots (Admin View)</a>
+        </div>
+        <div class="block">
+            <span>Rates</span>
+            <a href="<?= APP_URL . "admin/rates" ?>">Show Rates</a>
         </div>
     </nav>
     <main>
