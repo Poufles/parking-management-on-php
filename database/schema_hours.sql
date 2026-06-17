@@ -1,0 +1,5 @@
+USE DB_PARCHEGGIAMO;
+
+INSERT INTO tbl_hours (HOURS) VALUES
+(12),
+(24);
