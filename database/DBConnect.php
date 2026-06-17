@@ -25,8 +25,6 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //     public function searchAccounts($filterBy, $search, $page = 1, $limit = 10)
 //     {
 //         try {
-//             $connect = DB_CONNECT;
-
 //             $offset = ($page - 1) * $limit;
 
 //             $allowedFilters = ['name', 'username', 'email_address', 'phone', 'gender'];
@@ -35,7 +33,6 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //             $params = [];
 //             $types = "";
 
-//             // SEARCH LOGIC
 //             if (!empty($search)) {
 
 //                 $searchInject = "%" . $search . "%";
@@ -66,7 +63,7 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //             $params[] = $offset;
 //             $types .= "ii";
 
-//             $stmt = $connect->prepare($query);
+//             $stmt = $this->connect->prepare($query);
 //             $stmt->bind_param($types, ...$params);
 
 //             $stmt->execute();
@@ -78,7 +75,7 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //             $where
 //         ";
 
-//             $countStmt = $connect->prepare($countQuery);
+//             $countStmt = $this->connect->prepare($countQuery);
 
 //             $countParams = array_slice($params, 0, -2);
 //             $countTypes = substr($types, 0, -2);
@@ -99,6 +96,41 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //                     'limit' => $limit,
 //                     'totalPages' => ceil($total / $limit),
 //                     'totalItems' => $total
+//                 ]
+//             ];
+//         } catch (Exception $err) {
+//             return [
+//                 'status' => false,
+//                 'message' => $err->getMessage(),
+//                 'results' => []
+//             ];
+//         }
+//     }
+
+//     public function loginAccount($username, $password) {
+//         try {
+//             $query = "
+//             SELECT uid, username, password, account_type
+//             FROM " . self::TABLE . "
+//             WHERE username = ?
+//             "; 
+
+//             $stmt = $this->connect->prepare($query);
+//             $stmt->bind_param("s", $username);
+
+//             $success = $stmt->execute();
+//             $results = $stmt->get_result();
+//             $row = $results->fetch_assoc();
+
+//             return [
+//                 'status' => $success,
+//                 'message' => $success
+//                     ? 'Created an account successfully'
+//                     : 'Failed to create account',
+//                 'results' => [
+//                     'uid' => $this->connect->insert_id,
+//                     'username' => $row['username'],
+//                     'account_type' => $row['account_type'],
 //                 ]
 //             ];
 //         } catch (Exception $err) {
@@ -159,7 +191,6 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //     public function editAccount($uid, $name, $username, $email_address, $gender, $phone)
 //     {
 //         try {
-//             $connect = DB_CONNECT;
 //             $query = "
 //             UPDATE " . self::TABLE . "
 //             SET
@@ -171,7 +202,7 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //             WHERE uid = ?   
 //             ";
 
-//             $stmt = $connect->prepare($query);
+//             $stmt = $this->connect->prepare($query);
 
 //             $stmt->bind_param(
 //                 "sssssi",
@@ -208,14 +239,13 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //     public function editAccountPassword($uid, $newPassword)
 //     {
 //         try {
-//             $connect = DB_CONNECT;
 //             $query = "
 //             UPDATE " . self::TABLE . "
 //             SET password = ?
 //             WHERE uid = ?   
 //             ";
 
-//             $stmt = $connect->prepare($query);
+//             $stmt = $this->connect->prepare($query);
 
 //             $stmt->bind_param(
 //                 "si",
@@ -247,14 +277,13 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //     public function deleteAccount($uid)
 //     {
 //         try {
-//             $connect = DB_CONNECT;
 //             $query = "
 //             DELETE
 //             FROM " . self::TABLE . "
 //             WHERE uid = ?
 //             ";
 
-//             $stmt = $connect->prepare($query);
+//             $stmt = $this->connect->prepare($query);
 
 //             $stmt->bind_param(
 //                 "i",
@@ -286,14 +315,13 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //     public function uploadLicence($uid, $licence)
 //     {
 //         try {
-//             $connect = DB_CONNECT;
 //             $query = "
 //             UPDATE " . self::TABLE . "
 //             SET licence = ?
 //             WHERE uid = ?
 //             ";
 
-//             $stmt = $connect->prepare($query);
+//             $stmt = $this->connect->prepare($query);
 
 //             $stmt->bind_param('si', $licence, $uid);
 
@@ -318,4 +346,118 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //     }
 // }
 
-class VehicleService {}
+
+// class VehicleModel
+// {
+//     private static ?VehicleModel $instance = null;
+//     private mysqli $connect;
+//     private const TABLE = 'tbl_accounts';
+
+//     private function __construct()
+//     {
+//         $this->connect = DB_CONNECT;
+//     }
+
+//     public static function getInstance(): VehicleModel
+//     {
+//         if (self::$instance === null) {
+//             self::$instance = new VehicleModel();
+//         }
+
+//         return self::$instance;
+//     }
+
+//     public function searchVehicles($filterBy, $search, $page = 1, $limit = 10)
+//     {
+//         try {
+//             $connect = DB_CONNECT;
+
+//             $offset = ($page - 1) * $limit;
+//             $searchValue = $search . "%";
+
+//             $query = "
+//         SELECT
+//             v.vehicle_id as vehicle_id,
+//             a.name as name,
+//             v.plate_number as plate_number,
+//             vt.vehicle_type as vehicle_type
+//         FROM tbl_vehicles v
+//         INNER JOIN tbl_accounts a
+//             ON v.uid = a.uid
+//         INNER JOIN tbl_vehicle_types vt
+//             ON v.vehicle_type_id = vt.vehicle_type_id
+//         ";
+
+//             if (empty($filterBy)) {
+//                 $query .= "
+//             WHERE
+//                 a.username LIKE ?
+//                 OR v.plate_number LIKE ?
+//                 OR vt.vehicle_type LIKE ?
+//             ";
+//             } else {
+//                 switch ($filterBy) {
+//                     case 'username':
+//                         $column = 'a.username';
+//                         break;
+
+//                     case 'plate_number':
+//                         $column = 'v.plate_number';
+//                         break;
+
+//                     case 'vehicle_type':
+//                         $column = 'vt.vehicle_type';
+//                         break;
+
+//                     default:
+//                         throw new Exception("Invalid filter.");
+//                 }
+
+//                 $query .= " WHERE {$column} LIKE ? ";
+//             }
+
+//             $query .= " LIMIT ? OFFSET ? ";
+
+//             $stmt = $connect->prepare($query);
+
+//             if (empty($filterBy)) {
+//                 $stmt->bind_param(
+//                     "sssii",
+//                     $searchValue,
+//                     $searchValue,
+//                     $searchValue,
+//                     $limit,
+//                     $offset
+//                 );
+//             } else {
+//                 $stmt->bind_param(
+//                     "sii",
+//                     $searchValue,
+//                     $limit,
+//                     $offset
+//                 );
+//             }
+
+//             $success = $stmt->execute();
+
+//             if (!$success) {
+//                 throw new Exception($stmt->error);
+//             }
+
+//             $result = $stmt->get_result();
+
+//             return [
+//                 'status' => true,
+//                 'message' => 'Vehicles retrieved successfully.',
+//                 'results' => [
+//                     'rows' => $result->fetch_all(MYSQLI_ASSOC),
+//                 ]
+//             ];
+//         } catch (Exception $e) {
+//             return [
+//                 'status' => false,
+//                 'message' => $e->getMessage()
+//             ];
+//         }
+//     }
+// }

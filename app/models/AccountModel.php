@@ -71,7 +71,7 @@ class AccountModel
             SELECT COUNT(*) as total
             FROM tbl_accounts
             $where
-        ";
+            ";
 
             $countStmt = $this->connect->prepare($countQuery);
 
@@ -105,13 +105,14 @@ class AccountModel
         }
     }
 
-    public function loginAccount($username, $password) {
+    public function loginAccount($username, $password)
+    {
         try {
             $query = "
             SELECT uid, username, password, account_type
             FROM " . self::TABLE . "
             WHERE username = ?
-            "; 
+            ";
 
             $stmt = $this->connect->prepare($query);
             $stmt->bind_param("s", $username);
