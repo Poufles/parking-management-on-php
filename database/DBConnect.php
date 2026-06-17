@@ -2,10 +2,11 @@
 
 define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 
-// class AccountModel {
+// class AccountModel
+// {
 //     private static ?AccountModel $instance = null;
 //     private mysqli $connect;
-//     private const TABLE = 'tbl_accounts'; 
+//     private const TABLE = 'tbl_accounts';
 
 //     private function __construct()
 //     {
@@ -21,50 +22,77 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //         return self::$instance;
 //     }
 
-// public function searchAccounts($filterBy, $search, $page = 1, $limit = 10)
+//     public function searchAccounts($filterBy, $search, $page = 1, $limit = 10)
 //     {
 //         try {
 //             $connect = DB_CONNECT;
 
 //             $offset = ($page - 1) * $limit;
-//             $searchInject = "$search%";
 
+//             $allowedFilters = ['name', 'username', 'email_address', 'phone', 'gender'];
+
+//             $where = "";
+//             $params = [];
+//             $types = "";
+
+//             // SEARCH LOGIC
+//             if (!empty($search)) {
+
+//                 $searchInject = "%" . $search . "%";
+
+//                 if (!empty($filterBy) && in_array($filterBy, $allowedFilters)) {
+//                     $where = "WHERE $filterBy LIKE ?";
+//                     $params[] = $searchInject;
+//                     $types .= "s";
+//                 } else {
+//                     $where = "WHERE name LIKE ? 
+//                           OR username LIKE ? 
+//                           OR email_address LIKE ?";
+
+//                     $params = [$searchInject, $searchInject, $searchInject];
+//                     $types .= "sss";
+//                 }
+//             }
+
+//             // MAIN QUERY
 //             $query = "
 //             SELECT *
 //             FROM tbl_accounts
-//             WHERE " . $filterBy . " like ?
+//             $where
 //             LIMIT ? OFFSET ?
-//             ";
+//         ";
+
+//             $params[] = $limit;
+//             $params[] = $offset;
+//             $types .= "ii";
 
 //             $stmt = $connect->prepare($query);
-
-//             $stmt->bind_param(
-//                 "sii",
-//                 $searchInject,
-//                 $limit,
-//                 $offset
-//             );
+//             $stmt->bind_param($types, ...$params);
 
 //             $stmt->execute();
-
-//             $results = $stmt->get_result();
-//             $rows = $results->fetch_all(MYSQLI_ASSOC);
+//             $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
 //             $countQuery = "
 //             SELECT COUNT(*) as total
 //             FROM tbl_accounts
-//             WHERE $filterBy LIKE ?
-//             ";
+//             $where
+//         ";
 
 //             $countStmt = $connect->prepare($countQuery);
-//             $countStmt->bind_param('s', $searchInject);
-//             $countStmt->execute();
 
+//             $countParams = array_slice($params, 0, -2);
+//             $countTypes = substr($types, 0, -2);
+
+//             if (!empty($countParams)) {
+//                 $countStmt->bind_param($countTypes, ...$countParams);
+//             }
+
+//             $countStmt->execute();
 //             $total = $countStmt->get_result()->fetch_assoc()['total'];
 
 //             return [
 //                 'status' => true,
-//                 'message' => 'Searched Account Successfully!',
+//                 'message' => 'Accounts fetched successfully',
 //                 'results' => [
 //                     'rows' => $rows,
 //                     'page' => $page,
@@ -79,7 +107,7 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //                 'message' => $err->getMessage(),
 //                 'results' => []
 //             ];
-//         };
+//         }
 //     }
 
 //     public function createAccount($name, $username, $email_address, $gender, $phone, $password, $account_type = 'client', $licence = null)
@@ -95,7 +123,7 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //             $stmt = $this->connect->prepare($query);
 
 //             $stmt->bind_param(
-//                 "ssssisss",
+//                 "ssssssss",
 //                 $name,
 //                 $username,
 //                 $email_address,
@@ -128,7 +156,7 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //         };
 //     }
 
-//     public function editAccount($uid, $name, $username, $email_address, $gender, $phone, $password, $account_type = 'client', $licence = null)
+//     public function editAccount($uid, $name, $username, $email_address, $gender, $phone)
 //     {
 //         try {
 //             $connect = DB_CONNECT;
@@ -139,25 +167,19 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //                 username = ?,
 //                 email_address = ?,
 //                 gender = ?,
-//                 phone = ?,
-//                 password = ?,
-//                 account_type = ?,
-//                 licence = ?
+//                 phone = ?
 //             WHERE uid = ?   
 //             ";
 
 //             $stmt = $connect->prepare($query);
 
 //             $stmt->bind_param(
-//                 "ssssisssi",
+//                 "sssssi",
 //                 $name,
 //                 $username,
 //                 $email_address,
 //                 $gender,
 //                 $phone,
-//                 $password,
-//                 $account_type,
-//                 $licence,
 //                 $uid
 //             );
 
@@ -171,7 +193,6 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //                 'results' => [
 //                     'uid' => $uid,
 //                     'username' => $username,
-//                     'account_type' => $account_type,
 //                     'rows_affected' => $stmt->affected_rows
 //                 ]
 //             ];
@@ -182,6 +203,45 @@ define('DB_CONNECT', new mysqli('localhost', 'root', '', 'DB_PARCHEGGIAMO'));
 //                 'results' => []
 //             ];
 //         };
+//     }
+
+//     public function editAccountPassword($uid, $newPassword)
+//     {
+//         try {
+//             $connect = DB_CONNECT;
+//             $query = "
+//             UPDATE " . self::TABLE . "
+//             SET password = ?
+//             WHERE uid = ?   
+//             ";
+
+//             $stmt = $connect->prepare($query);
+
+//             $stmt->bind_param(
+//                 "si",
+//                 $newPassword,
+//                 $uid
+//             );
+
+//             $status = $stmt->execute();
+
+//             return [
+//                 'status' => $status && $stmt->affected_rows >= 0,
+//                 'message' => $status
+//                     ? "Edited password successfully"
+//                     : "Edit failed",
+//                 'results' => [
+//                     'uid' => $uid,
+//                     'rows_affected' => $stmt->affected_rows
+//                 ]
+//             ];
+//         } catch (Exception $err) {
+//             return [
+//                 'status' => false,
+//                 'message' => $err->getMessage(),
+//                 'results' => []
+//             ];
+//         }
 //     }
 
 //     public function deleteAccount($uid)

@@ -23,8 +23,6 @@ class AccountModel
     public function searchAccounts($filterBy, $search, $page = 1, $limit = 10)
     {
         try {
-            $connect = DB_CONNECT;
-
             $offset = ($page - 1) * $limit;
 
             $allowedFilters = ['name', 'username', 'email_address', 'phone', 'gender'];
@@ -33,7 +31,6 @@ class AccountModel
             $params = [];
             $types = "";
 
-            // SEARCH LOGIC
             if (!empty($search)) {
 
                 $searchInject = "%" . $search . "%";
@@ -64,7 +61,7 @@ class AccountModel
             $params[] = $offset;
             $types .= "ii";
 
-            $stmt = $connect->prepare($query);
+            $stmt = $this->connect->prepare($query);
             $stmt->bind_param($types, ...$params);
 
             $stmt->execute();
@@ -76,7 +73,7 @@ class AccountModel
             $where
         ";
 
-            $countStmt = $connect->prepare($countQuery);
+            $countStmt = $this->connect->prepare($countQuery);
 
             $countParams = array_slice($params, 0, -2);
             $countTypes = substr($types, 0, -2);
@@ -97,6 +94,41 @@ class AccountModel
                     'limit' => $limit,
                     'totalPages' => ceil($total / $limit),
                     'totalItems' => $total
+                ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage(),
+                'results' => []
+            ];
+        }
+    }
+
+    public function loginAccount($username, $password) {
+        try {
+            $query = "
+            SELECT uid, username, password, account_type
+            FROM " . self::TABLE . "
+            WHERE username = ?
+            "; 
+
+            $stmt = $this->connect->prepare($query);
+            $stmt->bind_param("s", $username);
+
+            $success = $stmt->execute();
+            $results = $stmt->get_result();
+            $row = $results->fetch_assoc();
+
+            return [
+                'status' => $success,
+                'message' => $success
+                    ? 'Created an account successfully'
+                    : 'Failed to create account',
+                'results' => [
+                    'uid' => $this->connect->insert_id,
+                    'username' => $row['username'],
+                    'account_type' => $row['account_type'],
                 ]
             ];
         } catch (Exception $err) {
@@ -157,7 +189,6 @@ class AccountModel
     public function editAccount($uid, $name, $username, $email_address, $gender, $phone)
     {
         try {
-            $connect = DB_CONNECT;
             $query = "
             UPDATE " . self::TABLE . "
             SET
@@ -169,7 +200,7 @@ class AccountModel
             WHERE uid = ?   
             ";
 
-            $stmt = $connect->prepare($query);
+            $stmt = $this->connect->prepare($query);
 
             $stmt->bind_param(
                 "sssssi",
@@ -206,14 +237,13 @@ class AccountModel
     public function editAccountPassword($uid, $newPassword)
     {
         try {
-            $connect = DB_CONNECT;
             $query = "
             UPDATE " . self::TABLE . "
             SET password = ?
             WHERE uid = ?   
             ";
 
-            $stmt = $connect->prepare($query);
+            $stmt = $this->connect->prepare($query);
 
             $stmt->bind_param(
                 "si",
@@ -245,14 +275,13 @@ class AccountModel
     public function deleteAccount($uid)
     {
         try {
-            $connect = DB_CONNECT;
             $query = "
             DELETE
             FROM " . self::TABLE . "
             WHERE uid = ?
             ";
 
-            $stmt = $connect->prepare($query);
+            $stmt = $this->connect->prepare($query);
 
             $stmt->bind_param(
                 "i",
@@ -284,14 +313,13 @@ class AccountModel
     public function uploadLicence($uid, $licence)
     {
         try {
-            $connect = DB_CONNECT;
             $query = "
             UPDATE " . self::TABLE . "
             SET licence = ?
             WHERE uid = ?
             ";
 
-            $stmt = $connect->prepare($query);
+            $stmt = $this->connect->prepare($query);
 
             $stmt->bind_param('si', $licence, $uid);
 
