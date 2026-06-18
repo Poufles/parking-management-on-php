@@ -1,6 +1,6 @@
 <?php
 
-function AddVehicleController()
+function VehicleAddController()
 {
     $response = null;
 
@@ -15,7 +15,8 @@ function AddVehicleController()
         $filename = $vehicle_document['name'];
 
         $response = VehicleModel::getInstance()->addNewVehicle($uid, $plate_number, $vehicle_type, $filename);
-        
+        echo $response['message'];
+
         return $response;
     }
 

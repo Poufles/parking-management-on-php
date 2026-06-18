@@ -70,17 +70,17 @@ return [
         'title' => TITLE . "Manage Vehicles"
     ],
     'client/vehicles/add' => [
-        'controller' => __DIR__ . "/../app/controllers/client/add-vehicle.php",
+        'controller' => __DIR__ . "/../app/controllers/client/vehicle-add.php",
         'model' => [
             __DIR__ . "/../app/models/AccountModel.php",
             __DIR__ . "/../app/models/VehicleModel.php",
             __DIR__ . "/../app/models/FileModel.php",
         ],
-        'action' => 'AddVehicleController',
-        'view' => __DIR__ . "/../app/views/client/add-vehicle.php",
+        'action' => 'VehicleAddController',
+        'view' => __DIR__ . "/../app/views/client/vehicle-add.php",
         // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
-        'page' => 'add-vehicle',
+        'page' => 'vehicle-add',
         'title' => TITLE . "Add Vehicle"
     ],
     'admin/parking-slots' => [
@@ -97,18 +97,74 @@ return [
         'page' => 'parking-slots',
         'title' => TITLE . "Parking Slots"
     ],
-    'admin/rates' => [
-        'controller' => __DIR__ . "/../app/controllers/admin/manage-rates.php",
+    'admin/vehicles/create' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/vehicle-type-create.php",
         'model' => [
             __DIR__ . "/../app/models/AccountModel.php",
-            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php"
         ],
-        'action' => 'ManageRatesController',
-        'view' => __DIR__ . "/../app/views/admin/manage-rates.php",
+        'action' => 'VehicleTypeCreateController',
+        'view' => __DIR__ . "/../app/views/admin/vehicle-type-create.php",
         // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
-        'page' => 'manage-rates',
+        'page' => 'vehicle-type-create',
+        'title' => TITLE . "Add Vehicle Type"
+    ],
+    'admin/rates' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/rates-manage.php",
+        'model' => [
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/RateModel.php",
+            __DIR__ . "/../app/models/HoursModel.php",
+        ],
+        'action' => 'RatesManageController',
+        'view' => __DIR__ . "/../app/views/admin/rates-manage.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'rates-manage',
         'title' => TITLE . "Manage Rates"
+    ],
+    'admin/rates/add' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/rates-add.php",
+        'model' => [
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/RateModel.php",
+            __DIR__ . "/../app/models/HoursModel.php",
+        ],
+        'action' => 'RatesAddController',
+        'view' => __DIR__ . "/../app/views/admin/rates-add.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'rates-add',
+        'title' => TITLE . "Add Rate"
+    ],
+    'admin/rates/edit' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/rates-edit.php",
+        'model' => [
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/RateModel.php",
+            __DIR__ . "/../app/models/HoursModel.php",
+        ],
+        'action' => 'RatesEditController',
+        'view' => __DIR__ . "/../app/views/admin/rates-add.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'rates-edit',
+        'title' => TITLE . "Edit Rate"
+    ],
+    'admin/rates/delete' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/rates-delete.php",
+        'model' => [
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/RateModel.php",
+            __DIR__ . "/../app/models/HoursModel.php",
+        ],
+        'action' => 'RatesDeleteController',
+        'view' => __DIR__ . "/../app/views/admin/rates-delete.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'rates-edit',
+        'title' => TITLE . "Edit Rate"
     ],
     'error404' => [
         'controller' => __DIR__ . "/../app/controllers/pages/error-404.php",

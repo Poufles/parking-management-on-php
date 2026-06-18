@@ -3,8 +3,6 @@
 
 $rows_vehicle_types = VehicleModel::getInstance()->getAllVehicleTypes();
 $rows = $rows_vehicle_types['results']['rows'];
-
-echo $response['message'];
 ?>
 
 <h1>Add Vehicle</h1>
