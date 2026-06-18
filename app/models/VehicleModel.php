@@ -5,6 +5,7 @@ class VehicleModel
     private static ?VehicleModel $instance = null;
     private mysqli $connect;
     public const TABLE = 'tbl_vehicles';
+    public const TABLE_VEHICLE_TYPES = 'tbl_vehicle_types';
 
     private function __construct()
     {
@@ -83,8 +84,8 @@ class VehicleModel
                 a.name as name,
                 v.plate_number as plate_number,
                 vt.vehicle_type as vehicle_type
-            FROM ". self::TABLE ." v
-            INNER JOIN ". AccountModel::getInstance()::TABLE ." a
+            FROM " . self::TABLE . " v
+            INNER JOIN " . AccountModel::getInstance()::TABLE . " a
                 ON v.uid = a.uid
             INNER JOIN tbl_vehicle_types vt
                 ON v.vehicle_type_id = vt.vehicle_type_id
@@ -106,7 +107,7 @@ class VehicleModel
             $countQuery = "
             SELECT COUNT(*) AS total
             FROM tbl_vehicles v
-            INNER JOIN ". AccountModel::getInstance()::TABLE ." a
+            INNER JOIN " . AccountModel::getInstance()::TABLE . " a
                 ON v.uid = a.uid
             INNER JOIN tbl_vehicle_types vt
                 ON v.vehicle_type_id = vt.vehicle_type_id
@@ -135,6 +136,72 @@ class VehicleModel
                     'totalPages' => ceil($total / $limit),
                     'totalItems' => $total
                 ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage(),
+                'results' => []
+            ];
+        }
+    }
+
+    public function getAllVehicleTypes()
+    {
+        try {
+            $query = "
+            SELECT *
+            FROM " . self::TABLE_VEHICLE_TYPES . "
+            ";
+
+            $results = $this->connect->query($query);
+            $rows = $results->fetch_all(MYSQLI_ASSOC);
+
+            return [
+                'status' => $results,
+                'message' => 'Vehicles types fetched successfully',
+                'results' => [
+                    'rows' => $rows,
+                ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage(),
+                'results' => []
+            ];
+        }
+    }
+
+    public function addNewVehicle($uid, $plate_number, $vehicle_type_id, $vehicle_document)
+    {
+        try {
+            $query = "
+            INSERT INTO " . self::TABLE . " (
+                uid,
+                plate_number,
+                vehicle_type_id
+            ) VALUES (?, ?, ?)
+            ";
+
+            $stmt = $this->connect->prepare($query);
+            $stmt->bind_param(
+                'isi',
+                $uid,
+                $plate_number,
+                $vehicle_type_id
+            );
+
+            $stmt->execute();
+            $db_vehicle_id = $stmt->insert_id;
+            $results = FileModel::getInstance()->uploadFile($uid, 1, $vehicle_document, $db_vehicle_id);
+
+            return [
+                'status' => $results,
+                'message' => $results
+                    ? "Vehicle added successfully"
+                    : "Something went wrong...",
+                'results' => []
             ];
         } catch (Exception $err) {
             return [

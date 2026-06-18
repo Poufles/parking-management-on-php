@@ -69,6 +69,20 @@ return [
         'page' => 'manage-vehicles',
         'title' => TITLE . "Manage Vehicles"
     ],
+    'client/vehicles/add' => [
+        'controller' => __DIR__ . "/../app/controllers/client/add-vehicle.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/FileModel.php",
+        ],
+        'action' => 'AddVehicleController',
+        'view' => __DIR__ . "/../app/views/client/add-vehicle.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'add-vehicle',
+        'title' => TITLE . "Add Vehicle"
+    ],
     'admin/parking-slots' => [
         'controller' => __DIR__ . "/../app/controllers/admin/parking-slots.php",
         'model' => [

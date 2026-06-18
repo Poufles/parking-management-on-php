@@ -52,7 +52,9 @@ $response = $action();
         </div>
         <div class="block">
             <span>Vehicles</span>
+            <a href="<?= APP_URL . "client/vehicles/add" ?>">Add Vehicles (User)</a>
             <a href="<?= APP_URL . "client/vehicles" ?>">Vehicles (Client View)</a>
+            <a href="<?= APP_URL . "admin/vehicles/create" ?>">Create Vehicle Type (Admin)</a>
         </div>
         <div class="block">
             <span>Parking Slots</span>
