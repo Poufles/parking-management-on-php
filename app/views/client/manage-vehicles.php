@@ -17,7 +17,6 @@ $currentPage = $_GET['page'] ?? '1';
             <th>Client Name</th>
             <th>Plate Number</th>
             <th>Vehicle Type</th>
-            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -29,7 +28,6 @@ $currentPage = $_GET['page'] ?? '1';
                 <td><?= $row['name'] ?></td>
                 <td><?= $row['plate_number'] ?></td>
                 <td><?= $row['vehicle_type'] ?></td>
-                <td><a href="<?= APP_URL . "client/vehicle/edit?vehicle_id=". $row['vehicle_id'] ?>">Edit</a></td>
             </tr>
         <?php
         }

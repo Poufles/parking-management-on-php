@@ -271,4 +271,30 @@ class VehicleModel
             ];
         }
     }
+
+    public function deleteVehicleType($vehicle_type_id)
+    {
+        try {
+            $query = "
+            DELETE FROM " . self::TABLE . "
+            WHERE rate_id = $vehicle_type_id
+            ";
+
+            $results = $this->connect->query($query);
+
+            return [
+                'status' => $results,
+                'message' => $results
+                    ? 'Deleted rate fee successfully!'
+                    : 'Deleting rate fee failed!',
+                'results' => []
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage(),
+                'results' => []
+            ];
+        }
+    }
 }

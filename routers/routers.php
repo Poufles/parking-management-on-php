@@ -152,7 +152,7 @@ return [
         'page' => 'rates-edit',
         'title' => TITLE . "Edit Rate"
     ],
-    'admin/rates/delete' => [
+    'admin/rates/delete' => [ // COULD BE REMOVED
         'controller' => __DIR__ . "/../app/controllers/admin/rates-delete.php",
         'model' => [
             __DIR__ . "/../app/models/VehicleModel.php",
