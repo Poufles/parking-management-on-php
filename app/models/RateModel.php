@@ -1,35 +1,33 @@
 <?php
 
-class VehicleModel
+class RateModel
 {
-    private static ?VehicleModel $instance = null;
+    private static ?RateModel $instance = null;
     private mysqli $connect;
-    private const VEHICLE_LIMIT = 3;
-    public const TABLE = 'tbl_vehicles';
-    public const TABLE_VEHICLE_TYPES = 'tbl_vehicle_types';
+    public const TABLE = 'tbl_rates';
 
     private function __construct()
     {
         $this->connect = DB_CONNECT;
     }
 
-    public static function getInstance(): VehicleModel
+    public static function getInstance(): RateModel
     {
         if (self::$instance === null) {
-            self::$instance = new VehicleModel();
+            self::$instance = new RateModel();
         }
 
         return self::$instance;
     }
 
-    public function searchVehicles($filterBy, $search, $page = 1, $limit = 10)
+    public function searchRates($filterBy, $search, $page = 1, $limit = 10)
     {
         try {
             $offset = ($page - 1) * $limit;
 
             $allowedFilters = [
-                'username',
-                'plate_number',
+                'rate_id',
+                'hours',
                 'vehicle_type'
             ];
 
@@ -38,61 +36,66 @@ class VehicleModel
             $types = "";
 
             if (!empty($search)) {
-
                 $searchInject = "%" . $search . "%";
 
                 if (!empty($filterBy) && in_array($filterBy, $allowedFilters)) {
 
                     switch ($filterBy) {
-                        case 'username':
-                            $column = 'a.username';
+                        case 'rate_id':
+                            $column = 'r.rate_id';
+                            $where = "WHERE {$column} = ?";
+                            $params[] = (int)$search;
+                            $types .= "i";
                             break;
 
-                        case 'plate_number':
-                            $column = 'v.plate_number';
+                        case 'hours':
+                            $column = 'h.hours';
+                            $where = "WHERE {$column} LIKE ?";
+                            $params[] = $searchInject;
+                            $types .= "s";
                             break;
 
                         case 'vehicle_type':
                             $column = 'vt.vehicle_type';
+                            $where = "WHERE {$column} LIKE ?";
+                            $params[] = $searchInject;
+                            $types .= "s";
                             break;
                     }
-
-                    $where = "WHERE {$column} LIKE ?";
-                    $params[] = $searchInject;
-                    $types .= "s";
                 } else {
-
+                    // Recherche globale
                     $where = "
-                WHERE a.username LIKE ?
-                OR v.plate_number LIKE ?
-                OR vt.vehicle_type LIKE ?
-                ";
+                    WHERE r.rate_id = ?
+                    OR h.hours LIKE ?
+                    OR vt.vehicle_type LIKE ?
+                    ";
 
                     $params = [
-                        $searchInject,
+                        (int)$search,
                         $searchInject,
                         $searchInject
                     ];
-
-                    $types .= "sss";
+                    $types .= "iss";
                 }
             }
 
             $query = "
             SELECT
-                v.vehicle_id as vehicle_id,
-                a.uid as uid,
-                a.name as name,
-                v.plate_number as plate_number,
-                vt.vehicle_type as vehicle_type
-            FROM " . self::TABLE . " v
-            INNER JOIN " . AccountModel::getInstance()::TABLE . " a
-                ON v.uid = a.uid
-            INNER JOIN tbl_vehicle_types vt
-                ON v.vehicle_type_id = vt.vehicle_type_id
+                r.rate_id,
+                h.hours_id,
+                h.hours,
+                vt.vehicle_type_id,
+                vt.vehicle_type,
+                r.fee
+            FROM " . self::TABLE . " r
+            INNER JOIN " . HoursModel::getInstance()::TABLE . " h 
+                ON r.hours_id = h.hours_id
+            INNER JOIN " . VehicleModel::getInstance()::TABLE_VEHICLE_TYPES . " vt 
+                ON r.vehicle_type_id = vt.vehicle_type_id
             $where
             LIMIT ? OFFSET ?
             ";
+            // ORDER BY h.hours ASC, vt.vehicle_type ASC
 
             $params[] = $limit;
             $params[] = $offset;
@@ -104,14 +107,11 @@ class VehicleModel
             $stmt->execute();
             $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-            // Count query
             $countQuery = "
             SELECT COUNT(*) AS total
-            FROM tbl_vehicles v
-            INNER JOIN " . AccountModel::getInstance()::TABLE . " a
-                ON v.uid = a.uid
-            INNER JOIN tbl_vehicle_types vt
-                ON v.vehicle_type_id = vt.vehicle_type_id
+            FROM " . self::TABLE . " r
+            INNER JOIN " . HoursModel::getInstance()::TABLE . " h ON r.hours_id = h.hours_id
+            INNER JOIN " . VehicleModel::getInstance()::TABLE_VEHICLE_TYPES . " vt ON r.vehicle_type_id = vt.vehicle_type_id
             $where
             ";
 
@@ -129,7 +129,7 @@ class VehicleModel
 
             return [
                 'status' => true,
-                'message' => 'Vehicles fetched successfully',
+                'message' => 'Rates fetched successfully!',
                 'results' => [
                     'rows' => $rows,
                     'page' => $page,
@@ -147,22 +147,29 @@ class VehicleModel
         }
     }
 
-    public function getAllVehicleTypes()
+    public function isRateExist($hours, $vehicle_type)
     {
         try {
             $query = "
-            SELECT *
-            FROM " . self::TABLE_VEHICLE_TYPES . "
+            SELECT COUNT(*) as count                
+            FROM " . self::TABLE . " 
+            WHERE hours_id = ?
+            AND vehicle_type_id = ?
             ";
 
-            $results = $this->connect->query($query);
-            $rows = $results->fetch_all(MYSQLI_ASSOC);
+            $stmt = $this->connect->prepare($query);
+            $stmt->bind_param('ii', $hours, $vehicle_type);
+
+            $results = $stmt->execute();
+            $isRateExist = $stmt->get_result()->fetch_assoc()['count'];
 
             return [
                 'status' => $results,
-                'message' => 'Vehicles types fetched successfully',
+                'message' => $results
+                    ? 'Rates fetched successfully!'
+                    : 'Rates fetched successfully!',
                 'results' => [
-                    'rows' => $rows,
+                    'isRateExist' => $isRateExist,
                 ]
             ];
         } catch (Exception $err) {
@@ -174,93 +181,24 @@ class VehicleModel
         }
     }
 
-    public function checkClientVehicleLimit($uid) {
-        try {
-            $query = "
-            SELECT COUNT(*) as count
-            FROM ". self::TABLE ."
-            WHERE uid = ?
-            ";
-
-            $stmt = $this->connect->prepare($query);
-            $stmt->bind_param('i', $uid);
-            
-            $results = $stmt->execute();
-            $row = $stmt->get_result()->fetch_assoc();
-            $count = $row['count'];
-
-            return [
-                'status' => $results,
-                'message' => 'Vehicle counts fetched successfully',
-                'results' => [
-                    'isLimit' => $count > self::VEHICLE_LIMIT,
-                ]
-            ];
-        } catch (Exception $err) {
-            return [
-                'status' => false,
-                'message' => $err->getMessage(),
-                'results' => []
-            ];
-        }
-    }
-
-    public function addNewVehicle($uid, $plate_number, $vehicle_type_id, $vehicle_document)
+    public function createRateFee($hours_id, $vehicle_type_id, $fee)
     {
         try {
             $query = "
-            INSERT INTO " . self::TABLE . " (
-                uid,
-                plate_number,
-                vehicle_type_id
-            ) VALUES (?, ?, ?)
+            INSERT INTO " . self::TABLE . " (hours_id, vehicle_type_id, fee)
+            VALUES (?, ?, ?)
             ";
 
             $stmt = $this->connect->prepare($query);
-            $stmt->bind_param(
-                'isi',
-                $uid,
-                $plate_number,
-                $vehicle_type_id
-            );
-
-            $stmt->execute();
-            $db_vehicle_id = $stmt->insert_id;
-            $results = FileModel::getInstance()->uploadFile($uid, 1, $vehicle_document, $db_vehicle_id);
-
-            return [
-                'status' => $results,
-                'message' => $results
-                    ? "Vehicle $plate_number added successfully!"
-                    : "Something went wrong...",
-                'results' => []
-            ];
-        } catch (Exception $err) {
-            return [
-                'status' => false,
-                'message' => $err->getMessage(),
-                'results' => []
-            ];
-        }
-    }
-
-    public function createNewVehicleType($new_vehicle_type) {
-        try {
-            $query = "
-            INSERT INTO ". self::TABLE_VEHICLE_TYPES ." (vehicle_type)
-            VALUES (?)
-            ";
-
-            $stmt = $this->connect->prepare($query);
-            $stmt->bind_param('s', $new_vehicle_type);
+            $stmt->bind_param('iii', $hours_id, $vehicle_type_id, $fee);
 
             $results = $stmt->execute();
 
             return [
                 'status' => $results,
                 'message' => $results
-                    ? "Vehicle $new_vehicle_type added successfully!"
-                    : "Something went wrong...",
+                    ? 'Created rate fee successfully!'
+                    : 'Creating rate fee failed!',
                 'results' => []
             ];
         } catch (Exception $err) {
@@ -272,12 +210,42 @@ class VehicleModel
         }
     }
 
-    public function deleteVehicleType($vehicle_type_id)
+    public function editRateFee($rate_id, $fee)
+    {
+        try {
+            $query = "
+            UPDATE " . self::TABLE . "
+            SET FEE = ?
+            WHERE RATE_ID = ?
+            ";
+
+            $stmt = $this->connect->prepare($query);
+            $stmt->bind_param('ii', $fee, $rate_id);
+
+            $results = $stmt->execute();
+
+            return [
+                'status' => $results,
+                'message' => $results
+                    ? 'Edited rate fee successfully!'
+                    : 'Editing rate fee failed!',
+                'results' => []
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage(),
+                'results' => []
+            ];
+        }
+    }
+
+    public function deleteRateFee($rate_id)
     {
         try {
             $query = "
             DELETE FROM " . self::TABLE . "
-            WHERE rate_id = $vehicle_type_id
+            WHERE rate_id = $rate_id
             ";
 
             $results = $this->connect->query($query);

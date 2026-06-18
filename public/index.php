@@ -1,7 +1,7 @@
 <?php
 
+require __DIR__ . "/../app/utils/database.php";
 require __DIR__ . "/../app/utils/session.php";
-require __DIR__ . "/../database/DBConnect.php";
 
 $routes = require  __DIR__ . "/../routers/routers.php";
 
@@ -45,14 +45,16 @@ $response = $action();
         <a href="<?= APP_URL ?>">Index</a>
         <div class="block">
             <span>Accounts</span>
-            <a href="<?= APP_URL . "auth/login" ?>">Login Account</a>
-            <a href="<?= APP_URL . "auth/register" ?>">Create Account</a>
-            <a href="<?= APP_URL . "client/account/edit" ?>">Edit Account</a>
+            <a href="<?= APP_URL . "auth/login" ?>">Login Account</a> |
+            <a href="<?= APP_URL . "auth/register" ?>">Create Account</a> |
+            <a href="<?= APP_URL . "client/account/edit" ?>">Edit Account</a> |
             <a href="<?= APP_URL . "client/account/delete" ?>">Delete Account</a>
         </div>
         <div class="block">
             <span>Vehicles</span>
-            <a href="<?= APP_URL . "client/vehicles" ?>">Vehicles (Client View)</a>
+            <a href="<?= APP_URL . "client/vehicles/add" ?>">Add Vehicles (User)</a> |
+            <a href="<?= APP_URL . "client/vehicles" ?>">Vehicles (Admin)</a> |
+            <a href="<?= APP_URL . "admin/vehicles/create" ?>">Create Vehicle Type (Admin)</a> |
         </div>
         <div class="block">
             <span>Parking Slots</span>
@@ -60,7 +62,8 @@ $response = $action();
         </div>
         <div class="block">
             <span>Rates</span>
-            <a href="<?= APP_URL . "admin/rates" ?>">Show Rates</a>
+            <a href="<?= APP_URL . "admin/rates" ?>">Show Rates</a> |
+            <a href="<?= APP_URL . "admin/rates/add" ?>">Add Rates</a>
         </div>
     </nav>
     <main>
