@@ -15,27 +15,56 @@ return [
     ],
     'auth/login' => [
         'controller' => __DIR__ . "/../app/controllers/auth/login.php",
-        'model' => [ __DIR__ . "/../app/models/AccountModel.php" ],
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/utils/Validation.php"
+        ],
         'action' => 'LoginController',
         'view' => __DIR__ . "/../app/views/auth/login.php",
-        // 'css' => "../public/styles/auth/config.css",
-        'css' => APP_URL . "styles/index.css",
+        'css' => APP_URL . "styles/auth/login.css",
         'page' => 'login',
         'title' => TITLE . "Log in"
     ],
-    'auth/register' => [
+    'auth/register/email' => [
         'controller' => __DIR__ . "/../app/controllers/auth/register.php",
-        'model' => [ __DIR__ . "/../app/models/AccountModel.php" ],
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/utils/Validation.php",
+            __DIR__ . "/../app/services/MailService.php"
+        ],
         'action' => 'RegisterController',
         'view' => __DIR__ . "/../app/views/auth/register.php",
-        // 'css' => "../public/styles/auth/config.css",
-        'css' => APP_URL . "styles/index.css",
-        'page' => 'register',
-        'title' => TITLE . "Registration"
+        'css' => APP_URL . "styles/auth/register.css",
+        'page' => 'register-email',
+        'title' => TITLE . "Registration: Email"
+    ],
+    'auth/register/otp' => [
+        'controller' => __DIR__ . "/../app/controllers/auth/register.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/utils/Validation.php",
+        ],
+        'action' => 'RegisterController',
+        'view' => __DIR__ . "/../app/views/auth/register.php",
+        'css' => APP_URL . "styles/auth/register.css",
+        'page' => 'register-otp',
+        'title' => TITLE . "Registration: OTP"
+    ],
+    'auth/register/details' => [
+        'controller' => __DIR__ . "/../app/controllers/auth/register.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/utils/Validation.php"
+        ],
+        'action' => 'RegisterController',
+        'view' => __DIR__ . "/../app/views/auth/register.php",
+        'css' => APP_URL . "styles/auth/register.css",
+        'page' => 'register-details',
+        'title' => TITLE . "Registration: Details"
     ],
     'client/account/edit' => [
         'controller' => __DIR__ . "/../app/controllers/client/account-edit.php",
-        'model' => [ __DIR__ . "/../app/models/AccountModel.php" ],
+        'model' => [__DIR__ . "/../app/models/AccountModel.php"],
         'action' => 'AccountEditController',
         'view' => __DIR__ . "/../app/views/client/account-edit.php",
         // 'css' => "../public/styles/client/config.css",
@@ -48,7 +77,7 @@ return [
     // COULD BE DONE WITH EDIT vvv
     'client/account/delete' => [
         'controller' => __DIR__ . "/../app/controllers/client/account-delete.php",
-        'model' => [ __DIR__ . "/../app/models/AccountModel.php" ],
+        'model' => [__DIR__ . "/../app/models/AccountModel.php"],
         'action' => 'AccountDeleteController',
         'view' => __DIR__ . "/../app/views/client/account-delete.php",
         // 'css' => "../public/styles/client/config.css",

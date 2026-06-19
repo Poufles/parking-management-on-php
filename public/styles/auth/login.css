@@ -1,0 +1,9 @@
+@import "./config.css";
+
+#login .alt-auth-container {
+    color: var(--secondary-dark-color);
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}

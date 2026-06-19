@@ -2,17 +2,42 @@
 
 function LoginController()
 {
+    if (isset($_SESSION['uid'])) {
+        header('location: ' . APP_URL . $_SESSION['account-type'] . "/dashboard");
+        exit;
+    }
+
+    $response = null;
+
     if (isset($_POST['login'])) {
         // ADD VALIDATORS LATER
 
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+        $username = $_POST['username'] ?? null;
+        $password = $_POST['password'] ?? null;
+
+        $response = Validation::getInstance()->areFieldsEmpty([
+            'username' => $username,
+            'password' => $password
+        ]);
+
+        if (!$response['status']) return $response;
 
         $response = AccountModel::getInstance()->loginAccount($username, $password);
+
         if ($response['status']) {
-            echo $response['results']['uid'] . "<br>";
-            echo $response['results']['username'] . "<br>";
-            echo $response['results']['account_type'] . "<br>";
+            $results = $response['results'];
+            $uid = $results['uid'];
+            $username = $results['username'];
+            $account_type = $results['account_type'];
+
+            setcookie('parcheggiamo-uid', $uid, time() + 9999, "/");
+            setcookie('parcheggiamo-username', $username, time() + 9999, "/");
+            setcookie('parcheggiamo-account-type', $account_type, time() + 9999, "/");
+
+            header('location: ' . APP_URL . "client/dashboard");
+            exit;
         }
     }
+
+    return $response;
 };

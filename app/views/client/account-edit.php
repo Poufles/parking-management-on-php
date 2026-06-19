@@ -21,6 +21,9 @@
         <span>Phone No.: </span>
         <input type="text" name="phone" id="">
     </label>
+        <span>Password: </span>
+        <input type="password" name="password" id="">
+    </label>
     <button type="reset" name="reset">Reset</button>
     <button type="submit" name="edit">Edit</button>
 </form>

@@ -16,7 +16,6 @@ function RatesEditController()
     if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $fee = $_POST['fee'];
 
-        echo 'Hello';
         $response = RateModel::getInstance()->editRateFee($rate_id, $fee);
 
         if ($response['status']) {

@@ -1,32 +1,18 @@
+@import url('https://fonts.cdnfonts.com/css/rogan');
 @import './css-reset-jc.css';
 
 :root {
-    font-family: Arial, Helvetica, sans-serif;
+    --primary-color: #FFFAFA;
+    --secondary-color: #606C38;
+    --secondary-dark-color: #283618;
+    --accent-color: #DDA15E;
+    --accent-dark-color: #BC6C25;
 }
 
 * {
-    box-sizing: border-box;
     padding: 0;
-    margin: 0;
 }
 
 body {
-    height: 100dvh;
-}
-
-nav {
-    padding: 10px 30px;
-}
-
-main {
-    padding: 30px;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-form button {
-    width: max-content;
+    font-family: 'Rogan', sans-serif !important;
 }
