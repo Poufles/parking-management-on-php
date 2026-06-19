@@ -317,7 +317,7 @@ function handle_add_vehicle(): void
 
     require_input_fields(
         $_POST,
-        ['plate_number','vehicle_type','brand','model','color'],
+        ['plate_number','vehicle_type'],
         'Complete all vehicle information.'
     );
 
@@ -330,10 +330,7 @@ function handle_add_vehicle(): void
     $vehicles[] = [
         'id' => $vehicleId,
         'plate_number' => $plateNumber,
-        'vehicle_type' => input_choice($_POST, 'vehicle_type', ['Car','Motorcycle','Van'], 'Car'),
-        'brand' => input_text($_POST, 'brand'),
-        'model' => input_text($_POST, 'model'),
-        'color' => input_text($_POST, 'color'),
+        'vehicle_type' => input_choice($_POST, 'vehicle_type', ['Car','Motorcycle','Van','Service'], 'Car'),
     ];
 
     $_SESSION['vehicles'] = $vehicles;
@@ -518,6 +515,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
 }
 
 $account = $_SESSION['account'];
+$userId = 1;
 $vehicles = $_SESSION['vehicles'] ?? [];
 $accountAttachments = $_SESSION['account_attachments'] ?? [];
 $vehicleAttachments = $_SESSION['vehicle_attachments'] ?? [];

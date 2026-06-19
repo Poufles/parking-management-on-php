@@ -120,22 +120,28 @@
  .selectable-map .parking-bay {
   font:inherit;
   cursor:pointer;
-  transition:transform .2s,box-shadow .2s,outline .2s
+  transition:box-shadow .2s,transform .15s,background-color .2s
 }
- .selectable-map .parking-bay:has(.slot-radio:checked),
- .selectable-map .parking-bay.selected {
-  outline:5px solid var(--clay);
-  outline-offset:-2px;
-  transform:translateY(-4px);
-  box-shadow:0 12px 24px rgba(15,26,8,.3)
+ .selectable-map .parking-bay.bay-available:hover {
+  box-shadow:0 5px 12px rgba(15,26,8,.16)
 }
+ .selectable-map .parking-bay.bay-available:active {
+  transform:scale(.98)
+ }
+ .selectable-map .parking-bay:has(.slot-radio:checked) {
+  background:#dce9dc;
+  box-shadow:inset 0 0 0 5px #245c35,0 6px 14px rgba(15,26,8,.2)
+ }
+ .selectable-map .parking-bay.bay-occupied {
+  cursor:not-allowed
+ }
  .slot-radio {
   position:absolute;
-  z-index:5;
-  top:10px;
-  left:10px;
-  width:18px;
-  height:18px
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  opacity:0;
+  pointer-events:none
 }
  .park-form-grid {
   margin-top:18px

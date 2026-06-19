@@ -37,16 +37,17 @@ if (!$attachment) {
 
 $path = __DIR__ . '/uploads/' . basename((string) $attachment['stored_name']);
 $filename = basename((string) $attachment['original_name']);
+$disposition = isset($_GET['view']) ? 'inline' : 'attachment';
 
 if (!is_file($path)) {
     header('Content-Type: text/plain');
-    header('Content-Disposition: attachment; filename="' . str_replace('"', '', $filename) . '"');
+    header('Content-Disposition: ' . $disposition . '; filename="' . str_replace('"', '', $filename) . '"');
     echo "File placeholder for {$filename}.";
     exit;
 }
 
 $mime = (new finfo(FILEINFO_MIME_TYPE))->file($path) ?: 'application/octet-stream';
 header('Content-Type: ' . $mime);
-header('Content-Disposition: attachment; filename="' . str_replace('"', '', $filename) . '"');
+header('Content-Disposition: ' . $disposition . '; filename="' . str_replace('"', '', $filename) . '"');
 header('Content-Length: ' . filesize($path));
 readfile($path);

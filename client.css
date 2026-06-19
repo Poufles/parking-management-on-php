@@ -188,3 +188,11 @@ body {
     margin-top:12px;
   }
 }
+.form-buttons {
+  display:flex;
+  align-items:center;
+  gap:10px
+}
+.form-buttons .btn {
+  min-width:130px
+}

@@ -1,1 +1,0 @@
-csrf|s:48:"090d8813fad5aec29d240e7cf1fd3e0fd67ad5f085df4562";user|a:3:{s:2:"id";i:1;s:4:"name";s:6:"Client";s:4:"role";s:6:"client";}account|a:6:{s:2:"id";i:1;s:9:"full_name";s:6:"Client";s:5:"email";s:0:"";s:5:"phone";s:0:"";s:7:"address";s:0:"";s:13:"license_image";N;}account_attachments|a:0:{}vehicles|a:0:{}vehicle_attachments|a:0:{}history|a:0:{}session_data_ready|b:1;

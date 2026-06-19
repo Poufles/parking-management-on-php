@@ -12,7 +12,6 @@
                         <th>Time Out</th>
                         <th>Duration</th>
                         <th>To Pay</th>
-                        <th>Receipt</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -21,7 +20,6 @@
                         $end = $row['exit_time'] ? strtotime($row['exit_time']) : time();
                         $minutes = max(1, (int) ceil(($end - strtotime($row['entry_time'])) / 60));
                         $toPay = parking_charge($row['entry_time'], $row['exit_time']);
-                        $hasReceipt = $row['exit_time'] && $row['payment_status'] === 'paid';
                         ?>
                         <tr>
                             <td><strong><?= e($row['plate_number']) ?></strong></td>
@@ -50,47 +48,6 @@
                                     <small class="muted">
                                         Paid: PHP <?= number_format((float) $row['paid_amount'], 2) ?>
                                     </small>
-                                <?php } ?>
-                            </td>
-                            <td>
-                                <?php if ($hasReceipt) { ?>
-                                    <details class="receipt-details">
-                                        <summary class="btn btn-primary">Receipt</summary>
-                                        <p class="eyebrow">PAYMENT RECEIPT</p>
-                                        <h2><?= APP_NAME ?></h2>
-                                        <dl>
-                                            <div>
-                                                <dt>Vehicle</dt>
-                                                <dd><?= e($row['plate_number']) ?></dd>
-                                            </div>
-                                            <div>
-                                                <dt>Slot</dt>
-                                                <dd><?= e($row['slot_code']) ?></dd>
-                                            </div>
-                                            <div>
-                                                <dt>Time In</dt>
-                                                <dd><?= e(date('M d, Y h:i A', strtotime($row['entry_time']))) ?></dd>
-                                            </div>
-                                            <div>
-                                                <dt>Time Out</dt>
-                                                <dd><?= e(date('M d, Y h:i A', strtotime($row['exit_time']))) ?></dd>
-                                            </div>
-                                            <div>
-                                                <dt>Duration</dt>
-                                                <dd><?= $minutes ?> min</dd>
-                                            </div>
-                                            <div>
-                                                <dt>Total</dt>
-                                                <dd>PHP <?= number_format((float) $row['fee'], 2) ?></dd>
-                                            </div>
-                                            <div>
-                                                <dt>Paid</dt>
-                                                <dd>PHP <?= number_format((float) $row['paid_amount'], 2) ?></dd>
-                                            </div>
-                                        </dl>
-                                    </details>
-                                <?php } else { ?>
-                                    -
                                 <?php } ?>
                             </td>
                         </tr>

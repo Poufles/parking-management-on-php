@@ -97,7 +97,7 @@ $defaultVehicleId = $availableVehicles ? (int) $availableVehicles[0]['id'] : nul
                             && (int) $slot['id'] === (int) $defaultSelectedSlot['id'];
                         $bayClass = $occupied ? 'bay-occupied' : 'bay-available';
                         ?>
-                        <label class="parking-bay <?= $bayClass ?> <?= $isSelected ? 'selected' : '' ?>">
+                        <label class="parking-bay <?= $bayClass ?>">
                             <?php if (!$occupied) { ?>
                                 <input
                                     class="slot-radio"
@@ -145,9 +145,7 @@ $defaultVehicleId = $availableVehicles ? (int) $availableVehicles[0]['id'] : nul
                                         e(
                                             $vehicle['plate_number']
                                             . ' - '
-                                            . $vehicle['brand']
-                                            . ' '
-                                            . $vehicle['model']
+                                            . $vehicle['vehicle_type']
                                         )
                                     ?>
                                     <?= $isParkedVehicle ? ' (Currently parked)' : '' ?>

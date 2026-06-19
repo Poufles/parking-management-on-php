@@ -32,12 +32,18 @@
                     <label class="profile-upload">
                         <span class="profile-upload-circle">
                             <?php if (!empty($profileImagePath) && is_file(dirname(__DIR__, 2) . '/' . $profileImagePath)) { ?>
-                                <img src="<?= e($profileImagePath) ?>" alt="">
+                                <img id="profile-preview" src="<?= e($profileImagePath) ?>" alt="Profile picture">
                             <?php } else { ?>
-                                <?= e(strtoupper(substr($clientName, 0, 1))) ?>
+                                <span id="profile-initial"><?= e(strtoupper(substr($clientName, 0, 1))) ?></span>
+                                <img id="profile-preview" src="" alt="Profile picture" hidden>
                             <?php } ?>
                         </span>
-                        <input type="file" name="profile_image" accept="image/*">
+                        <input
+                            id="profile-image-input"
+                            type="file"
+                            name="profile_image"
+                            accept="image/jpeg,image/png,image/webp"
+                        >
                     </label>
                 </div>
                 <div class="form-group full">
@@ -82,7 +88,10 @@
                     <label>New Password </label>
                     <input class="input" type="password" name="password" minlength="6">
                 </div>
-                <button class="btn btn-primary full">Save Changes</button>
+                <div class="form-buttons full">
+                    <button class="btn btn-primary" type="submit">Save Changes</button>
+                    <button class="btn btn-dark" type="reset">Reset</button>
+                </div>
             </div>
         </form>
     </section>
@@ -105,3 +114,25 @@
         </div>
     </section>
 </div>
+
+<script>
+const profileInput = document.querySelector('#profile-image-input');
+const profilePreview = document.querySelector('#profile-preview');
+const profileInitial = document.querySelector('#profile-initial');
+
+if (profileInput && profilePreview) {
+    profileInput.addEventListener('change', function () {
+        const selectedImage = this.files[0];
+        if (!selectedImage) {
+            return;
+        }
+
+        profilePreview.src = URL.createObjectURL(selectedImage);
+        profilePreview.hidden = false;
+
+        if (profileInitial) {
+            profileInitial.hidden = true;
+        }
+    });
+}
+</script>

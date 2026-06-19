@@ -36,7 +36,7 @@
                         <input class="input" name="color" required>
                     </div>
                     <div class="form-group full">
-                        <label>Vehicle Attachments <small>(any file type)</small></label>
+                        <label>Vehicle Attachments</label>
                         <input
                             class="input"
                             type="file"
