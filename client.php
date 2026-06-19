@@ -636,7 +636,7 @@ $titles = [
             </div>
         <?php } ?>
 
-        <?php include __DIR__ . '/includes/pages/' . $page . '.php'; ?>
+        <?php include __DIR__ . '/sidebar_client/' . $page . '.php'; ?>
 
         <?php if ($receipt) { ?>
             <div class="receipt-backdrop">
