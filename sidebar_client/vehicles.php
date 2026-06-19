@@ -44,7 +44,10 @@
                             multiple
                         >
                     </div>
-                    <button class="btn btn-primary full">Save Vehicle</button>
+                    <div class="form-buttons full">
+                        <button class="btn btn-primary" type="submit">Save Vehicle</button>
+                        <button class="btn btn-dark" type="reset">Reset</button>
+                    </div>
                 </div>
             </form>
         <?php } ?>
