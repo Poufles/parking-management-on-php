@@ -21,7 +21,7 @@ class Validation
         $results = [];
 
         foreach ($arrValues as $key => $field) {
-            if (empty($field)) {
+            if (empty($field) || $field == 'default') {
                 $isEmpty--;
 
                 $results[$key] = [
@@ -74,6 +74,17 @@ class Validation
         return [
             'status' => $_SESSION['otp'] == $otp,
             'message' => 'Incorrect OTP Code !'
+        ];
+    }
+
+    public function isPlateNumberValid($plate_number) {
+        $isValid = preg_match('/^[A-Z]{3} \d{3,4}$/', $plate_number);
+
+        return [
+            'status' => $isValid,
+            'message' => $isValid
+                ? null
+                : 'Invalid plate number !'
         ];
     }
 }

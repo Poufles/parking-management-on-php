@@ -193,7 +193,7 @@ class VehicleModel
                 'status' => $results,
                 'message' => 'Vehicle counts fetched successfully',
                 'results' => [
-                    'isLimit' => $count > self::VEHICLE_LIMIT,
+                    'isLimit' => $count >= self::VEHICLE_LIMIT,
                 ]
             ];
         } catch (Exception $err) {

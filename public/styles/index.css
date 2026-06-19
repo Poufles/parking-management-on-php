@@ -15,4 +15,15 @@
 
 body {
     font-family: 'Rogan', sans-serif !important;
+    min-height: 100dvh;
+}
+
+body.app {
+    display: grid !important;
+    grid-template-columns: auto 1fr;
+}
+
+body.app main {
+    background-color: var(--primary-color) !important;
+    padding: 30px 40px 0;
 }

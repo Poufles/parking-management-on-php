@@ -102,11 +102,13 @@ return [
         'model' => [
             __DIR__ . "/../app/models/AccountModel.php",
             __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/FileModel.php",
+            __DIR__ . "/../app/utils/Validation.php"
         ],
         'action' => 'ManageVehiclesController',
         'view' => __DIR__ . "/../app/views/client/manage-vehicles.php",
-        // 'css' => "../public/styles/client/config.css",
-        'css' => APP_URL . "styles/index.css",
+        'css' => APP_URL . "styles/client/manage-vehicles.css",
+        // 'css' => APP_URL . "styles/index.css",
         'page' => 'manage-vehicles',
         'title' => TITLE . "Manage Vehicles"
     ],
@@ -123,6 +125,48 @@ return [
         'css' => APP_URL . "styles/index.css",
         'page' => 'vehicle-add',
         'title' => TITLE . "Add Vehicle"
+    ],
+    'client/parking-slots' => [
+        'controller' => __DIR__ . "/../app/controllers/client/parking-slots.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/ParkingModel.php"
+        ],
+        'action' => 'ParkingSlotsController',
+        'view' => __DIR__ . "/../app/views/client/parking-slots.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'client-parking-slots',
+        'title' => TITLE . "Parking Slots"
+    ],
+    'client/history' => [
+        'controller' => __DIR__ . "/../app/controllers/client/history.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/ParkingModel.php"
+        ],
+        'action' => 'HistoryController',
+        'view' => __DIR__ . "/../app/views/client/history.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'client-history',
+        'title' => TITLE . "History"
+    ],
+    'client/account-settings' => [
+        'controller' => __DIR__ . "/../app/controllers/client/account-settings.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/ParkingModel.php"
+        ],
+        'action' => 'AccountSettingsController',
+        'view' => __DIR__ . "/../app/views/client/account-settings.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'client-settings',
+        'title' => TITLE . "Account Settings"
     ],
     'admin/parking-slots' => [
         'controller' => __DIR__ . "/../app/controllers/admin/parking-slots.php",

@@ -153,7 +153,7 @@ class AccountModel
                     ? 'Successfully logged in !'
                     : 'Something went wrong...',
                 'results' => [
-                    'uid' => $this->connect->insert_id,
+                    'uid' => $row['uid'],
                     'username' => $row['username'],
                     'account_type' => $row['account_type'],
                 ]

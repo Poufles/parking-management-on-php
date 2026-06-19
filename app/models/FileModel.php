@@ -31,7 +31,7 @@ class FileModel
 
             $results = $this->connect->query($query);
             $rows = $results->fetch_all(MYSQLI_ASSOC);
-            
+
             return [
                 'status' => $results,
                 'message' => $results
@@ -50,7 +50,7 @@ class FileModel
         }
     }
 
-    public function uploadFile($uid, $file_type_id, $filename, $vehicle_id = null)
+    public function uploadFile($uid, $file_type_id, $file, $vehicle_id = null)
     {
         try {
             $query = "
@@ -58,6 +58,8 @@ class FileModel
             uid, vehicle_id, file_type_id, uploaded_file 
             ) VALUES (?, ?, ?, ?)
             ";
+
+            $filename = $file['name'];
 
             $stmt = $this->connect->prepare($query);
             $stmt->bind_param(
@@ -69,6 +71,18 @@ class FileModel
             );
 
             $results = $stmt->execute();
+
+            $fileTmpPath = $file['tmp_name'];
+            $uploadFolder = __DIR__ . "/../uploads/$uid/";
+
+            if (!is_dir($uploadFolder)) {
+                mkdir($uploadFolder, 0755, true);
+            }
+
+            $safeFileName = $filename;
+            $destination = $uploadFolder . $safeFileName;
+
+            move_uploaded_file($fileTmpPath, $destination);
 
             return [
                 'status' => $results,
