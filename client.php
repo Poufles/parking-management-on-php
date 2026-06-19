@@ -330,7 +330,12 @@ function handle_add_vehicle(): void
     $vehicles[] = [
         'id' => $vehicleId,
         'plate_number' => $plateNumber,
-        'vehicle_type' => input_choice($_POST, 'vehicle_type', ['Car','Motorcycle','Van','Service'], 'Car'),
+        'vehicle_type' => input_choice(
+            $_POST,
+            'vehicle_type',
+            ['Car','Motorcycle','Van','Service','Pick Up'],
+            'Car'
+        ),
     ];
 
     $_SESSION['vehicles'] = $vehicles;

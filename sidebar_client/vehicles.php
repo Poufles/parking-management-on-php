@@ -21,19 +21,8 @@
                             <option>Car</option>
                             <option>Motorcycle</option>
                             <option>Van</option>
+                            <option>Pick Up</option>
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Brand</label>
-                        <input class="input" name="brand" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Model</label>
-                        <input class="input" name="model" required>
-                    </div>
-                    <div class="form-group full">
-                        <label>Color</label>
-                        <input class="input" name="color" required>
                     </div>
                     <div class="form-group full">
                         <label>Vehicle Attachments</label>
@@ -63,19 +52,7 @@
                     <article class="vehicle-card">
                         <div class="vehicle-details">
                             <h3><?= e($v['plate_number']) ?></h3>
-                            <p>
-                                <?=
-                                    e(
-                                        $v['color']
-                                        . ' '
-                                        . $v['brand']
-                                        . ' '
-                                        . $v['model']
-                                        . ' - '
-                                        . $v['vehicle_type']
-                                    )
-                                ?>
-                            </p>
+                            <p><?= e($v['vehicle_type']) ?></p>
                             <strong>Uploaded files <?= $attachments ? '('.count($attachments).')' : '' ?></strong>
                             <?php if (empty($attachments)) { ?>
                                 <small>No vehicle documents uploaded.</small>
@@ -83,7 +60,11 @@
                                 <ul class="attachment-list">
                                     <?php foreach ($attachments as $attachment) { ?>
                                         <li>
-                                            <a href="download.php?id=<?= $attachment['id'] ?>">
+                                            <a
+                                                href="download.php?id=<?= $attachment['id'] ?>&view=1"
+                                                target="_blank"
+                                                rel="noopener"
+                                            >
                                                 <?= e($attachment['original_name']) ?>
                                             </a>
                                         </li>
