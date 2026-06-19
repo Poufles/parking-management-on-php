@@ -1,0 +1,104 @@
+@import "../index.css";
+
+.view-content {
+    display: flex;
+}
+
+.sides {
+    flex-basis: 50%;
+}
+
+.img-container {
+    display: flex;
+    width: 100%;
+    height: 100dvh;
+}
+
+.img-container img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.interface-container {
+    position: relative;
+}
+
+.interface-container .logo-container {
+    width: max-content;
+    text-decoration: none;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.interface-container .logo-container svg {
+    aspect-ratio: 1;
+    width: 18px;
+}
+
+.interface-container .logo-container span {
+    color: var(--accent-color);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.interface-container .titles-container {
+    color: var(--secondary-color);
+}
+
+.interface-container .form-wrapper {
+    max-width: 500px;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}
+
+.interface-container .form-wrapper label {
+    color: var(--secondary-color);
+}
+
+.interface-container form .actions-container {
+    display: flex;
+    align-items: center;
+}
+
+.interface-container form .actions-container .actions {
+    flex-grow: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+.interface-container form .actions-container button[type=submit] {
+    background-color: var(--secondary-color);
+}
+
+.interface-container form .actions-container button[type=reset] {
+    color: var(--secondary-color);
+}
+
+.interface-container form .actions-container button {
+    transition: 0.3s;
+    
+    &:hover {
+        filter: brightness(0.95)
+    }
+}
+
+.interface-container form .actions-container {
+    flex-direction: column;
+}
+
+.interface-container form .actions-container .actions {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.interface-container form .actions-container .actions button {
+    width: 100%;
+}

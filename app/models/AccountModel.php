@@ -119,13 +119,39 @@ class AccountModel
 
             $success = $stmt->execute();
             $results = $stmt->get_result();
+            $count = $results->num_rows;
+
+            if ($count == 0) return [
+                'status' => false,
+                'message' => "Wrong account credentials !",
+                'results' => [
+                    'username' => [
+                        'status' => false,
+                        "message" => 'Account does not exist !',
+                        'results' => []
+                    ]
+                ]
+            ];
+
             $row = $results->fetch_assoc();
+            $db_password = $row['password'];
+
+            if ($password !== $db_password) return [
+                'status' => false,
+                'message' => "Wrong account credentials !",
+                'results' => [
+                    'password' => [
+                        'status' => false,
+                        "message" => 'Wrong password !',
+                    ]
+                ]
+            ];
 
             return [
                 'status' => $success,
                 'message' => $success
-                    ? 'Created an account successfully'
-                    : 'Failed to create account',
+                    ? 'Successfully logged in !'
+                    : 'Something went wrong...',
                 'results' => [
                     'uid' => $this->connect->insert_id,
                     'username' => $row['username'],
@@ -152,6 +178,7 @@ class AccountModel
             ";
 
             $stmt = $this->connect->prepare($query);
+            $hashedPassword = sha1($password);
 
             $stmt->bind_param(
                 "ssssssss",
@@ -160,7 +187,7 @@ class AccountModel
                 $email_address,
                 $gender,
                 $phone,
-                $password,
+                $hashedPassword,
                 $account_type,
                 $licence
             );
@@ -334,6 +361,33 @@ class AccountModel
                 'results' => [
                     'uid' => $uid
                 ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage(),
+                'results' => []
+            ];
+        }
+    }
+
+    public function checkUsername($username) {
+        try {
+            $query = "
+            SELECT COUNT(*) as count
+            FROM ". self::TABLE ."
+            WHERE username = '$username'
+            ";
+
+            $results = $this->connect->query($query);
+            $count = $results->num_rows;
+
+            return [
+                'status' => $count == 0,
+                'message' => 
+                    $count == 0
+                    ? 'Username already exists'
+                    : null
             ];
         } catch (Exception $err) {
             return [
