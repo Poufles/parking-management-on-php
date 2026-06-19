@@ -1,0 +1,97 @@
+.settings-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 720px;
+      margin-bottom: 20px;
+}
+ .settings-choice {
+      padding: 20px;
+      text-align: left;
+      border: 1px solid #ddd7bd;
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+}
+ .settings-choice strong, .settings-choice small {
+      display: block;
+}
+ .settings-choice strong {
+      color: var(--forest);
+      font-size: 16px;
+}
+ .settings-choice small {
+      margin-top: 5px;
+      color: #777;
+}
+ .settings-choice:hover {
+      border-color: var(--copper);
+      box-shadow: 0 8px 22px rgba(48, 58, 32, .08);
+}
+ .settings-delete-form {
+      margin: 0;
+}
+ .settings-delete-form .settings-choice {
+      width: 100%;
+      height: 100%;
+}
+ .delete-choice strong {
+      color: #9f2f25;
+}
+ .settings-check {
+      display: none;
+}
+ .settings-panel {
+      display: none;
+      grid-column: 1 / -1;
+      margin-top: 4px;
+}
+ .settings-panel h2 {
+      margin-top: 0;
+}
+ #show-client-account:checked ~ .client-account-panel,
+ #show-parking-help:checked ~ .parking-help-panel {
+      display: block;
+}
+ .profile-upload {
+      display: inline-block;
+      cursor: pointer;
+}
+ .profile-upload-group {
+      display: block;
+      text-align: left;
+}
+ .profile-upload-group > label:first-child {
+      display: block;
+      margin: 0 0 10px;
+      font-weight: 700;
+}
+ .profile-upload input {
+      display: none;
+}
+ .profile-upload-circle {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 92px;
+      height: 92px;
+      overflow: hidden;
+      color: var(--forest);
+      background: linear-gradient(135deg, var(--clay), var(--copper));
+      border: 4px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 10px 24px rgba(40,54,24,.18);
+      font-size: 34px;
+      font-weight: 800;
+}
+ .profile-upload-circle img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+}
+ @media (max-width: 650px) {
+      .settings-actions {
+            grid-template-columns: 1fr;
+  }
+}

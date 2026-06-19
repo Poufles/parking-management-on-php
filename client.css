@@ -1,0 +1,190 @@
+body {
+  background:#f4f1e3;
+}
+
+.client-shell {
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:260px minmax(0,1fr);
+}
+
+.client-main {
+  grid-column:2;
+  min-width:0;
+  padding:32px 38px;
+}
+
+.client-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:28px;
+}
+
+.client-title-row {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.client-top .eyebrow {
+  margin:0;
+}
+
+.client-top h1 {
+  margin:5px 0 0;
+  font:800 32px Georgia,serif;
+}
+
+.client-main .card {
+  margin-bottom:20px;
+  padding:24px;
+}
+
+.client-main .card h2 {
+  margin:0 0 16px;
+  font-family:Georgia,serif;
+}
+
+.client-two {
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  gap:20px;
+}
+
+.client-main .cards {
+  grid-template-columns:repeat(3,1fr);
+}
+
+.settings-card {
+  max-width:720px;
+}
+
+.slot-toolbar {
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:flex-start;
+}
+
+.slot-toolbar form {
+  display:flex;
+  gap:10px;
+}
+
+.slot-toolbar label {
+  font-size:12px;
+  font-weight:700;
+}
+
+.slot-toolbar .input {
+  display:block;
+  min-width:120px;
+  margin-top:6px;
+  padding:9px;
+}
+
+.level-tabs,
+.category-tabs {
+  display:flex;
+  gap:8px;
+  margin:18px 0;
+  overflow-x:auto;
+}
+
+.level-tabs a,
+.category-tabs a {
+  padding:10px 16px;
+  color:var(--olive);
+  background:#ece8d5;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.level-tabs a.active,
+.category-tabs a.active {
+  color:var(--cream);
+  background:var(--forest);
+}
+
+.license-notice {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:20px;
+  padding:18px 20px;
+  border:1px solid #d9c88a;
+  border-radius:10px;
+  background:#fff8d8;
+}
+
+.license-notice strong {
+  display:block;
+  color:var(--forest);
+  font-size:18px;
+}
+
+.license-notice p {
+  margin:5px 0 0;
+}
+
+.table-wrap {
+  overflow:auto;
+}
+
+.badge {
+  display:inline-block;
+  padding:.3rem .6rem;
+  border-radius:99px;
+  font-size:.7rem;
+  font-weight:bold;
+}
+
+.occupied {
+  color:#83421d;
+  background:#f5dec7;
+}
+
+@media(max-width:950px) {
+  .client-shell {
+    display:block;
+  }
+
+  .client-main {
+    padding:22px;
+  }
+
+  .client-two {
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:650px) {
+  .client-top,
+  .slot-toolbar {
+    display:block;
+  }
+
+  .client-top .btn {
+    margin-top:14px;
+  }
+
+  .slot-toolbar form {
+    margin-top:14px;
+  }
+
+  .client-main .cards {
+    grid-template-columns:1fr;
+  }
+
+  .license-notice {
+    display:block;
+  }
+
+  .license-notice .btn {
+    margin-top:12px;
+  }
+}
