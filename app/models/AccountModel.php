@@ -136,7 +136,7 @@ class AccountModel
             $row = $results->fetch_assoc();
             $db_password = $row['password'];
 
-            if ($password !== $db_password) return [
+            if (sha1($password) !== $db_password) return [
                 'status' => false,
                 'message' => "Wrong account credentials !",
                 'results' => [

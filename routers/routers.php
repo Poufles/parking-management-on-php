@@ -62,6 +62,18 @@ return [
         'page' => 'register-details',
         'title' => TITLE . "Registration: Details"
     ],
+    'client/dashboard' => [
+        'controller' => __DIR__ . "/../app/controllers/client/dashboard.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php"
+        ],
+        'action' => 'ClientDashboardController',
+        'view' => __DIR__ . "/../app/views/client/dashboard.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'client-dashboard',
+        'title' => TITLE . "Dashboard"
+    ],
     'client/account/edit' => [
         'controller' => __DIR__ . "/../app/controllers/client/account-edit.php",
         'model' => [__DIR__ . "/../app/models/AccountModel.php"],

@@ -34,7 +34,7 @@ $passwordValidation = $results['password'] ?? null;
                 </div>
                 <div class="input-group has-validation mb-3">
                     <div class="form-floating <?php if (!$passwordValidation['status']) echo 'is-invalid'; ?>">
-                        <input type="text" class="form-control" id="input-password" placeholder="******" name="password" value=<?= $_POST['password'] ?? null ?>>
+                        <input type="password" class="form-control" id="input-password" placeholder="******" name="password" value=<?= $_POST['password'] ?? null ?>>
                         <label for="input-password">Password</label>
                     </div>
                     <div class="invalid-feedback">
