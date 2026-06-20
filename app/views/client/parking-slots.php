@@ -1,1 +1,0 @@
-<h1>Parking Slots</h1>

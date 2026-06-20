@@ -115,11 +115,12 @@ class ParkingModel
         }
     }
 
-    public function searchVehicle($vehicle_id) {
+    public function searchVehicle($vehicle_id)
+    {
         try {
             $query = "
             SELECT *
-            FROM ". self::TABLE ."
+            FROM " . self::TABLE . "
             WHERE vehicle_id = $vehicle_id
             ";
 
@@ -136,7 +137,6 @@ class ParkingModel
                 ]
             ];
         } catch (Exception $err) {
-
         }
     }
 

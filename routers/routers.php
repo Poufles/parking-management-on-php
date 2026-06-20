@@ -145,14 +145,14 @@ return [
         'model' => [
             __DIR__ . "/../app/models/AccountModel.php",
             __DIR__ . "/../app/models/VehicleModel.php",
-            __DIR__ . "/../app/models/ParkingModel.php"
+            __DIR__ . "/../app/models/ParkingModel.php",
+            __DIR__ . "/../app/models/HistoryModel.php"
         ],
         'action' => 'HistoryController',
         'view' => __DIR__ . "/../app/views/client/history.php",
-        // 'css' => "../public/styles/client/config.css",
-        'css' => APP_URL . "styles/index.css",
+        'css' => APP_URL . "styles/client/history.css",
         'page' => 'client-history',
-        'title' => TITLE . "History"
+        'title' => TITLE . "Parking History"
     ],
     'client/account-settings' => [
         'controller' => __DIR__ . "/../app/controllers/client/account-settings.php",

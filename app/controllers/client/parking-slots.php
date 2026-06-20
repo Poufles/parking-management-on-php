@@ -1,7 +1,7 @@
 <?php
 
 function ParkingSlotsController() {
-    $response = null;
+    $response = [];
 
     return $response;
 }
