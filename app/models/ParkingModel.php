@@ -20,7 +20,7 @@ class ParkingModel
         return self::$instance;
     }
 
-    public function searchParkingSlotsAdmin($page = 1, $limit = 20)
+    public function ParkingTableForAdmin($page = 1, $limit = 20)
     {
         try {
             $page   = max(1, (int)$page);
@@ -112,6 +112,126 @@ class ParkingModel
                 'status' => false,
                 'message' => $e->getMessage()
             ];
+        }
+    }
+
+    public function ParkingTableForClient($uid, $level, $section)
+    {
+
+        try {
+            $sql = "SELECT 
+                    s.SLOT_ID AS slot_id,
+                    s.LEVEL AS level,
+                    s.SECTION AS section,
+                    s.SLOT_NUMBER AS slot_number,
+                    s.VEHICLE_ID AS vehicle_id,
+                    s.TIME_IN AS time_in,
+                    s.TIME_OUT AS time_out,
+                    v.UID AS owner_uid,
+                    v.PLATE_NUMBER AS plate_number,
+                    vt.VEHICLE_TYPE AS vehicle_type
+                FROM " . self::TABLE . " s
+                LEFT JOIN " . VehicleModel::TABLE . " v ON v.VEHICLE_ID = s.VEHICLE_ID
+                LEFT JOIN " . VehicleModel::TABLE_VEHICLE_TYPES . " vt ON vt.VEHICLE_TYPE_ID = v.VEHICLE_TYPE_ID
+                WHERE s.LEVEL = ? AND s.SECTION = ?
+                ORDER BY s.SLOT_NUMBER ASC
+                LIMIT 10
+                ";
+
+            $stmt = $this->connect->prepare($sql);
+            $stmt->bind_param('ss', $level, $section);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+            $slots = $result->fetch_all(MYSQLI_ASSOC);
+            $stmt->close();
+
+            foreach ($slots as &$slot) {
+                if ($slot['vehicle_id'] === null) {
+                    $slot['status'] = 'available';
+                } elseif ((string) $slot['owner_uid'] === (string) $uid) {
+                    $slot['status'] = 'parked';
+                } else {
+                    $slot['status'] = 'occupied';
+                }
+            }
+            unset($slot);
+
+            return [
+                'status' => $result,
+                'message' => 'Fetched Slots !',
+                'response' => [
+                    'slots' => $slots
+                ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage(),
+                'response' => []
+            ];
+        }
+    }
+
+    public function parkIn($slot_id, $vehicle_id)
+    {
+        try {
+            $query = "
+            UPDATE " . self::TABLE . "
+            SET vehicle_id = ?,
+            time_in = ?
+            WHERE slot_id = ?
+            ";
+
+            $stmt = $this->connect->prepare($query);
+
+            $now = time();
+
+            $stmt->bind_param(
+                'iii',
+                $vehicle_id,
+                $now,
+                $slot_id
+            );
+
+            $results = $stmt->execute();
+
+            return [
+                'status' => $results,
+                'message' => 'Parked in !',
+                'rows' => []
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage(),
+                'response' => []
+            ];
+        }
+    }
+
+    public function searchVehicle($vehicle_id)
+    {
+        try {
+            $query = "
+            SELECT *
+            FROM " . self::TABLE . "
+            WHERE vehicle_id = $vehicle_id
+            ";
+
+            $results = $this->connect->query($query, MYSQLI_ASSOC);
+            $count = $results->num_rows;
+            $row = $results->fetch_assoc();
+
+            return [
+                'status' => $results,
+                'message' => 'Effectuated !',
+                'response' => [
+                    'count' => $count,
+                    'row' => $row
+                ]
+            ];
+        } catch (Exception $err) {
         }
     }
 
@@ -282,10 +402,6 @@ class ParkingModel
                 $hours12 = ($remainingHours <= 12) ? 1 : 2;
             }
 
-            // Total des blocs
-            // $total12hBlocks = ($hours24 * 2) + $hours12;
-
-            // Récupération des tarifs
             $fees = RateModel::getInstance()->getRateFees($vehicleTypeId);
 
             $totalFee = 0;
@@ -319,6 +435,53 @@ class ParkingModel
             return [
                 'status'  => false,
                 'message' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function isVehicleAlreadyParked($vehicle_id) {
+        try {
+            $query = "
+            SELECT COUNT(*) as count
+            FROM ". self::TABLE ."
+            WHERE vehicle_id = $vehicle_id
+            ";
+
+            $results = $this->connect->query($query);
+            $count = $results->fetch_all(MYSQLI_ASSOC);
+
+            return $count != 0;
+        } catch (Exception $err) {
+            return [
+                'status'  => false,
+                'message' => $err->getMessage()
+            ];
+        }
+    }
+
+    public function requestTimeOut($slot_id) {
+        try {
+            $query = "
+            UPDATE ". self::TABLE ."
+            SET time_out = ?
+            WHERE slot_id = ?
+            ";
+
+            $stmt = $this->connect->prepare($query);
+            
+            $time_out = time();
+
+            $stmt->bind_param('ii', $time_out, $slot_id);
+            $stmt->execute();
+
+            return [
+                'status' => true,
+                'message' => 'Time Out request',
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage()
             ];
         }
     }

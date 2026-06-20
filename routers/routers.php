@@ -103,7 +103,8 @@ return [
             __DIR__ . "/../app/models/AccountModel.php",
             __DIR__ . "/../app/models/VehicleModel.php",
             __DIR__ . "/../app/models/FileModel.php",
-            __DIR__ . "/../app/utils/Validation.php"
+            __DIR__ . "/../app/utils/Validation.php",
+            __DIR__ . "/../app/models/ParkingModel.php"
         ],
         'action' => 'ManageVehiclesController',
         'view' => __DIR__ . "/../app/views/client/manage-vehicles.php",
@@ -134,24 +135,36 @@ return [
         ],
         'action' => 'ParkingSlotsController',
         'view' => __DIR__ . "/../app/views/client/parking-slots.php",
-        // 'css' => "../public/styles/client/config.css",
-        'css' => APP_URL . "styles/index.css",
+        'css' => APP_URL . "styles/client/parking-slots.css",
         'page' => 'client-parking-slots',
         'title' => TITLE . "Parking Slots"
+    ],
+    'client/parking-slots/park-in' => [
+        'controller' => __DIR__ . "/../app/controllers/client/parking-slots-park-in.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/ParkingModel.php"
+        ],
+        'action' => 'ParkInController',
+        'view' => __DIR__ . "/../app/views/client/parking-slots-park-in.php",
+        'css' => APP_URL . "styles/client/parking-slots-park-in.css",
+        'page' => 'client-park-in',
+        'title' => TITLE . "Park In"
     ],
     'client/history' => [
         'controller' => __DIR__ . "/../app/controllers/client/history.php",
         'model' => [
             __DIR__ . "/../app/models/AccountModel.php",
             __DIR__ . "/../app/models/VehicleModel.php",
-            __DIR__ . "/../app/models/ParkingModel.php"
+            __DIR__ . "/../app/models/ParkingModel.php",
+            __DIR__ . "/../app/models/HistoryModel.php"
         ],
         'action' => 'HistoryController',
         'view' => __DIR__ . "/../app/views/client/history.php",
-        // 'css' => "../public/styles/client/config.css",
-        'css' => APP_URL . "styles/index.css",
+        'css' => APP_URL . "styles/client/history.css",
         'page' => 'client-history',
-        'title' => TITLE . "History"
+        'title' => TITLE . "Parking History"
     ],
     'client/account-settings' => [
         'controller' => __DIR__ . "/../app/controllers/client/account-settings.php",
@@ -278,6 +291,18 @@ return [
         'css' => APP_URL . "styles/index.css",
         'page' => 'rates-edit',
         'title' => TITLE . "Edit Rate"
+    ],
+    'admin/account-settings' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/account-settings.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+        ],
+        'action' => 'AccountSettingsController',
+        'view' => __DIR__ . "/../app/views/admin/account-settings.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'account-settings',
+        'title' => TITLE . "Account Settings"
     ],
     'error404' => [
         'controller' => __DIR__ . "/../app/controllers/pages/error-404.php",

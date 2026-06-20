@@ -50,6 +50,45 @@ class FileModel
         }
     }
 
+    public function getFile($uid, $fileId, $typeId)
+    {
+        try {
+            $sql = "
+            SELECT uploaded_file 
+            FROM " . self::TABLE . " 
+            WHERE uid = ? 
+            AND " . $typeId . " = ?
+            ";
+
+            $stmt = $this->connect->prepare($sql);
+            $stmt->bind_param("ii", $uid, $fileId); 
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+
+            if ($result->num_rows === 0) {
+                echo "Aucun fichier trouvé.";
+                return null;
+            }
+
+            $row = $result->fetch_assoc();
+
+            return [
+                'status' => $result,
+                'message' => 'File retrieved !',
+                'response' => [
+                    'filename' => $row['uploaded_file']
+                ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage(),
+                'response' => []
+            ];
+        }
+    }
+
     public function uploadFile($uid, $file_type_id, $file, $vehicle_id = null)
     {
         try {
@@ -98,9 +137,5 @@ class FileModel
                 'results' => []
             ];
         }
-    }
-
-    public function getFile($uid, $file_type_id, $vehicle_id = null) {
-
     }
 }
