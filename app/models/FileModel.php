@@ -99,4 +99,8 @@ class FileModel
             ];
         }
     }
+
+    public function getFile($uid, $file_type_id, $vehicle_id = null) {
+
+    }
 }

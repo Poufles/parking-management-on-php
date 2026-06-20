@@ -33,7 +33,9 @@ class Validation
 
         return [
             "status" => $isEmpty == count($arrValues),
-            "message" => 'Missing fields.',
+            "message" => $isEmpty == count($arrValues)
+                ? ''
+                : 'Missing fields.',
             "results" => $results
         ];
     }
@@ -53,8 +55,9 @@ class Validation
             'message' => 'Invalid phone number !'
         ];
     }
-    
-    public function isPasswordValid($password) {
+
+    public function isPasswordValid($password)
+    {
         return [
             'status' => preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/", $password),
             'message' => 'Invalid password format !'
@@ -77,7 +80,8 @@ class Validation
         ];
     }
 
-    public function isPlateNumberValid($plate_number) {
+    public function isPlateNumberValid($plate_number)
+    {
         $isValid = preg_match('/^[A-Z]{3} \d{3,4}$/', $plate_number);
 
         return [
@@ -85,6 +89,18 @@ class Validation
             'message' => $isValid
                 ? null
                 : 'Invalid plate number !'
+        ];
+    }
+
+    function isPaymentValid($amount_to_pay, $payment)
+    {
+        $isSufficient = $amount_to_pay <= $payment;
+
+        return [
+            'status' => $isSufficient,
+            'message' => $isSufficient
+                ? null
+                : 'Insufficient money !'
         ];
     }
 }

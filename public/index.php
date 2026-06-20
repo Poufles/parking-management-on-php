@@ -10,6 +10,10 @@ $url = $_GET['url'] ?? "";
 $userTypes = ['client', 'admin'];
 $userInApp = in_array(explode('/', $url)[0], $userTypes);
 
+if ($userInApp && !isset($_SESSION['uid'])) {
+    header('location: '. APP_URL . "auth/login");
+}
+
 $route =
     !isset($routes[$url]) ?
     $routes['error404'] :
@@ -48,59 +52,6 @@ $response = $action();
 </head>
 
 <body class="<?php if($userInApp) echo "app" ?>">
-    <!-- <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="<?= APP_URL ?>">{} dev tool</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="<?= APP_URL ?>">Homepage</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Accounts
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= APP_URL . "auth/login" ?>">Login Account</a></li>
-                            <li><a class="dropdown-item" href="<?= APP_URL . "auth/register/email" ?>">Create Account</a></li>
-                            <li><a class="dropdown-item" href="<?= APP_URL . "client/account/edit" ?>">Edit Account</a></li>
-                            <li><a class="dropdown-item" href="<?= APP_URL . "client/account/delete" ?>">Delete Account</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Vehicles
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= APP_URL . "client/vehicles/add" ?>">Add Vehicles (Client)</a></li>
-                            <li><a class="dropdown-item" href="<?= APP_URL . "client/vehicles/" ?>">Vehicles (Admin)</a></li>
-                            <li><a class="dropdown-item" href="<?= APP_URL . "admin/vehicles/create" ?>">Create Vehicle Type (Admin)</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Parking Slots
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= APP_URL . "admin/parking-slots" ?>">Parking Slots (Admin View)</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Rates
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= APP_URL . "admin/rates" ?>">Show Rates</a></li>
-                            <li><a class="dropdown-item" href="<?= APP_URL . "admin/rates/add" ?>">Add Rates</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav> -->
     <?php
     if ($userInApp) require __DIR__ . "/../app/components/navigation/NavbarLateral.php";
     ?>

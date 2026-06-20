@@ -149,7 +149,7 @@ function RegisterController()
 
         if (!$response['status'])  return $response;
         
-        $response = AccountModel::getInstance()->createAccount($name, $username, $_SESSION['email'], $gender, $phone, $password, 'client');
+        $response = AccountModel::getInstance()->createAccount($name, $username, $_SESSION['register-email'], $gender, $phone, $password, 'client');
 
         setcookie('parcheggiamo-uid', $response['results']['uid'], time() + 9999, '/');
         setcookie('parcheggiamo-username', $response['results']['username'], time() + 9999, '/');

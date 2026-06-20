@@ -1,3 +1,5 @@
+@import './index.css';
+
 .page-title {
     background-color: var(--secondary-color);
     color: var(--primary-color);
@@ -16,6 +18,7 @@
 .content-container>.content {
     border: 2px solid var(--secondary-color);
     background-color: #FFF;
+    color: var(--secondary-color);
     border-radius: 5px;
     padding: 20px;
 }
@@ -48,4 +51,9 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+.content-container .content-title {
+    font-size: 24px;
+    font-weight: bold;
 }

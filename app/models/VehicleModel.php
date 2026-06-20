@@ -226,7 +226,7 @@ class VehicleModel
 
             $stmt->execute();
             $db_vehicle_id = $stmt->insert_id;
-            $results = FileModel::getInstance()->uploadFile($uid, 1, $vehicle_document, $db_vehicle_id);
+            $results = FileModel::getInstance()->uploadFile($uid, 2, $vehicle_document, $db_vehicle_id);
 
             return [
                 'status' => $results,

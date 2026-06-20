@@ -112,19 +112,18 @@ return [
         'page' => 'manage-vehicles',
         'title' => TITLE . "Manage Vehicles"
     ],
-    'client/vehicles/add' => [
-        'controller' => __DIR__ . "/../app/controllers/client/vehicle-add.php",
+    'client/vehicles/view' => [
+        'controller' => __DIR__ . "/../app/controllers/client/vehicle-view.php",
         'model' => [
             __DIR__ . "/../app/models/AccountModel.php",
             __DIR__ . "/../app/models/VehicleModel.php",
             __DIR__ . "/../app/models/FileModel.php",
         ],
-        'action' => 'VehicleAddController',
-        'view' => __DIR__ . "/../app/views/client/vehicle-add.php",
-        // 'css' => "../public/styles/client/config.css",
+        'action' => 'VehicleViewController',
+        'view' => __DIR__ . "/../app/views/client/vehicle-view.php",
         'css' => APP_URL . "styles/index.css",
-        'page' => 'vehicle-add',
-        'title' => TITLE . "Add Vehicle"
+        'page' => 'vehicle-view',
+        'title' => TITLE . "View Vehicle"
     ],
     'client/parking-slots' => [
         'controller' => __DIR__ . "/../app/controllers/client/parking-slots.php",
@@ -168,19 +167,48 @@ return [
         'page' => 'client-settings',
         'title' => TITLE . "Account Settings"
     ],
-    'admin/parking-slots' => [
-        'controller' => __DIR__ . "/../app/controllers/admin/parking-slots.php",
+    'admin/dashboard' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/dashboard.php",
         'model' => [
             __DIR__ . "/../app/models/AccountModel.php",
             __DIR__ . "/../app/models/VehicleModel.php",
             __DIR__ . "/../app/models/ParkingModel.php"
         ],
-        'action' => 'ParkingSlotsController',
-        'view' => __DIR__ . "/../app/views/admin/parking-slots.php",
+        'action' => 'AdminDashboardController',
+        'view' => __DIR__ . "/../app/views/admin/dashboard.php",
         // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
+        'page' => 'admin-dashboard',
+        'title' => TITLE . "Admin Dashboard"
+    ],
+    'admin/parking-slots' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/parking-slots.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/ParkingModel.php",
+            __DIR__ . "/../app/models/RateModel.php"
+        ],
+        'action' => 'ParkingSlotsController',
+        'view' => __DIR__ . "/../app/views/admin/parking-slots.php",
+        'css' => APP_URL . "styles/admin/parking-slots.css",
         'page' => 'parking-slots',
         'title' => TITLE . "Parking Slots"
+    ],
+    'admin/parking-slots/manage-request' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/parking-slots-manage-request.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/ParkingModel.php",
+            __DIR__ . "/../app/models/RateModel.php",
+            __DIR__ . "/../app/utils/Validation.php"
+        ],
+        'action' => 'ParkingSlotsManageRequestController',
+        'view' => __DIR__ . "/../app/views/admin/parking-slots-manage-request.php",
+        'css' => APP_URL . "styles/admin/parking-slots.css",
+        'page' => 'parking-slots-manage-request',
+        'title' => TITLE . "Manage Request"
     ],
     'admin/vehicles/create' => [
         'controller' => __DIR__ . "/../app/controllers/admin/vehicle-type-create.php",

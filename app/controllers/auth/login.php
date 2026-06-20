@@ -34,7 +34,7 @@ function LoginController()
             setcookie('parcheggiamo-username', $username, time() + 9999, "/");
             setcookie('parcheggiamo-account-type', $account_type, time() + 9999, "/");
 
-            header('location: ' . APP_URL . "client/dashboard");
+            header('location: ' . APP_URL . "$account_type/dashboard");
             exit;
         }
     }
