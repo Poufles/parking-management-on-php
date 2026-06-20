@@ -28,6 +28,7 @@ class VehicleModel
             $offset = ($page - 1) * $limit;
 
             $allowedFilters = [
+                'uid',
                 'username',
                 'plate_number',
                 'vehicle_type'
@@ -44,6 +45,10 @@ class VehicleModel
                 if (!empty($filterBy) && in_array($filterBy, $allowedFilters)) {
 
                     switch ($filterBy) {
+                        case 'uid':
+                            $column = 'v.uid';
+                            break;
+
                         case 'username':
                             $column = 'a.username';
                             break;

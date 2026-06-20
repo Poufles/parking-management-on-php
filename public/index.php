@@ -6,9 +6,10 @@ require __DIR__ . "/../app/utils/session.php";
 $routes = require  __DIR__ . "/../routers/routers.php";
 
 $url = $_GET['url'] ?? "";
+$urlAccountMode = explode('/', $url)[0];
 
 $userTypes = ['client', 'admin'];
-$userInApp = in_array(explode('/', $url)[0], $userTypes);
+$userInApp = in_array($urlAccountMode, $userTypes);
 
 if ($userInApp && !isset($_SESSION['uid'])) {
     header('location: '. APP_URL . "auth/login");

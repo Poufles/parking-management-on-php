@@ -135,10 +135,22 @@ return [
         ],
         'action' => 'ParkingSlotsController',
         'view' => __DIR__ . "/../app/views/client/parking-slots.php",
-        // 'css' => "../public/styles/client/config.css",
-        'css' => APP_URL . "styles/index.css",
+        'css' => APP_URL . "styles/client/parking-slots.css",
         'page' => 'client-parking-slots',
         'title' => TITLE . "Parking Slots"
+    ],
+    'client/parking-slots/park-in' => [
+        'controller' => __DIR__ . "/../app/controllers/client/parking-slots-park-in.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/ParkingModel.php"
+        ],
+        'action' => 'ParkInController',
+        'view' => __DIR__ . "/../app/views/client/parking-slots-park-in.php",
+        'css' => APP_URL . "styles/client/parking-slots-park-in.css",
+        'page' => 'client-park-in',
+        'title' => TITLE . "Park In"
     ],
     'client/history' => [
         'controller' => __DIR__ . "/../app/controllers/client/history.php",

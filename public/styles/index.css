@@ -25,5 +25,5 @@ body.app {
 
 body.app main {
     background-color: var(--primary-color) !important;
-    padding: 30px 40px 0;
+    padding: 30px 40px 30px;
 }
