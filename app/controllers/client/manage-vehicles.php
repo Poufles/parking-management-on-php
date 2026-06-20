@@ -2,11 +2,6 @@
 
 function ManageVehiclesController()
 {
-    if (!isset($_SESSION['uid'])) {
-        header('location: ' . APP_URL . "auth/login");
-        exit;
-    }
-
     $response = null;
 
     if (isset($_POST['add'])) {
@@ -26,6 +21,17 @@ function ManageVehiclesController()
         if (!$response['status']) return $response;
         
         $response = VehicleModel::getInstance()->addNewVehicle($_SESSION['uid'], $plate_number, $vehicle_type_id, $vehicle_document);
+    }
+
+    if (isset($_GET['delete_vehicle_id'])) {
+        $vehicle_id = $_GET['delete_vehicle_id'];
+
+        $response = ParkingModel::getInstance()->searchVehicle($vehicle_id);
+        
+        if ($response['response']['count'] == 0) {
+            VehicleModel::getInstance()->deleteVehicle($vehicle_id);
+            header('location: ' . APP_URL . 'client/vehicles');
+        }
     }
 
     return $response;

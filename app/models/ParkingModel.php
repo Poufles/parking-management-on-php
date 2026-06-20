@@ -20,7 +20,7 @@ class ParkingModel
         return self::$instance;
     }
 
-    public function searchParkingSlotsAdmin($page = 1, $limit = 20)
+    public function ParkingTableForAdmin($page = 1, $limit = 20)
     {
         try {
             $page   = max(1, (int)$page);
@@ -112,6 +112,31 @@ class ParkingModel
                 'status' => false,
                 'message' => $e->getMessage()
             ];
+        }
+    }
+
+    public function searchVehicle($vehicle_id) {
+        try {
+            $query = "
+            SELECT *
+            FROM ". self::TABLE ."
+            WHERE vehicle_id = $vehicle_id
+            ";
+
+            $results = $this->connect->query($query, MYSQLI_ASSOC);
+            $count = $results->num_rows;
+            $row = $results->fetch_assoc();
+
+            return [
+                'status' => $results,
+                'message' => 'Effectuated !',
+                'response' => [
+                    'count' => $count,
+                    'row' => $row
+                ]
+            ];
+        } catch (Exception $err) {
+
         }
     }
 

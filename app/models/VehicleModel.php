@@ -174,17 +174,18 @@ class VehicleModel
         }
     }
 
-    public function checkClientVehicleLimit($uid) {
+    public function checkClientVehicleLimit($uid)
+    {
         try {
             $query = "
             SELECT COUNT(*) as count
-            FROM ". self::TABLE ."
+            FROM " . self::TABLE . "
             WHERE uid = ?
             ";
 
             $stmt = $this->connect->prepare($query);
             $stmt->bind_param('i', $uid);
-            
+
             $results = $stmt->execute();
             $row = $stmt->get_result()->fetch_assoc();
             $count = $row['count'];
@@ -244,10 +245,37 @@ class VehicleModel
         }
     }
 
-    public function createNewVehicleType($new_vehicle_type) {
+    public function deleteVehicle($vehicle_id)
+    {
         try {
             $query = "
-            INSERT INTO ". self::TABLE_VEHICLE_TYPES ." (vehicle_type)
+            DELETE FROM " . self::TABLE . "
+            WHERE vehicle_id = $vehicle_id
+            ";
+
+            $results = $this->connect->query($query);
+
+            return [
+                'status' => $results,
+                'message' => $results
+                    ? 'Deleted vehicle successfully!'
+                    : 'Deleting vehicle failed!',
+                'results' => []
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage(),
+                'results' => []
+            ];
+        }
+    }
+
+    public function createNewVehicleType($new_vehicle_type)
+    {
+        try {
+            $query = "
+            INSERT INTO " . self::TABLE_VEHICLE_TYPES . " (vehicle_type)
             VALUES (?)
             ";
 
@@ -277,7 +305,7 @@ class VehicleModel
         try {
             $query = "
             DELETE FROM " . self::TABLE . "
-            WHERE rate_id = $vehicle_type_id
+            WHERE vehicle_type_id = $vehicle_type_id
             ";
 
             $results = $this->connect->query($query);
@@ -285,8 +313,8 @@ class VehicleModel
             return [
                 'status' => $results,
                 'message' => $results
-                    ? 'Deleted rate fee successfully!'
-                    : 'Deleting rate fee failed!',
+                    ? 'Deleted vehicle type successfully!'
+                    : 'Deleting vehicle type failed!',
                 'results' => []
             ];
         } catch (Exception $err) {

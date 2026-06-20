@@ -103,7 +103,8 @@ return [
             __DIR__ . "/../app/models/AccountModel.php",
             __DIR__ . "/../app/models/VehicleModel.php",
             __DIR__ . "/../app/models/FileModel.php",
-            __DIR__ . "/../app/utils/Validation.php"
+            __DIR__ . "/../app/utils/Validation.php",
+            __DIR__ . "/../app/models/ParkingModel.php"
         ],
         'action' => 'ManageVehiclesController',
         'view' => __DIR__ . "/../app/views/client/manage-vehicles.php",

@@ -43,7 +43,7 @@ $vehicleDocumentValidation = $results['vehicle_document'] ?? null;
                         <td><?= $row['plate_number'] ?></td>
                         <td><?= $row['vehicle_type'] ?></td>
                         <td>
-                            <a href="<?= APP_URL . "client/vehicles/view?vehicle_id=" . $row['vehicle_id'] ?>">View Document</a> ||
+                            <a href="<?= APP_URL . "client/vehicles/view?vehicle_id=" . $row['vehicle_id'] ?>" target="_blank" rel="noopener noreferrer">View Document</a> ||
                             <a href="<?= APP_URL . "client/vehicles?delete_vehicle_id=" . $row['vehicle_id'] ?>">Delete</a>
                         </td>
                     </tr>
