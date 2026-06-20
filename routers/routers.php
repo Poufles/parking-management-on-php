@@ -279,6 +279,18 @@ return [
         'page' => 'rates-edit',
         'title' => TITLE . "Edit Rate"
     ],
+    'admin/account-settings' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/account-settings.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+        ],
+        'action' => 'AccountSettingsController',
+        'view' => __DIR__ . "/../app/views/admin/account-settings.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'account-settings',
+        'title' => TITLE . "Account Settings"
+    ],
     'error404' => [
         'controller' => __DIR__ . "/../app/controllers/pages/error-404.php",
         'action' => 'Error404Controller',

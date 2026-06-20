@@ -1,6 +1,7 @@
 <?php
 
 function AccountSettingsController() {
+    
     if (isset($_POST['logout'])) {
         setcookie('parcheggiamo-uid', '', 0, '/');
         setcookie('parcheggiamo-username', '', 0, '/');
