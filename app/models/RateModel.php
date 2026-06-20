@@ -272,7 +272,7 @@ class RateModel
         SELECT hours_id, fee 
         FROM " . self::TABLE . " 
         WHERE vehicle_type_id = ?
-    ";
+        ";
 
         $stmt = $this->connect->prepare($query);
         $stmt->bind_param("i", $vehicleTypeId);

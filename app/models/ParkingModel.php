@@ -241,6 +241,7 @@ class ParkingModel
             $query = "
             SELECT
                 CONCAT(s.level, ' - ', s.section, s.slot_number) as slot,
+                a.uid,
                 a.name,
                 v.plate_number,
                 vt.vehicle_type,
@@ -439,16 +440,19 @@ class ParkingModel
         }
     }
 
-    public function isVehicleAlreadyParked($vehicle_id) {
+    public function isVehicleAlreadyParked($vehicle_id)
+    {
         try {
             $query = "
             SELECT COUNT(*) as count
-            FROM ". self::TABLE ."
+            FROM " . self::TABLE . "
             WHERE vehicle_id = $vehicle_id
             ";
 
             $results = $this->connect->query($query);
-            $count = $results->fetch_all(MYSQLI_ASSOC);
+            $rows = $results->fetch_all(MYSQLI_ASSOC);
+            $row = $rows[0];
+            $count = $row['count'];
 
             return $count != 0;
         } catch (Exception $err) {
@@ -459,16 +463,17 @@ class ParkingModel
         }
     }
 
-    public function requestTimeOut($slot_id) {
+    public function requestTimeOut($slot_id)
+    {
         try {
             $query = "
-            UPDATE ". self::TABLE ."
+            UPDATE " . self::TABLE . "
             SET time_out = ?
             WHERE slot_id = ?
             ";
 
             $stmt = $this->connect->prepare($query);
-            
+
             $time_out = time();
 
             $stmt->bind_param('ii', $time_out, $slot_id);

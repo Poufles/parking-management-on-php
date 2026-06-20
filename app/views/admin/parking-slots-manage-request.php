@@ -64,6 +64,7 @@ $paymentValidation = $response['results']['payment'] ?? null;
     <form action="<?= APP_URL . "admin/parking-slots/manage-request?slot_id=" . $_GET['slot_id'] ?>" method="POST" class="content" id="payment">
         <input type="hidden" name="slot_id" value="<?= $_GET['slot_id'] ?>">
         <input type="hidden" name="amount_to_pay" value="<?= $details['fee']['results']['fee'] ?>">
+        <input type="hidden" name="uid" value="<?= $details['uid'] ?>">
         <div class="input-group has-validation">
             <div class="input-container <?php if (isset($paymentValidation) && !$paymentValidation['status']) echo 'is-invalid'; ?>">
                 <input type="text" name="payment" class="form-control" id="input-payment" placeholder="Payment" value="<?= $_POST['payment'] ?? null ?>">
