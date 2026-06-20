@@ -1,0 +1,124 @@
+#sidebar {
+    box-sizing: border-box;
+    height: 100dvh;
+    width: 250px;
+    padding: 5px 1em;
+    background-color: var(--secondary-color);
+    border-right: 2px solid var(--accent-color);
+    position: sticky;
+    top: 0;
+    align-self: start;
+    transition: 0.3s ease-in-out;
+    overflow: hidden;
+    text-wrap: nowrap;
+}
+
+#sidebar.close {
+    padding: 3px;
+    width: 60px;
+
+    span {
+        margin-left: 2px;
+    }
+}
+
+#sidebar ul {
+    padding: 0;
+    list-style: none;
+}
+
+#sidebar > ul > li:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+    margin-left: 14px;
+    
+    .logo {
+        padding-left: 3px;
+        font-weight: bold;
+    }
+}
+
+#sidebar ul li.active a {
+    color: var(--primary-color);
+
+    svg {
+        fill: var(--primary-color);
+    }
+}
+
+#sidebar a, #sidebar .dropdown-btn, #sidebar .logo {
+    border-radius: .5em;
+    padding: .85em;
+    text-decoration: none;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    transition: 0.3s;
+}
+
+#sidebar .dropdown-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    width: 100%;
+}
+
+#sidebar svg {
+    flex-shrink: 0 !important;
+    fill: var(--primary-color);
+}
+
+#sidebar a span, #sidebar .dropdown-btn span {
+    flex-grow: 1;
+
+    transition: 0.3s ease-in-out;
+}
+
+#sidebar a:hover, #sidebar .dropdown-btn:hover {
+    background-color: var(--accent-color);
+}
+
+#sidebar .sub-menu {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: 0.3s ease-in-out;
+
+    > div {
+        overflow: hidden;
+    }
+}
+
+#sidebar .sub-menu.show {
+    grid-template-rows: 1fr;
+}
+
+#sidebar .dropdown-btn svg {
+    transition: 0.3s ease;
+}
+
+#sidebar .rotate svg:last-child {
+    rotate: 180deg;
+}
+
+#sidebar .sub-menu a {
+    padding-left: 2em;
+}
+
+#sidebar #toggle-btn {
+    margin-left: auto;
+    padding: 1em;
+    border: none;
+    border-radius: .5em;
+    background-color: transparent;
+    cursor: pointer;
+    min-width: max-content;
+
+    svg {
+        width: max-content;
+    }
+}

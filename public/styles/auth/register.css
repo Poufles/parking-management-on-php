@@ -1,5 +1,3 @@
-@import "./config.css";
-
 #register-details #left-content form .input-group-split {
     display: flex;
     gap: 10px;

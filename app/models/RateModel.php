@@ -265,4 +265,25 @@ class RateModel
             ];
         }
     }
+
+    public function getRateFees($vehicleTypeId)
+    {
+        $query = "
+        SELECT hours_id, fee 
+        FROM " . self::TABLE . " 
+        WHERE vehicle_type_id = ?
+    ";
+
+        $stmt = $this->connect->prepare($query);
+        $stmt->bind_param("i", $vehicleTypeId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        $fees = [];
+        foreach ($result as $row) {
+            $fees[$row['hours_id']] = (float)$row['fee'];
+        }
+
+        return $fees;
+    }
 }

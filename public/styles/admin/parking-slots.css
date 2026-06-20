@@ -1,0 +1,48 @@
+@import '../config.css';
+
+.content.table .page-item {
+    padding: 0 !important;
+}
+
+.content.table thead {
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.content-container #receipt .head label, 
+.content-container #receipt .head .form-control-plaintext {
+    font-weight: bold;
+}
+
+.content-container #receipt .form-control-plaintext {
+    color: var(--secondary-color);
+    text-align: right;
+}
+
+.content-container #receipt hr {
+    margin-top: 0;
+}
+
+.content-container #receipt>div:last-of-type {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.content-container #payment {
+    display: flex;
+    gap: 10px;
+    align-items: start;
+
+    > button {
+        background-color: var(--secondary-color);
+        border: none;
+    }
+}
+
+.content-container #payment .input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-container #payment .invalid-feedback {
+    width: max-content;
+}
