@@ -152,13 +152,25 @@ class VehicleModel
         }
     }
 
-    public function getAllVehicleTypes()
+    public function getAllVehicleTypes($withRates = true)
     {
         try {
             $query = "
             SELECT *
             FROM " . self::TABLE_VEHICLE_TYPES . "
             ";
+
+            if (!$withRates) {
+                $query = "
+                SELECT 
+                    v.vehicle_type_id as vehicle_type_id,
+                    v.vehicle_type as vehicle_type
+                FROM ". VehicleModel::getInstance()::TABLE_VEHICLE_TYPES ." v
+                INNER JOIN ". RateModel::getInstance()::TABLE ." r ON v.vehicle_type_id = r.vehicle_type_id
+                WHERE r.fee IS NOT NULL
+                GROUP BY v.vehicle_type_id
+                ";
+            }
 
             $results = $this->connect->query($query);
             $rows = $results->fetch_all(MYSQLI_ASSOC);
