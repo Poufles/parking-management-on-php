@@ -67,7 +67,7 @@ $currentPage = $_GET['page'] ?? '1';
                         <td><?= htmlspecialchars($row['plate_number'] ?? '-') ?></td>
                         <td><?= htmlspecialchars($row['vehicle_type'] ?? '-') ?></td>
                         <td>
-                            <?= $row['time_in'] ? date('h:i A', strtotime($row['time_in'])) : '-' ?>
+                            <?= $row['time_in'] ? date('h:i A', $row['time_in']) : '-' ?>
                         </td>
                         <td>
                             <?php if ($row['status'] === 'occupied'): ?>

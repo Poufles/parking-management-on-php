@@ -3,6 +3,8 @@
 require __DIR__ . "/../app/utils/database.php";
 require __DIR__ . "/../app/utils/session.php";
 
+date_default_timezone_set('Asia/Manila');
+
 $routes = require  __DIR__ . "/../routers/routers.php";
 
 $url = $_GET['url'] ?? "auth/login";
