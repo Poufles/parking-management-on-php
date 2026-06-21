@@ -10,7 +10,7 @@ function HistoryController()
 
     $totalPages = $response['results']['total_pages'];
 
-    if ($currentPage < 0 || $currentPage > $totalPages) {
+    if (($currentPage < 0 || $currentPage > $totalPages) && $totalPages != null) {
         header('location: ' . APP_URL . 'admin/history?page=1');
         exit;
     }

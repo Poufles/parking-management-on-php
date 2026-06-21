@@ -3,7 +3,7 @@
 function LoginController()
 {
     if (isset($_SESSION['uid'])) {
-        header('location: ' . APP_URL . $_SESSION['account-type'] . "/dashboard");
+        header('location: ' . APP_URL . $_SESSION['account-type'] . "/parking-slots");
         exit;
     }
 
@@ -34,7 +34,7 @@ function LoginController()
             setcookie('parcheggiamo-username', $username, time() + 9999, "/");
             setcookie('parcheggiamo-account-type', $account_type, time() + 9999, "/");
 
-            header('location: ' . APP_URL . "$account_type/dashboard");
+            header('location: ' . APP_URL . "$account_type/parking-slots");
             exit;
         }
     }
