@@ -273,9 +273,11 @@ class AccountModel
 
             $stmt = $this->connect->prepare($query);
 
+            $hashedPassword = sha1($newPassword);
+
             $stmt->bind_param(
                 "si",
-                $newPassword,
+                $hashedPassword,
                 $uid
             );
 

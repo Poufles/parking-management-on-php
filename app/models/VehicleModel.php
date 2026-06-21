@@ -272,6 +272,8 @@ class VehicleModel
 
             $results = $this->connect->query($query);
 
+            FileModel::getInstance()->deleteFile($_SESSION['uid'], $vehicle_id);
+
             return [
                 'status' => $results,
                 'message' => $results

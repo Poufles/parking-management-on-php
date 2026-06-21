@@ -57,7 +57,7 @@ $queryParams = $_GET;
                 $prevDisabled = $currentPage <= 1 ? 'd-none' : '';
                 ?>
                 <li class="page-item <?= $prevDisabled ?>">
-                    <a class="page-link" href="?<?= '?page=' . $currentPage - 1 ?>" aria-label="Previous">
+                    <a class="page-link" href="<?= '?page=' . $currentPage - 1 ?>" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>

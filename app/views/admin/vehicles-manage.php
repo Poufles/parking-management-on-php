@@ -142,8 +142,7 @@ $vehicleDocumentValidation = $results['vehicle_document'] ?? null;
                         <td><?= $row['plate_number'] ?></td>
                         <td><?= $row['vehicle_type'] ?></td>
                         <td>
-                            <a href="<?= APP_URL . "client/vehicles/view?vehicle_id=" . $row['vehicle_id'] ?>" target="_blank" rel="noopener noreferrer">View Document</a> ||
-                            <a href="<?= APP_URL . "client/vehicles?delete_vehicle_id=" . $row['vehicle_id'] ?>">Delete</a>
+                            <a href="<?= APP_URL . "client/vehicles/view?vehicle_id=" . $row['vehicle_id'] ?>" target="_blank" rel="noopener noreferrer">View Document</a>
                         </td>
                     </tr>
                 <?php
@@ -158,7 +157,7 @@ $vehicleDocumentValidation = $results['vehicle_document'] ?? null;
                 $prevDisabled = $currentPage <= 1 ? 'd-none' : '';
                 ?>
                 <li class="page-item <?= $prevDisabled ?>">
-                    <a class="page-link" href="?<?= '?page=' . $currentPage - 1 ?>" aria-label="Previous">
+                    <a class="page-link" href="<?= '?page=' . $currentPage - 1 ?>" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
