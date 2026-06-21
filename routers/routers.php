@@ -133,8 +133,7 @@ return [
         ],
         'action' => 'AccountSettingsController',
         'view' => __DIR__ . "/../app/views/client/account-settings.php",
-        // 'css' => "../public/styles/client/config.css",
-        'css' => APP_URL . "styles/index.css",
+        'css' => APP_URL . "styles/config.css",
         'page' => 'client-settings',
         'title' => TITLE . "Account Settings"
     ],

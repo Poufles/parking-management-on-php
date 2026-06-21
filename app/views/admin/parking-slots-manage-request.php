@@ -38,13 +38,13 @@ $paymentValidation = $response['results']['payment'] ?? null;
         <div class="row">
             <label for="" class="col-sm-5 col-form-label">Time In:</label>
             <div class="col-sm-7">
-                <input type="text" readonly class="form-control-plaintext" id="" value="<?= date('h:s A', $details['time_in']) ?>">
+                <input type="text" readonly class="form-control-plaintext" id="" value="<?= date('h:i A', $details['time_in']) ?>">
             </div>
         </div>
         <div class="row">
             <label for="" class="col-sm-5 col-form-label">Time Out</label>
             <div class="col-sm-7">
-                <input type="text" readonly class="form-control-plaintext" id="" value="<?= date('h:s A', $details['time_out']) ?>">
+                <input type="text" readonly class="form-control-plaintext" id="" value="<?= date('h:i A', $details['time_out']) ?>">
             </div>
         </div>
         <div class="row">
