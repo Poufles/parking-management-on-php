@@ -20,8 +20,8 @@
                         <select class="input" name="vehicle_type">
                             <option>Car</option>
                             <option>Motorcycle</option>
-                            <option>Van</option>
-                            <option>Pick Up</option>
+                            <option>SUV</option>
+                            <option>Pickup</option>
                         </select>
                     </div>
                     <div class="form-group full">

@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+require 'app/utils/database.php';             
+require 'vehicle_information.php';    
+
 const APP_NAME = 'Parcheggiamo';
 
 $dataDir = __DIR__ . '/data';
@@ -326,21 +329,29 @@ function handle_add_vehicle(): void
         throw new RuntimeException('Enter a valid plate number.');
     }
 
-    $vehicleId = next_session_id($vehicles);
+    $vehicleType = input_choice(
+        $_POST,
+        'vehicle_type',
+        ['Car','Motorcycle','SUV','Pickup'],
+        'Car'
+    );
+
     $vehicles[] = [
         'id' => $vehicleId,
         'plate_number' => $plateNumber,
-        'vehicle_type' => input_choice(
-            $_POST,
-            'vehicle_type',
-            ['Car','Motorcycle','Van','Service','Pick Up'],
-            'Car'
-        ),
+        'vehicle_type' => $vehicleType,
     ];
 
     $_SESSION['vehicles'] = $vehicles;
     $_SESSION['vehicle_attachments'][$vehicleId] = upload_documents('registration_documents');
+    $attachment = $_SESSION['vehicle_attachments'][$vehicleId][0]['stored_name'] ?? '';
     set_flash('success', 'Vehicle added.');
+
+    
+    $vehicleDB = new vehicle_information();
+    $vehicleTypeId = $vehicleDB->getVehicleTypeId($vehicleType);
+    $vehicleDB->addVehicle($plateNumber, $vehicleTypeId);
+    $vehicleDB->addVehicleUpload($attachment);
 }
 
 // Creates an active parking record for the selected vehicle and slot.
