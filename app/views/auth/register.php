@@ -139,7 +139,6 @@ if ($page == 'register-email') {
                         </div>
                         <div class="form-floating">
                             <select class="form-select" id="gender" name="gender">
-                                <option value="default" <?= isset($_POST['gender']) ? null : 'selected' ?> disabled>Select your gender</option>
                                 <option value="male" <?php if (isset($_POST['gender']) && $_POST['gender'] == 'male') echo 'selected'; ?>>Male</option>
                                 <option value="female" <?php if (isset($_POST['gender']) && $_POST['gender'] == 'female') echo 'selected'; ?>>Female</option>
                                 <option value="others" <?php if (isset($_POST['gender']) && $_POST['gender'] == 'others') echo 'selected'; ?>>Others</option>

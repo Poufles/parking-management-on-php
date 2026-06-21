@@ -18,14 +18,6 @@ if ($userType == 'client') {
                     </svg>
                 </button>
             </li>
-            <li class="active">
-                <a href="<?= APP_URL . "client/dashboard" ?>">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000">
-                        <path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
-                    </svg>
-                    <span>Dashboard</span>
-                </a>
-            </li>
             <li>
                 <a href="<?= APP_URL . 'client/parking-slots' ?>">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000">
@@ -75,14 +67,6 @@ if ($userType == 'client') {
                         <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
                     </svg>
                 </button>
-            </li>
-            <li class="active">
-                <a href="<?= APP_URL . "admin/dashboard" ?>">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000">
-                        <path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
-                    </svg>
-                    <span>Dashboard</span>
-                </a>
             </li>
             <li>
                 <a href="<?= APP_URL . 'admin/parking-slots' ?>">

@@ -5,7 +5,7 @@ function RegisterController()
     /** @var string $page */
 
     if (isset($_SESSION['uid'])) {
-        header('location: ' . APP_URL . $_SESSION['account-type'] . "/dashboard");
+        header('location: ' . APP_URL . $_SESSION['account-type'] . "/parking-slots");
         exit;
     }
 
@@ -120,11 +120,10 @@ function RegisterController()
         $password = trim($_POST['password']) ?? null;
         $conpass = trim($_POST['conpass']) ?? null;
 
-        $phoneValidation = Validation::getInstance()->isPhoneValid($phone);
-
-        $passwordConfirmedValidation = Validation::getInstance()->isPasswordConfirmed($password, $conpass);
-
         $usernameValidation = AccountModel::getInstance()->checkUsername($username);
+        $phoneValidation = Validation::getInstance()->isPhoneValid($phone);
+        $passwordValidation = Validation::getInstance()->isPasswordValid($password);
+        $passwordConfirmedValidation = Validation::getInstance()->isPasswordConfirmed($password, $conpass);
 
         $response = Validation::getInstance()->areFieldsEmpty([
             'name' => $name,
@@ -135,20 +134,29 @@ function RegisterController()
             'conpass' => $conpass,
         ]);
 
-        $response['results']['username'] = $usernameValidation;
-        $response['results']['phone'] = $phoneValidation;
-
-        $passwordValidation = Validation::getInstance()->isPasswordValid($password);
-
-        $conpassValidation = $response['results']['conpass'] ?? null;
-        
-        if (!isset($conpassValidation)) {
-            $response['results']['conpass'] = $passwordConfirmedValidation;
-            $response['results']['password'] = $passwordValidation;
+        if (!$usernameValidation['status']) {
+            $response['results']['username'] = $usernameValidation;
+            $response['status'] = false;
         }
 
+        if (!$phoneValidation['status']) {
+            $response['results']['phone'] = $phoneValidation;
+            $response['status'] = false;
+        }
+
+        if (!$passwordValidation['status'] && !isset($response['results']['password'])) {
+            $response['results']['password'] = $passwordValidation;
+            $response['status'] = false;
+        }
+
+        if (!$passwordConfirmedValidation['status']) {
+            $response['results']['conpass'] = $passwordConfirmedValidation;
+            $response['status'] = false;
+        }
+
+
         if (!$response['status'])  return $response;
-        
+
         $response = AccountModel::getInstance()->createAccount($name, $username, $_SESSION['register-email'], $gender, $phone, $password, 'client');
 
         setcookie('parcheggiamo-uid', $response['results']['uid'], time() + 9999, '/');
@@ -159,7 +167,7 @@ function RegisterController()
         unset($_SESSION['register']);
         unset($_SESSION['otp']);
 
-        header('location: ' . APP_URL . 'client/dashboard');
+        header('location: ' . APP_URL . 'client/parking-slots');
         exit;
     }
 

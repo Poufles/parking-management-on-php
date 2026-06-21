@@ -382,14 +382,16 @@ class AccountModel
             ";
 
             $results = $this->connect->query($query);
-            $count = $results->num_rows;
+            $count = $results->fetch_assoc()['count'];
+
+            $isValid = $count == 0;
 
             return [
-                'status' => $count == 0,
+                'status' => $isValid,
                 'message' => 
-                    $count == 0
-                    ? 'Username already exists'
-                    : null
+                    $isValid
+                    ? ''
+                    : 'Username already exists'
             ];
         } catch (Exception $err) {
             return [

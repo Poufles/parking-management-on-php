@@ -42,41 +42,61 @@ class Validation
 
     public function isEmailValid($email)
     {
+        $isValid = preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/", $email);
+
         return [
-            'status' => preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/", $email),
-            'message' => 'Invalid email address !'
+            'status' => $isValid,
+            'message' => $isValid
+                ? ''
+                : 'Invalid Email Address !'
         ];
     }
 
     public function isPhoneValid($phone)
     {
+        $isValid =  preg_match("/^\+?[0-9]{11,15}$/", $phone);
+        
         return [
-            'status' => preg_match("/^\+?[0-9]{10,15}$/", $phone),
-            'message' => 'Invalid phone number !'
+            'status' => $isValid,
+            'message' => $isValid
+                ? ''
+                : 'Invalid Phone Number !'
         ];
     }
 
     public function isPasswordValid($password)
     {
+        $isValid = preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/", $password);
+
         return [
-            'status' => preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/", $password),
-            'message' => 'Invalid password format !'
+            'status' => $isValid,
+            'message' => $isValid
+                ? ''
+                : 'Invalid Password Format !'
         ];
     }
 
     public function isPasswordConfirmed($password, $conpass)
     {
+        $isValid = $password == $conpass;
+
         return [
-            'status' => $password == $conpass,
-            'message' => 'Passwords do not match !'
+            'status' => $isValid,
+            'message' => $isValid
+                ? ''
+                : 'Passwords do not match !'
         ];
     }
 
     public function isOTPCorrect($otp)
     {
+        $isValid = $_SESSION['otp'] == $otp;
+
         return [
-            'status' => $_SESSION['otp'] == $otp,
-            'message' => 'Incorrect OTP Code !'
+            'status' => $isValid,
+            'message' => $isValid
+                ? ''
+                : 'Incorrect OTP Code !'
         ];
     }
 
