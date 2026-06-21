@@ -93,9 +93,9 @@ class RateModel
             INNER JOIN " . VehicleModel::getInstance()::TABLE_VEHICLE_TYPES . " vt 
                 ON r.vehicle_type_id = vt.vehicle_type_id
             $where
+            ORDER BY r.fee DESC, h.hours DESC
             LIMIT ? OFFSET ?
             ";
-            // ORDER BY h.hours ASC, vt.vehicle_type ASC
 
             $params[] = $limit;
             $params[] = $offset;
@@ -272,7 +272,7 @@ class RateModel
         SELECT hours_id, fee 
         FROM " . self::TABLE . " 
         WHERE vehicle_type_id = ?
-    ";
+        ";
 
         $stmt = $this->connect->prepare($query);
         $stmt->bind_param("i", $vehicleTypeId);
@@ -285,5 +285,40 @@ class RateModel
         }
 
         return $fees;
+    }
+
+    public function isRateUsed($vehicle_type_id) {
+        try {
+            $query = "
+            SELECT
+            r.rate_id as rate_id,
+            r.vehicle_type_id as vehicle_type_id,
+            s.vehicle_id as vehicle_id
+            FROM ". self::TABLE ." as r
+            INNER JOIN ". VehicleModel::getInstance()::TABLE_VEHICLE_TYPES ." vt ON r.vehicle_type_id = vt.vehicle_type_id
+            INNER JOIN ". VehicleModel::getInstance()::TABLE ." v ON vt.vehicle_type_id = v.vehicle_type_id
+            INNER JOIN ". ParkingModel::getInstance()::TABLE ." s ON v.vehicle_id = s.vehicle_id
+            WHERE r.vehicle_type_id = ?
+            ";
+
+            $stmt = $this->connect->prepare($query);
+            $stmt->bind_param('i', $vehicle_type_id);
+            $stmt->execute();
+            $results = $stmt->get_result();
+            $count = $results->num_rows;
+
+            return [
+                'status' => true,
+                'message' => 'Effectuated !',
+                'response' => [
+                    'isRateUsed' => $count != 0
+                ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage()
+            ];
+        }
     }
 }

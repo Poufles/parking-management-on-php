@@ -152,13 +152,25 @@ class VehicleModel
         }
     }
 
-    public function getAllVehicleTypes()
+    public function getAllVehicleTypes($withRates = true)
     {
         try {
             $query = "
             SELECT *
             FROM " . self::TABLE_VEHICLE_TYPES . "
             ";
+
+            if (!$withRates) {
+                $query = "
+                SELECT 
+                    v.vehicle_type_id as vehicle_type_id,
+                    v.vehicle_type as vehicle_type
+                FROM " . VehicleModel::getInstance()::TABLE_VEHICLE_TYPES . " v
+                INNER JOIN " . RateModel::getInstance()::TABLE . " r ON v.vehicle_type_id = r.vehicle_type_id
+                WHERE r.fee IS NOT NULL
+                GROUP BY v.vehicle_type_id
+                ";
+            }
 
             $results = $this->connect->query($query);
             $rows = $results->fetch_all(MYSQLI_ASSOC);
@@ -260,6 +272,8 @@ class VehicleModel
 
             $results = $this->connect->query($query);
 
+            FileModel::getInstance()->deleteFile($_SESSION['uid'], $vehicle_id);
+
             return [
                 'status' => $results,
                 'message' => $results
@@ -309,7 +323,7 @@ class VehicleModel
     {
         try {
             $query = "
-            DELETE FROM " . self::TABLE . "
+            DELETE FROM " . self::TABLE_VEHICLE_TYPES . "
             WHERE vehicle_type_id = $vehicle_type_id
             ";
 
@@ -327,6 +341,63 @@ class VehicleModel
                 'status' => false,
                 'message' => $err->getMessage(),
                 'results' => []
+            ];
+        }
+    }
+
+    public function isVehicleTypeExist($vehicle_type)
+    {
+        try {
+            $query = "
+            SELECT COUNT(*) as count
+            FROM " . self::TABLE_VEHICLE_TYPES . "
+            WHERE vehicle_type = '$vehicle_type'
+            ";
+
+            $results = $this->connect->query($query);
+            $row = $results->fetch_assoc();
+            $count = $row['count'];
+
+            return [
+                'status' => true,
+                'message' => 'Effectuated',
+                'results' => [
+                    'isExist' => $count != 0
+                ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage()
+            ];
+        }
+    }
+
+    public function isVehicleTypeUsed($vehicle_type_id)
+    {
+        try {
+            $query = "
+            SELECT COUNT(*) as count
+            FROM " . self::TABLE_VEHICLE_TYPES . " vt 
+            INNER JOIN ". self::TABLE ." v ON vt.vehicle_type_id = v.vehicle_type_id
+            WHERE v.vehicle_type_id = $vehicle_type_id
+            ";
+
+            $results = $this->connect->query($query);
+            $row = $results->fetch_assoc();
+            $count = $row['count'];
+            
+            return [
+                'status' => true,
+                'message' => 'Effectuated',
+                'results' => [
+                    'isUsed' => $count != 0
+                ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage()
             ];
         }
     }

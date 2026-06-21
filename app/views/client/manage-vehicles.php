@@ -10,7 +10,7 @@ $currentPage = $_GET['page'] ?? '1';
 $vehicleLimit = VehicleModel::getInstance()->checkClientVehicleLimit($_SESSION['uid']);
 $isLimit = $vehicleLimit['results']['isLimit'];
 
-$vehicle_types_row = VehicleModel::getInstance()->getAllVehicleTypes();
+$vehicle_types_row = VehicleModel::getInstance()->getAllVehicleTypes(false);
 $vehicle_types = $vehicle_types_row['results']['rows'];
 
 $results = $response['results'] ?? null;
@@ -56,7 +56,7 @@ $vehicleDocumentValidation = $results['vehicle_document'] ?? null;
     <?php
     if (!$isLimit) {
     ?>
-            <div class="content crud">
+        <div class="content crud">
             <h4>Add New Vehicle</h4>
             <div id="passwordHelpBlock" class="form-text">
                 <ul>
@@ -82,7 +82,7 @@ $vehicleDocumentValidation = $results['vehicle_document'] ?? null;
                         <?php
                         foreach ($vehicle_types as $type) {
                         ?>
-                            <option value="<?= $type['VEHICLE_TYPE_ID'] ?>" <?php if (isset($_POST['vehicle-type-id']) && $_POST['vehicle-type-id'] == $type['VEHICLE_TYPE_ID']) echo 'selected'; ?>><?= $type['VEHICLE_TYPE'] ?></option>
+                            <option value="<?= $type['vehicle_type_id'] ?>" <?php if (isset($_POST['vehicle-type-id']) && $_POST['vehicle-type-id'] == $type['vehicle_type_id']) echo 'selected'; ?>><?= $type['vehicle_type'] ?></option>
                         <?php
                         }
                         ?>

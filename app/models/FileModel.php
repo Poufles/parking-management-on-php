@@ -61,7 +61,7 @@ class FileModel
             ";
 
             $stmt = $this->connect->prepare($sql);
-            $stmt->bind_param("ii", $uid, $fileId); 
+            $stmt->bind_param("ii", $uid, $fileId);
             $stmt->execute();
 
             $result = $stmt->get_result();
@@ -135,6 +135,68 @@ class FileModel
                 'status' => false,
                 'message' => $err->getMessage(),
                 'results' => []
+            ];
+        }
+    }
+
+    public function deleteFile($uid, $vehicle_id = null)
+    {
+        try {
+            $query = "
+            SELECT uploaded_file
+            FROM " . self::TABLE . "
+            WHERE uid = ?
+            ";
+
+            $params = [$uid];
+            $types = 'i';
+
+            if (isset($vehicle_id)) {
+                $query .= "AND vehicle_id = ?";
+                $types .= "i";
+                array_push($params, $vehicle_id);
+            }
+
+            $stmt = $this->connect->prepare($query);
+            $stmt->bind_param($types, ...$params);
+
+            $stmt->execute();
+
+            $row = $stmt->get_result()->fetch_assoc();
+            $filename = $row['uploaded_file'];
+
+            $uploadFolder = __DIR__ . "/../uploads/$uid/";
+
+            $destination = $uploadFolder . $filename;
+
+            unlink($destination);
+
+            $query = "
+            DELETE FROM " . self::TABLE . "
+            WHERE uid = ?
+            ";
+
+            $params = [$uid];
+            $types = 'i';
+
+            if (isset($vehicle_id)) {
+                $query .= "AND vehicle_id = ?";
+                $types .= "i";
+                array_push($params, $vehicle_id);
+            }
+
+            $stmt = $this->connect->prepare($query);
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
+
+            return [
+                'status' => true,
+                'message' => 'Successfully deleted !'
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage()
             ];
         }
     }

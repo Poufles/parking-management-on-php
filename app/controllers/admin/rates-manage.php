@@ -2,16 +2,52 @@
 
 function RatesManageController()
 {
-    $currentPage = $_GET['page'] ?? '1';
+    $response = null;
 
-    $response = RateModel::getInstance()->searchRates('', '', $currentPage);
+    if (isset($_POST['create'])) {
+        $hours_id = $_POST['hours-id'];
+        $vehicle_type_id = $_POST['vehicle-type-id'];
+        $fee = $_POST['fee'] ?? null;
 
-    $totalPages = $response['results']['totalPages'];
+        if (empty($fee)) return [
+            'status' => false,
+            'message' => 'Please fill up this field !'
+        ];
 
-    if ($totalPages != 0 && $currentPage > $totalPages || $currentPage < 1) {
-        header('location: ' . APP_URL . 'admin/rates?page=1');
-        exit;
-    };
+        if (filter_var($fee, FILTER_VALIDATE_INT) === false) return [
+            'status' => false,
+            'message' => 'Not a number !'
+        ];
+
+        $isRateExist = RateModel::getInstance()->isRateExist($hours_id, $vehicle_type_id);
+
+        if ($isRateExist['results']['isRateExist']) return [
+            'status' => false,
+            'message' => 'Rate already exists !'
+        ];
+
+        $response = RateModel::getInstance()->createRateFee($hours_id, $vehicle_type_id, $fee);
+        unset($_POST['create']);
+        unset($_POST['hours-id']);
+        unset($_POST['vehicle-type-id']);
+        unset($_POST['fee']);
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] && isset($_POST['edit'])) {
+        echo 'Hello';
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] && isset($_POST['delete'])) {
+        $response = RateModel::getInstance()->isRateUsed($_POST['vehicle_type_id']);
+        $isRateUsed = $response['response']['isRateUsed'];
+
+        if ($isRateUsed) {
+            $_POST['delete-error'] = true;
+            return;
+        }
+
+        RateModel::getInstance()->deleteRateFee($_POST['rate-id']);
+    }
 
     return $response;
 };

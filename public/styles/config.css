@@ -30,6 +30,19 @@
     width: 90%;
 }
 
+.content-container>.content.table a {
+    text-decoration: none;
+}
+
+.content-container>.content.table #delete-form {
+    display: inline;
+}
+.content-container>.content.table #delete-form button {
+    background-color: transparent;
+    border: 0;
+    color: red
+}
+
 .content-container>.content.crud {
     color: var(--secondary-color);
 }
@@ -67,5 +80,28 @@
 
     .page-link {
         margin: 0;
+    }
+}
+
+.content.error {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.content.error button {
+    background-color: transparent;
+    border: 0;
+    color: red;
+    display: flex;
+    align-items: end;
+
+    svg {
+        fill: red
     }
 }
