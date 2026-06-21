@@ -6,6 +6,11 @@ $currentPage = $_GET['page'] ?? '1';
 ?>
 
 <h1>Manage Rates</h1>
+
+<?php if (isset($_GET['error'])): ?>
+    <div class="alert alert-danger"><?= htmlspecialchars($_GET['error']) ?></div>
+<?php endif; ?>
+
 <table class="table table-striped table-hover">
     <thead>
         <tr>
@@ -25,7 +30,7 @@ $currentPage = $_GET['page'] ?? '1';
             <td><?= $row['hours'] ?></td>
             <td><?= $row['vehicle_type'] ?></td>
             <td><?= $row['fee'] ?></td>
-            <td><a href="<?= APP_URL . "admin/rates/edit?rate_id=" . urlencode($row['rate_id']) ?>">Edit</a> | <a href="<?= APP_URL . "admin/rates/delete?rate_id=" . urlencode($row['rate_id']) ?>">Delete</a></td>
+            <td><a href="<?= APP_URL . "admin/rates/edit?rate_id=" . urlencode($row['rate_id']) ?>">Edit</a> | <a href="<?= APP_URL . "admin/rates/delete?rate_id=" . urlencode($row['rate_id']) ?>" onclick="return confirm('Are you sure you want to delete this rate?');">Delete</a></td>
         </tr>
         <?php 
         }

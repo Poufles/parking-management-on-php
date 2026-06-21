@@ -485,4 +485,34 @@ class ParkingModel
             ];
         }
     }
+
+    public function getDashboardStats()
+    {
+        try {
+            $query = "
+            SELECT
+                (SELECT COUNT(*) FROM tbl_slots) AS total_slots,
+                (SELECT COUNT(*) FROM tbl_slots WHERE vehicle_id IS NOT NULL AND time_out IS NULL) AS occupied_slots,
+                (SELECT COUNT(*) FROM tbl_slots WHERE vehicle_id IS NULL) AS available_slots,
+                (SELECT COUNT(*) FROM tbl_slots WHERE vehicle_id IS NOT NULL AND time_out IS NOT NULL) AS pending_checkout,
+                (SELECT COUNT(*) FROM tbl_accounts WHERE account_type = 'client') AS total_clients,
+                (SELECT IFNULL(SUM(payment), 0) FROM tbl_payment_history WHERE FROM_UNIXTIME(time_out) >= CURDATE() AND FROM_UNIXTIME(time_out) < CURDATE() + INTERVAL 1 DAY) AS today_revenue
+            ";
+
+            $result = $this->connect->query($query);
+            $stats = $result->fetch_assoc();
+
+            return [
+                'status' => true,
+                'message' => 'Effectuated',
+                'results' => $stats
+            ];
+        } catch (Exception $e) {
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+                'results' => []
+            ];
+        }
+    }
 }

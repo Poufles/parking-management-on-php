@@ -1,7 +1,7 @@
 <?php
 
 function AdminDashboardController() {
-    $response = null;
-    
+    $response = ParkingModel::getInstance()->getDashboardStats();
+
     return $response;
 }

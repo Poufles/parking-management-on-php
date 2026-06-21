@@ -69,7 +69,6 @@ return [
         ],
         'action' => 'ClientDashboardController',
         'view' => __DIR__ . "/../app/views/client/dashboard.php",
-        // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
         'page' => 'client-dashboard',
         'title' => TITLE . "Dashboard"
@@ -79,20 +78,15 @@ return [
         'model' => [__DIR__ . "/../app/models/AccountModel.php"],
         'action' => 'AccountEditController',
         'view' => __DIR__ . "/../app/views/client/account-edit.php",
-        // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
         'page' => 'account-edit',
         'title' => TITLE . "Account Edit"
     ],
-    // COULD BE DONE WITH EDIT vvv
-    // COULD BE DONE WITH EDIT vvv
-    // COULD BE DONE WITH EDIT vvv
     'client/account/delete' => [
         'controller' => __DIR__ . "/../app/controllers/client/account-delete.php",
         'model' => [__DIR__ . "/../app/models/AccountModel.php"],
         'action' => 'AccountDeleteController',
         'view' => __DIR__ . "/../app/views/client/account-delete.php",
-        // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
         'page' => 'account-delete',
         'title' => TITLE . "Account Delete"
@@ -109,7 +103,6 @@ return [
         'action' => 'ManageVehiclesController',
         'view' => __DIR__ . "/../app/views/client/manage-vehicles.php",
         'css' => APP_URL . "styles/client/manage-vehicles.css",
-        // 'css' => APP_URL . "styles/index.css",
         'page' => 'manage-vehicles',
         'title' => TITLE . "Manage Vehicles"
     ],
@@ -175,7 +168,6 @@ return [
         ],
         'action' => 'AccountSettingsController',
         'view' => __DIR__ . "/../app/views/client/account-settings.php",
-        // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
         'page' => 'client-settings',
         'title' => TITLE . "Account Settings"
@@ -189,7 +181,6 @@ return [
         ],
         'action' => 'AdminDashboardController',
         'view' => __DIR__ . "/../app/views/admin/dashboard.php",
-        // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
         'page' => 'admin-dashboard',
         'title' => TITLE . "Admin Dashboard"
@@ -223,18 +214,41 @@ return [
         'page' => 'parking-slots-manage-request',
         'title' => TITLE . "Manage Request"
     ],
-    'admin/vehicles/create' => [
-        'controller' => __DIR__ . "/../app/controllers/admin/vehicle-type-create.php",
+    'admin/vehicles' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/vehicle-types.php",
         'model' => [
             __DIR__ . "/../app/models/AccountModel.php",
             __DIR__ . "/../app/models/VehicleModel.php"
         ],
-        'action' => 'VehicleTypeCreateController',
-        'view' => __DIR__ . "/../app/views/admin/vehicle-type-create.php",
-        // 'css' => "../public/styles/client/config.css",
+        'action' => 'VehicleTypesController',
+        'view' => __DIR__ . "/../app/views/admin/vehicle-types.php",
         'css' => APP_URL . "styles/index.css",
-        'page' => 'vehicle-type-create',
-        'title' => TITLE . "Add Vehicle Type"
+        'page' => 'vehicle-types',
+        'title' => TITLE . "Vehicle Types"
+    ],
+    'admin/vehicles/create' => [
+    'controller' => __DIR__ . "/../app/controllers/admin/vehicle-type-create.php",
+    'model' => [
+        __DIR__ . "/../app/models/AccountModel.php",
+        __DIR__ . "/../app/models/VehicleModel.php",
+        __DIR__ . "/../app/utils/Validation.php"   // ← IDAGDAG ITO
+    ],
+    'action' => 'VehicleTypeCreateController',
+    'view' => __DIR__ . "/../app/views/admin/vehicle-type-create.php",
+    'css' => APP_URL . "styles/index.css",
+    'page' => 'vehicle-type-create',
+    'title' => TITLE . "Add Vehicle Type"
+   ],
+    'admin/manage-accounts' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/manage-accounts.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+        ],
+        'action' => 'ManageAccountsController',
+        'view' => __DIR__ . "/../app/views/admin/manage-accounts.php",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'manage-accounts',
+        'title' => TITLE . "Manage Accounts"
     ],
     'admin/rates' => [
         'controller' => __DIR__ . "/../app/controllers/admin/rates-manage.php",
@@ -245,7 +259,6 @@ return [
         ],
         'action' => 'RatesManageController',
         'view' => __DIR__ . "/../app/views/admin/rates-manage.php",
-        // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
         'page' => 'rates-manage',
         'title' => TITLE . "Manage Rates"
@@ -259,7 +272,6 @@ return [
         ],
         'action' => 'RatesAddController',
         'view' => __DIR__ . "/../app/views/admin/rates-add.php",
-        // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
         'page' => 'rates-add',
         'title' => TITLE . "Add Rate"
@@ -273,12 +285,11 @@ return [
         ],
         'action' => 'RatesEditController',
         'view' => __DIR__ . "/../app/views/admin/rates-add.php",
-        // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
         'page' => 'rates-edit',
         'title' => TITLE . "Edit Rate"
     ],
-    'admin/rates/delete' => [ // COULD BE REMOVED
+    'admin/rates/delete' => [
         'controller' => __DIR__ . "/../app/controllers/admin/rates-delete.php",
         'model' => [
             __DIR__ . "/../app/models/VehicleModel.php",
@@ -287,7 +298,6 @@ return [
         ],
         'action' => 'RatesDeleteController',
         'view' => __DIR__ . "/../app/views/admin/rates-delete.php",
-        // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
         'page' => 'rates-edit',
         'title' => TITLE . "Edit Rate"
@@ -299,7 +309,6 @@ return [
         ],
         'action' => 'AccountSettingsController',
         'view' => __DIR__ . "/../app/views/admin/account-settings.php",
-        // 'css' => "../public/styles/client/config.css",
         'css' => APP_URL . "styles/index.css",
         'page' => 'account-settings',
         'title' => TITLE . "Account Settings"
@@ -308,7 +317,6 @@ return [
         'controller' => __DIR__ . "/../app/controllers/pages/error-404.php",
         'action' => 'Error404Controller',
         'view' => __DIR__ . "/../app/views/pages/error-404.php",
-        // 'css' => "../public/styles/pages/config.css",
         'css' => APP_URL . "styles/index.css",
         'page' => 'error404',
         'title' => TITLE . "Error 404"
