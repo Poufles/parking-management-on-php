@@ -266,6 +266,21 @@ return [
         'page' => 'vehicles-manage',
         'title' => TITLE . "Manage Vehicles"
     ],
+    'admin/history' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/history.php",
+        'model' => [
+            __DIR__ . "/../app/models/HistoryModel.php",
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/RateModel.php",
+        ],
+        'action' => 'HistoryController',
+        'view' => __DIR__ . "/../app/views/admin/history.php",
+        // 'css' => "../public/styles/client/config.css",
+        'css' => APP_URL . "styles/config.css",
+        'page' => 'admin-history',
+        'title' => TITLE . "History"
+    ],
     'admin/account-settings' => [
         'controller' => __DIR__ . "/../app/controllers/admin/account-settings.php",
         'model' => [
