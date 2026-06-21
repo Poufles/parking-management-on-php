@@ -227,18 +227,18 @@ return [
         'title' => TITLE . "Vehicle Types"
     ],
     'admin/vehicles/create' => [
-    'controller' => __DIR__ . "/../app/controllers/admin/vehicle-type-create.php",
-    'model' => [
-        __DIR__ . "/../app/models/AccountModel.php",
-        __DIR__ . "/../app/models/VehicleModel.php",
-        __DIR__ . "/../app/utils/Validation.php"   // ← IDAGDAG ITO
+        'controller' => __DIR__ . "/../app/controllers/admin/vehicle-type-create.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/utils/Validation.php"
+        ],
+        'action' => 'VehicleTypeCreateController',
+        'view' => __DIR__ . "/../app/views/admin/vehicle-type-create.php",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'vehicle-type-create',
+        'title' => TITLE . "Add Vehicle Type"
     ],
-    'action' => 'VehicleTypeCreateController',
-    'view' => __DIR__ . "/../app/views/admin/vehicle-type-create.php",
-    'css' => APP_URL . "styles/index.css",
-    'page' => 'vehicle-type-create',
-    'title' => TITLE . "Add Vehicle Type"
-   ],
     'admin/manage-accounts' => [
         'controller' => __DIR__ . "/../app/controllers/admin/manage-accounts.php",
         'model' => [
@@ -269,6 +269,7 @@ return [
             __DIR__ . "/../app/models/VehicleModel.php",
             __DIR__ . "/../app/models/RateModel.php",
             __DIR__ . "/../app/models/HoursModel.php",
+            __DIR__ . "/../app/utils/Validation.php",
         ],
         'action' => 'RatesAddController',
         'view' => __DIR__ . "/../app/views/admin/rates-add.php",
@@ -301,6 +302,19 @@ return [
         'css' => APP_URL . "styles/index.css",
         'page' => 'rates-edit',
         'title' => TITLE . "Edit Rate"
+    ],
+    'admin/history' => [
+        'controller' => __DIR__ . "/../app/controllers/admin/admin-history.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/HistoryModel.php",
+        ],
+        'action' => 'AdminHistoryController',
+        'view' => __DIR__ . "/../app/views/admin/admin-history.php",
+        'css' => APP_URL . "styles/index.css",
+        'page' => 'admin-history',
+        'title' => TITLE . "Parking History"
     ],
     'admin/account-settings' => [
         'controller' => __DIR__ . "/../app/controllers/admin/account-settings.php",
