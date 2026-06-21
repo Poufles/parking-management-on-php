@@ -64,14 +64,14 @@ class HistoryModel
             $result = $stmt->get_result();
             $history = $result->fetch_all(MYSQLI_ASSOC);
             $stmt->close();
-
+            
             $countSql = "
             SELECT COUNT(*) AS total
             FROM " . self::TABLE . "
             ";
 
             if (isset($uid)) {
-                $countSql .= " WHERE h.UID = ?";
+                $countSql .= " WHERE UID = ?";
 
                 $countStmt = $this->connect->prepare($countSql);
                 $countStmt->bind_param('i', $uid);
