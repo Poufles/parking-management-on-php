@@ -56,7 +56,7 @@ $vehicleDocumentValidation = $results['vehicle_document'] ?? null;
     <?php
     if (!$isLimit) {
     ?>
-            <div class="content crud">
+        <div class="content crud">
             <h4>Add New Vehicle</h4>
             <div id="passwordHelpBlock" class="form-text">
                 <ul>

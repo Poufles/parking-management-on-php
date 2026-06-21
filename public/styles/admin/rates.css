@@ -1,0 +1,28 @@
+@import '../config.css';
+
+.content.crud #return {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+
+    span {
+        color: var(--accent-color);
+    }
+
+    svg {
+        fill: var(--accent-color);
+    }
+}
+
+.content.crud #hours {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.content.crud #hours .radio-options {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}

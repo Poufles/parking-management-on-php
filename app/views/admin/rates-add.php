@@ -2,10 +2,6 @@
 
 /** @var array $response */
 
-// echo $response['message'];
-// var_dump($response['results']['rows']);
-// var_dump($_POST);
-
 $submitName = isset($_GET['rate_id']) ? 'edit' : 'add';
 $submitText = isset($_GET['rate_id']) ? 'Edit' : 'Add';
 

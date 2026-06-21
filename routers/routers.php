@@ -245,8 +245,7 @@ return [
         ],
         'action' => 'RatesManageController',
         'view' => __DIR__ . "/../app/views/admin/rates-manage.php",
-        // 'css' => "../public/styles/client/config.css",
-        'css' => APP_URL . "styles/index.css",
+        'css' => APP_URL . "styles/admin/rates.css",
         'page' => 'rates-manage',
         'title' => TITLE . "Manage Rates"
     ],
