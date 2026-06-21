@@ -20,6 +20,19 @@ $vehicleTypes = $vehicleTypesData['results']['rows'];
 
 <h4 class="page-title">Manage Rates</h4>
 
+<?php if (isset($_POST['delete-error'])) : ?>
+    <section class="content-container error mb-3">
+        <div class="content error">
+            <p class="mb-0">Rate fee can't be deleted: Make sure no vehicles are parked !</p>
+            <button type="button" id="close">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000">
+                    <path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z" />
+                </svg>
+                <span>Close</span>
+            </button>
+        </div>
+    </section>
+<?php endif; ?>
 <section class="content-container">
     <div class="content table">
         <table class="table table-striped table-hover">
@@ -41,7 +54,16 @@ $vehicleTypes = $vehicleTypesData['results']['rows'];
                         <td><?= $row['hours'] ?></td>
                         <td><?= $row['vehicle_type'] ?></td>
                         <td><?= $row['fee'] ?></td>
-                        <td><a href="<?= APP_URL . "admin/rates?edit=true&rate_id=" . urlencode($row['rate_id']) ?>">Edit</a> | <a href="<?= APP_URL . "admin/rates/delete?rate_id=" . urlencode($row['rate_id']) ?>">Delete</a></td>
+                        <td>
+                            <a href="<?= APP_URL . "admin/rates?edit=true&rate_id=" . urlencode($row['rate_id']) ?>">Edit</a> |
+                            <form action="<?= APP_URL . 'admin/rates' ?>" method="post" id="delete-form">
+                                <input type="hidden" name="rate-id" value="<?= $row['rate_id'] ?>">
+                                <input type="hidden" name="vehicle_type_id" value="<?= $row['vehicle_type_id'] ?>">
+                                <button type="submit" name="delete">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 <?php
                 }

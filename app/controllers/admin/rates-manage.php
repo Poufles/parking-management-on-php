@@ -37,5 +37,17 @@ function RatesManageController()
         echo 'Hello';
     }
 
+    if ($_SERVER['REQUEST_METHOD'] && isset($_POST['delete'])) {
+        $response = RateModel::getInstance()->isRateUsed($_POST['vehicle_type_id']);
+        $isRateUsed = $response['response']['isRateUsed'];
+
+        if ($isRateUsed) {
+            $_POST['delete-error'] = true;
+            return;
+        }
+
+        RateModel::getInstance()->deleteRateFee($_POST['rate-id']);
+    }
+
     return $response;
 };

@@ -239,8 +239,9 @@ return [
     'admin/rates' => [
         'controller' => __DIR__ . "/../app/controllers/admin/rates-manage.php",
         'model' => [
-            __DIR__ . "/../app/models/VehicleModel.php",
             __DIR__ . "/../app/models/RateModel.php",
+            __DIR__ . "/../app/models/VehicleModel.php",
+            __DIR__ . "/../app/models/ParkingModel.php",
             __DIR__ . "/../app/models/HoursModel.php",
         ],
         'action' => 'RatesManageController',
