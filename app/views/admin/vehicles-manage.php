@@ -2,8 +2,6 @@
 
 /** @var array $response */
 
-$currentPage = $_GET['page'] ?? '1';
-
 $types = VehicleModel::getInstance()->getAllVehicleTypes();
 $rows = $types['results']['rows'];
 
@@ -151,31 +149,31 @@ $vehicleDocumentValidation = $results['vehicle_document'] ?? null;
             </tbody>
         </table>
         <?php if ($totalPages > 1): ?>
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                <?php
-                $prevDisabled = $currentPage <= 1 ? 'd-none' : '';
-                ?>
-                <li class="page-item <?= $prevDisabled ?>">
-                    <a class="page-link" href="<?= '?page=' . $currentPage - 1 ?>" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <?php
+                    $prevDisabled = $currentPage <= 1 ? 'd-none' : '';
+                    ?>
+                    <li class="page-item <?= $prevDisabled ?>">
+                        <a class="page-link" href="<?= '?page=' . $currentPage - 1 ?>" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
 
-                <li class="page-item">
-                    <p class="page-link"><?= $currentPage ?></a>
-                </li>
-                
-                <?php
-                $nextDisabled = $currentPage >= $totalPages ? 'd-none' : '';
-                ?>
-                <li class="page-item <?= $nextDisabled ?>">
-                    <a class="page-link" href="<?= '?page=' . $currentPage + 1 ?>" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+                    <li class="page-item">
+                        <p class="page-link"><?= $currentPage ?></a>
+                    </li>
+
+                    <?php
+                    $nextDisabled = $currentPage >= $totalPages ? 'd-none' : '';
+                    ?>
+                    <li class="page-item <?= $nextDisabled ?>">
+                        <a class="page-link" href="<?= '?page=' . $currentPage + 1 ?>" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         <?php endif; ?>
     </div>
 </section>

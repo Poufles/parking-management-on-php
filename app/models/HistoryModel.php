@@ -20,7 +20,7 @@ class HistoryModel
         return self::$instance;
     }
 
-    public function getHistoryByUid($uid, $page = 1, $limit = 10)
+    public function getHistoryByUid($page = 1, $limit = 10, $uid = null)
     {
         try {
             $page = max(1, $page);
@@ -38,24 +38,47 @@ class HistoryModel
             INNER JOIN " . AccountModel::TABLE . " a ON a.UID = h.UID
             INNER JOIN " . VehicleModel::TABLE . " v ON v.VEHICLE_ID = h.VEHICLE_ID
             INNER JOIN " . VehicleModel::TABLE_VEHICLE_TYPES . " vt ON vt.VEHICLE_TYPE_ID = v.VEHICLE_TYPE_ID
-            WHERE h.UID = ?
+            ";
+
+            $params = [$limit, $offset];
+            $types = 'ii';
+
+            if (isset($uid)) {
+                $sql .= "
+                WHERE h.UID = ?
+                ";
+
+                $types = 'i' . $types;
+                array_unshift($params, $uid);
+            }
+
+            $sql .= "
             ORDER BY h.TIME_IN DESC
-            LIMIT ? OFFSET ?";
+            LIMIT ? OFFSET ?
+            ";
 
             $stmt = $this->connect->prepare($sql);
-            $stmt->bind_param('sii', $uid, $limit, $offset);
+            $stmt->bind_param($types, ...$params);
             $stmt->execute();
 
             $result = $stmt->get_result();
             $history = $result->fetch_all(MYSQLI_ASSOC);
             $stmt->close();
 
-            $countSql = "SELECT COUNT(*) AS total
-                 FROM " . self::TABLE . " h
-                 WHERE h.UID = ?";
+            $countSql = "
+            SELECT COUNT(*) AS total
+            FROM " . self::TABLE . "
+            ";
 
-            $countStmt = $this->connect->prepare($countSql);
-            $countStmt->bind_param('s', $uid);
+            if (isset($uid)) {
+                $countSql .= " WHERE h.UID = ?";
+
+                $countStmt = $this->connect->prepare($countSql);
+                $countStmt->bind_param('i', $uid);
+            } else {
+                $countStmt = $this->connect->prepare($countSql);
+            }
+
             $countStmt->execute();
             $total = $countStmt->get_result()->fetch_assoc()['total'];
             $countStmt->close();
