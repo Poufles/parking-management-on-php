@@ -17,6 +17,7 @@ $results = $response['results'] ?? null;
 $plateNumberValidation = $results['plate_number'] ?? null;
 $vehicleTypeIDValidation = $results['vehicle_type_id'] ?? null;
 $vehicleDocumentValidation = $results['vehicle_document'] ?? null;
+
 ?>
 
 <h4 class="page-title">Manage Vehicles</h4>
@@ -78,7 +79,6 @@ $vehicleDocumentValidation = $results['vehicle_document'] ?? null;
                 </div>
                 <div class="form-floating mb-3">
                     <select class="form-select" id="vehicle-type-id" name="vehicle-type-id">
-                        <option value="default" <?= isset($_POST['vehicle-type-id']) ? null : 'selected' ?> disabled>Select vehicle type</option>
                         <?php
                         foreach ($vehicle_types as $type) {
                         ?>
@@ -92,6 +92,11 @@ $vehicleDocumentValidation = $results['vehicle_document'] ?? null;
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Vehicle Document</label>
                     <input class="form-control" name="vehicle-document" type="file" id="formFile">
+                    <?php if (isset($vehicleDocumentValidation) && !$vehicleDocumentValidation['status']) : ?>
+                    <div style="color: red; font-size: 14px; margin-top: 5px">
+                        <?= $vehicleDocumentValidation['message'] ?? null ?>
+                    </div>
+                    <?php endif; ?>
                 </div>
                 <div class="actions-container">
                     <button type="submit" name="add" class="btn btn-success">Add Vehicle</button>

@@ -5,14 +5,6 @@ DEFINE('APP_URL', '/projets/parking-management-on-php/public/');
 DEFINE('TITLE', 'Parcheggiamo - ');
 
 return [
-    '' => [
-        'controller' => __DIR__ . "/../app/controllers/pages/homepage.php",
-        'action' => 'HomepageController',
-        'view' => __DIR__ . "/../app/views/pages/homepage.php",
-        'css' => APP_URL . "styles/index.css",
-        'page' => 'index',
-        'title' => TITLE . "Homepage"
-    ],
     'auth/login' => [
         'controller' => __DIR__ . "/../app/controllers/auth/login.php",
         'model' => [
@@ -61,41 +53,6 @@ return [
         'css' => APP_URL . "styles/auth/register.css",
         'page' => 'register-details',
         'title' => TITLE . "Registration: Details"
-    ],
-    'client/dashboard' => [
-        'controller' => __DIR__ . "/../app/controllers/client/dashboard.php",
-        'model' => [
-            __DIR__ . "/../app/models/AccountModel.php"
-        ],
-        'action' => 'ClientDashboardController',
-        'view' => __DIR__ . "/../app/views/client/dashboard.php",
-        // 'css' => "../public/styles/client/config.css",
-        'css' => APP_URL . "styles/index.css",
-        'page' => 'client-dashboard',
-        'title' => TITLE . "Dashboard"
-    ],
-    'client/account/edit' => [
-        'controller' => __DIR__ . "/../app/controllers/client/account-edit.php",
-        'model' => [__DIR__ . "/../app/models/AccountModel.php"],
-        'action' => 'AccountEditController',
-        'view' => __DIR__ . "/../app/views/client/account-edit.php",
-        // 'css' => "../public/styles/client/config.css",
-        'css' => APP_URL . "styles/index.css",
-        'page' => 'account-edit',
-        'title' => TITLE . "Account Edit"
-    ],
-    // COULD BE DONE WITH EDIT vvv
-    // COULD BE DONE WITH EDIT vvv
-    // COULD BE DONE WITH EDIT vvv
-    'client/account/delete' => [
-        'controller' => __DIR__ . "/../app/controllers/client/account-delete.php",
-        'model' => [__DIR__ . "/../app/models/AccountModel.php"],
-        'action' => 'AccountDeleteController',
-        'view' => __DIR__ . "/../app/views/client/account-delete.php",
-        // 'css' => "../public/styles/client/config.css",
-        'css' => APP_URL . "styles/index.css",
-        'page' => 'account-delete',
-        'title' => TITLE . "Account Delete"
     ],
     'client/vehicles' => [
         'controller' => __DIR__ . "/../app/controllers/client/manage-vehicles.php",
@@ -180,20 +137,6 @@ return [
         'css' => APP_URL . "styles/index.css",
         'page' => 'client-settings',
         'title' => TITLE . "Account Settings"
-    ],
-    'admin/dashboard' => [
-        'controller' => __DIR__ . "/../app/controllers/admin/dashboard.php",
-        'model' => [
-            __DIR__ . "/../app/models/AccountModel.php",
-            __DIR__ . "/../app/models/VehicleModel.php",
-            __DIR__ . "/../app/models/ParkingModel.php"
-        ],
-        'action' => 'AdminDashboardController',
-        'view' => __DIR__ . "/../app/views/admin/dashboard.php",
-        // 'css' => "../public/styles/client/config.css",
-        'css' => APP_URL . "styles/index.css",
-        'page' => 'admin-dashboard',
-        'title' => TITLE . "Admin Dashboard"
     ],
     'admin/parking-slots' => [
         'controller' => __DIR__ . "/../app/controllers/admin/parking-slots.php",

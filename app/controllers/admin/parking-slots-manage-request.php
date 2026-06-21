@@ -21,6 +21,7 @@ function ParkingSlotsManageRequestController()
 
         if (!$paymentValidation['status']) {
             $response['results']['payment'] = $paymentValidation;
+            $response['status'] = false;
 
             return $response;
         }

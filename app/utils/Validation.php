@@ -21,7 +21,7 @@ class Validation
         $results = [];
 
         foreach ($arrValues as $key => $field) {
-            if (empty($field) || $field == 'default') {
+            if (!isset($field)) {
                 $isEmpty--;
 
                 $results[$key] = [
@@ -103,7 +103,7 @@ class Validation
     public function isPlateNumberValid($plate_number)
     {
         $isValid = preg_match('/^[A-Z]{3} \d{3,4}$/', $plate_number);
-
+        
         return [
             'status' => $isValid,
             'message' => $isValid

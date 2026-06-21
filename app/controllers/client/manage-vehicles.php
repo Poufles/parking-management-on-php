@@ -13,21 +13,29 @@ function ManageVehiclesController()
         $response = Validation::getInstance()->areFieldsEmpty([
             'plate_number' => $plate_number,
             'vehicle_type_id' => $vehicle_type_id,
-            'vehicle_document' => $vehicle_document,
         ]);
 
-        if (!isset($response['results']['plate_number'])) $response['results']['plate_number'] = $plateNumberValidation;
+        if (!$plateNumberValidation['status']) {
+            $response['results']['plate_number'] = $plateNumberValidation;
+            $response['status'] = false;
+        }
+
+        if (empty($vehicle_document['name'])) {
+            $response['results']['vehicle_document'] = [ 'status' => false, 'message' => 'Please add attachment !' ];
+            $response['status'] = false;
+        }
 
         if (!$response['status']) return $response;
-        
+
         $response = VehicleModel::getInstance()->addNewVehicle($_SESSION['uid'], $plate_number, $vehicle_type_id, $vehicle_document);
+
     }
 
     if (isset($_GET['delete_vehicle_id'])) {
         $vehicle_id = $_GET['delete_vehicle_id'];
 
         $response = ParkingModel::getInstance()->searchVehicle($vehicle_id);
-        
+
         if ($response['response']['count'] == 0) {
             VehicleModel::getInstance()->deleteVehicle($vehicle_id);
             header('location: ' . APP_URL . 'client/vehicles');
