@@ -161,6 +161,10 @@ $defaultVehicleId = $availableVehicles ? (int) $availableVehicles[0]['id'] : nul
                     </button>
                 </div>
             </form>
-        <?php } ?>
+        <?php 
+        } 
+        ?>
     </section>
-<?php } ?>
+<?php 
+} 
+?>

@@ -1,97 +1,47 @@
-.settings-actions {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      max-width: 720px;
-      margin-bottom: 20px;
-}
- .settings-choice {
-      padding: 20px;
-      text-align: left;
-      border: 1px solid #ddd7bd;
-      border-radius: 12px;
-      background: #fff;
-      cursor: pointer;
-}
- .settings-choice strong, .settings-choice small {
-      display: block;
-}
- .settings-choice strong {
-      color: var(--forest);
-      font-size: 16px;
-}
- .settings-choice small {
-      margin-top: 5px;
-      color: #777;
-}
- .settings-choice:hover {
-      border-color: var(--copper);
-      box-shadow: 0 8px 22px rgba(48, 58, 32, .08);
-}
- .settings-delete-form {
-      margin: 0;
-}
- .settings-delete-form .settings-choice {
-      width: 100%;
-      height: 100%;
-}
- .delete-choice strong {
-      color: #9f2f25;
-}
- .settings-check {
-      display: none;
-}
- .settings-panel {
-      display: none;
-      grid-column: 1 / -1;
-      margin-top: 4px;
-}
- .settings-panel h2 {
-      margin-top: 0;
-}
- #show-client-account:checked ~ .client-account-panel,
- #show-parking-help:checked ~ .parking-help-panel {
-      display: block;
-}
- .profile-upload {
-      display: inline-block;
-      cursor: pointer;
-}
- .profile-upload-group {
-      display: block;
-      text-align: left;
-}
- .profile-upload-group > label:first-child {
-      display: block;
-      margin: 0 0 10px;
-      font-weight: 700;
-}
- .profile-upload input {
-      display: none;
-}
- .profile-upload-circle {
-      position: relative;
-      display: grid;
-      place-items: center;
-      width: 92px;
-      height: 92px;
-      overflow: hidden;
-      color: var(--forest);
-      background: linear-gradient(135deg, var(--clay), var(--copper));
-      border: 4px solid #fff;
-      border-radius: 50%;
-      box-shadow: 0 10px 24px rgba(40,54,24,.18);
-      font-size: 34px;
-      font-weight: 800;
-}
- .profile-upload-circle img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-}
- @media (max-width: 650px) {
-      .settings-actions {
-            grid-template-columns: 1fr;
-  }
+.settings-profile-page { max-width: 850px; }
+.settings-profile-card { padding: 28px; }
+.profile-summary { padding-bottom: 24px; border-bottom: 1px solid #e8e3d1; }
+.profile-summary h2, .profile-summary p { margin: 0; }
+.profile-summary .eyebrow { margin-bottom: 8px; }
+.profile-summary .muted { margin-top: 5px; }
+.profile-edit-fields { display: none; max-width: 560px; gap: 8px; }
+.profile-edit-fields label, .profile-details label { color: #777; font-size: 13px; font-weight: 700; text-transform: uppercase; }
+.profile-edit-fields label:not(:first-child) { margin-top: 8px; }
+.profile-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 24px 0; }
+.profile-details > div { display: grid; gap: 7px; padding: 16px; background: #fff; border: 1px solid #e3e3e3; border-radius: 10px; }
+.profile-details .full-detail { grid-column: 1 / -1; }
+.profile-details strong { color: var(--forest); }
+.profile-form .input { background: #fff; }
+.profile-form .input:disabled { color: #777; background: #fff; border-color: #ddd; opacity: 1; cursor: not-allowed; }
+.profile-footer-actions { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+.profile-footer-actions label { cursor: pointer; }
+.delete-account-form { display: inline-flex; align-items: center; margin: 0; }
+.delete-account-form .btn { margin: 0; }
+.btn-danger { color: #fff; background: #9f2f25; border-color: #9f2f25; }
+.btn-danger:hover { background: #81241d; }
+.btn-light { color: var(--forest); background: #f3f0e4; border-color: #ddd7bd; }
+.btn-light:hover { background: #e9e4d2; }
+.settings-check { position: absolute; opacity: 0; pointer-events: none; }
+.profile-edit-field, .profile-edit-buttons, .password-edit-buttons { display: none; }
+.password-settings { display: none !important; }
+.password-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.password-fields > div { display: grid; gap: 7px; }
+.profile-edit-buttons { align-items: center; gap: 10px; }
+.profile-edit-buttons label, .password-edit-buttons label { cursor: pointer; }
+#edit-client-profile:checked ~ .settings-profile-card .profile-view { display: none; }
+#edit-client-profile:checked ~ .settings-profile-card .profile-edit-field { display: block; }
+#edit-client-profile:checked ~ .settings-profile-card .profile-edit-fields { display: grid; }
+#edit-client-profile:checked ~ .settings-profile-card .profile-edit-buttons { display: flex; }
+#edit-client-profile:checked ~ .settings-profile-card .delete-account-form { display: none; }
+#edit-client-password:checked ~ .settings-profile-card .password-settings { display: grid !important; }
+#edit-client-password:checked ~ .settings-profile-card .profile-standard-action { display: none; }
+#edit-client-password:checked ~ .settings-profile-card .password-edit-buttons { display: flex; align-items: center; gap: 10px; }
+@media (max-width: 650px) {
+      .settings-profile-card { padding: 20px; }
+      .profile-details { grid-template-columns: 1fr; }
+      .profile-details .full-detail { grid-column: auto; }
+      .profile-footer-actions { align-items: stretch; flex-direction: column; width: 100%; margin-top: 8px; }
+      .profile-footer-actions > .btn, .delete-account-form, .delete-account-form .btn { width: 100%; text-align: center; }
+      .profile-edit-buttons, .password-edit-buttons { width: 100%; flex-direction: column; }
+      .password-fields { grid-template-columns: 1fr; }
 }

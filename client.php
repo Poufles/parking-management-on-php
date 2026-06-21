@@ -86,10 +86,10 @@ function ensure_session_data(): void
         'id' => 1,
         'full_name' => $_SESSION['user']['name'] ?? 'Client',
         'email' => '',
+        'gender' => 'Prefer not to say',
         'phone' => '',
         'address' => '',
         'license_image' => null,
-        'profile_image' => null,
     ];
 
     $_SESSION['account_attachments'] = [];
@@ -232,36 +232,6 @@ function upload_documents(string $field, int $existingCount = 0, ?int $maxFiles 
     }
 
     return $saved;
-}
-
-// Saves one profile image and returns its stored filename.
-function upload_profile_image(string $field): ?string
-{
-    if (empty($_FILES[$field]) || ($_FILES[$field]['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
-        return null;
-    }
-
-    $file = $_FILES[$field];
-    if ($file['error'] !== UPLOAD_ERR_OK || $file['size'] > 5 * 1024 * 1024) {
-        throw new RuntimeException('Profile picture must be 5 MB or smaller.');
-    }
-
-    $allowedTypes = [
-        'image/jpeg' => 'jpg',
-        'image/png' => 'png',
-        'image/webp' => 'webp',
-    ];
-    $mime = (new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
-    if (!isset($allowedTypes[$mime])) {
-        throw new RuntimeException('Profile picture must be JPG, PNG, or WEBP.');
-    }
-
-    $stored = 'profile-' . uniqid('', true) . '.' . $allowedTypes[$mime];
-    if (!move_uploaded_file($file['tmp_name'], __DIR__ . '/uploads/' . $stored)) {
-        throw new RuntimeException('Unable to save profile picture.');
-    }
-
-    return $stored;
 }
 
 require_client();
@@ -448,15 +418,29 @@ function handle_settings(): void
 {
     $name = input_text($_POST, 'full_name');
     $email = strtolower(input_text($_POST, 'email'));
+    $gender = input_choice($_POST, 'gender', ['Female', 'Male', 'Prefer not to say'], 'Prefer not to say');
     $phone = input_text($_POST, 'phone');
     $address = input_text($_POST, 'address');
+    $newPassword = input_text($_POST, 'new_password');
+    $confirmPassword = input_text($_POST, 'confirm_password');
 
     if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || $phone === '' || $address === '') {
         throw new RuntimeException('Complete all profile fields.');
     }
 
+    if ($newPassword !== '' || $confirmPassword !== '') {
+        if (strlen($newPassword) < 6) {
+            throw new RuntimeException('New password must have at least 6 characters.');
+        }
+        if ($newPassword !== $confirmPassword) {
+            throw new RuntimeException('New password and confirmation do not match.');
+        }
+        $_SESSION['account']['password_hash'] = password_hash($newPassword, PASSWORD_DEFAULT);
+    }
+
     $_SESSION['account']['full_name'] = $name;
     $_SESSION['account']['email'] = $email;
+    $_SESSION['account']['gender'] = $gender;
     $_SESSION['account']['phone'] = $phone;
     $_SESSION['account']['address'] = $address;
     $_SESSION['user']['name'] = $name;
@@ -473,11 +457,6 @@ function handle_settings(): void
             $_SESSION['account_attachments'] ?? [],
             $licenseFiles
         );
-    }
-
-    $profileImage = upload_profile_image('profile_image');
-    if ($profileImage !== null) {
-        $_SESSION['account']['profile_image'] = $profileImage;
     }
 
     set_flash('success', 'Account settings updated.');
@@ -588,8 +567,6 @@ $titles = [
     ];
     $clientName = $_SESSION['user']['name'] ?? 'Client';
     $clientFirstName = explode(' ', trim($clientName))[0] ?: 'Client';
-    $profileImage = $_SESSION['account']['profile_image'] ?? null;
-    $profileImagePath = $profileImage ? 'uploads/' . basename((string) $profileImage) : '';
     ?>
     <aside class="client-sidebar" id="clientSidebar">
         <div class="sidebar-heading">
@@ -601,11 +578,7 @@ $titles = [
 
         <div class="client-profile">
             <span class="profile-initial">
-                <?php if ($profileImagePath && is_file(__DIR__ . '/' . $profileImagePath)) { ?>
-                    <img src="<?= e($profileImagePath) ?>" alt="">
-                <?php } else { ?>
-                    <?= e(strtoupper(substr($clientName, 0, 1))) ?>
-                <?php } ?>
+                <?= e(strtoupper(substr($clientName, 0, 1))) ?>
             </span>
             <div>
                 <strong><?= e($clientName) ?></strong>
