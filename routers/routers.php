@@ -258,6 +258,7 @@ return [
             __DIR__ . "/../app/models/VehicleModel.php",
             __DIR__ . "/../app/models/ParkingModel.php",
             __DIR__ . "/../app/models/HoursModel.php",
+            __DIR__ . "/../app/models/AccountModel.php"
         ],
         'action' => 'VehiclesManageController',
         'view' => __DIR__ . "/../app/views/admin/vehicles-manage.php",
