@@ -4,6 +4,7 @@
 $results = $response['results'] ?? null;
 $usernameValidation = $results['username'] ?? null;
 $passwordValidation = $results['password'] ?? null;
+
 ?>
 
 <div class="view-content">

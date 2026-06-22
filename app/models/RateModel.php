@@ -287,6 +287,36 @@ class RateModel
         return $fees;
     }
 
+    public function getRateFeeInformation($rate_id) {
+        try {
+            $query = "
+            SELECT
+                rate_id,
+                hours_id,
+                vehicle_type_id,
+                fee
+            FROM ". self::TABLE ."
+            WHERE rate_id = $rate_id
+            ";
+
+            $results = $this->connect->query($query);
+            $rows = $results->fetch_assoc();
+            
+            return [
+                'status' => true,
+                'message' => 'Effectuated',
+                'response' => [
+                    'rows' => $rows
+                ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage()
+            ];
+        }
+    }
+
     public function isRateUsed($vehicle_type_id) {
         try {
             $query = "
