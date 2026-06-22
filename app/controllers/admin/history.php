@@ -2,18 +2,25 @@
 
 function HistoryController()
 {
-    $response = null;
+    $currentPage  = $_GET['page'] ?? 1;
+    $limit        = 10;
+    $search       = $_GET['search'] ?? null;
+    $filterDate   = $_GET['filter_date'] ?? null;
+    $filterType   = $_GET['filter_type'] ?? null;
+    $filterAcct   = $_GET['filter_acct'] ?? null;
+    $dateFrom     = $_GET['date_from'] ?? null;
+    $dateTo       = $_GET['date_to'] ?? null;
 
-    $currentPage = $_GET['page'] ?? '1';
-
-    $response = HistoryModel::getInstance()->getHistoryByUid($currentPage);
-
-    $totalPages = $response['results']['total_pages'];
-
-    if (($currentPage < 0 || $currentPage > $totalPages) && $totalPages != null) {
-        header('location: ' . APP_URL . 'admin/history?page=1');
-        exit;
-    }
+    $response = HistoryModel::getInstance()->getHistory(
+        $currentPage, 
+        $limit, 
+        $search, 
+        $filterDate, 
+        $filterType, 
+        $filterAcct, 
+        $dateFrom, 
+        $dateTo
+    );
 
     return $response;
 }

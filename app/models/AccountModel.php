@@ -147,6 +147,16 @@ class AccountModel
                 ]
             ];
 
+            $query = "
+            UPDATE " . self::TABLE . "
+            SET STATUS = 1
+            WHERE uid = ?
+            ";
+
+            $stmt = $this->connect->prepare($query);
+            $stmt->bind_param('i', $row['uid']);
+            $stmt->execute();
+
             return [
                 'status' => $success,
                 'message' => $success
@@ -157,6 +167,59 @@ class AccountModel
                     'username' => $row['username'],
                     'account_type' => $row['account_type'],
                 ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage(),
+                'results' => []
+            ];
+        }
+    }
+
+    public function logoutAccount($uid)
+    {
+        try {
+            $query = "
+            UPDATE " . self::TABLE . "
+            SET STATUS = 0
+            WHERE uid = ?
+            ";
+
+            $stmt = $this->connect->prepare($query);
+            $stmt->bind_param('i', $uid);
+            $stmt->execute();
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage(),
+                'results' => []
+            ];
+        }
+    }
+
+    public function isInSession($username)
+    {
+        try {
+            $query = "
+            SELECT COUNT(*) as count
+            FROM " . self::TABLE . "
+            WHERE USERNAME = '$username'
+            AND STATUS = 1
+            ";
+
+            $results = $this->connect->query($query);
+            $rows = $results->fetch_assoc();
+            $count = $rows['count'];
+
+            $inSession = $count == 1;
+
+            return [
+                'status' => $inSession,
+                'message' => $inSession
+                    ? 'Account is logged in another device !'
+                    : '',
+                'results' => []
             ];
         } catch (Exception $err) {
             return [
@@ -373,11 +436,12 @@ class AccountModel
         }
     }
 
-    public function checkUsername($username) {
+    public function checkUsername($username)
+    {
         try {
             $query = "
             SELECT COUNT(*) as count
-            FROM ". self::TABLE ."
+            FROM " . self::TABLE . "
             WHERE username = '$username'
             ";
 
@@ -388,8 +452,8 @@ class AccountModel
 
             return [
                 'status' => $isValid,
-                'message' => 
-                    $isValid
+                'message' =>
+                $isValid
                     ? ''
                     : 'Username already exists'
             ];
@@ -398,6 +462,48 @@ class AccountModel
                 'status' => false,
                 'message' => $err->getMessage(),
                 'results' => []
+            ];
+        }
+    }
+
+    public function isEmailExist($email) {
+        try {
+            $query = "
+            SELECT 
+                uid,
+                username,
+                account_type,
+                email_address
+            FROM ". self::TABLE ."
+            WHERE email_address = '$email'
+            ";
+
+            $results = $this->connect->query($query);
+            $rows = $results->fetch_assoc();
+
+            $uid = $rows['uid'];
+            $username = $rows['username'];
+            $account_type = $rows['account_type'];
+            $email = $rows['email_address'];
+
+            $isEmailExist = !empty($uid);
+
+            return [
+                'status' => $isEmailExist,
+                'message' => $isEmailExist
+                    ? ''
+                    : 'Email does not exist !',
+                'results' => [
+                    'uid' => $uid,
+                    'username' => $username,
+                    'account_type' => $account_type,
+                    'email' => $email
+                ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage()
             ];
         }
     }

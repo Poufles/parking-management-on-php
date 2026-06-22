@@ -10,8 +10,6 @@ function LoginController()
     $response = null;
 
     if (isset($_POST['login'])) {
-        // ADD VALIDATORS LATER
-
         $username = $_POST['username'] ?? null;
         $password = $_POST['password'] ?? null;
 
@@ -21,6 +19,15 @@ function LoginController()
         ]);
 
         if (!$response['status']) return $response;
+
+        $response = AccountModel::getInstance()->isInSession($username);
+
+        if ($response['status']) {
+            $response['results']['username'] = $response;
+            $response['results']['username']['status'] = false;
+            
+            return $response;
+        }
 
         $response = AccountModel::getInstance()->loginAccount($username, $password);
 

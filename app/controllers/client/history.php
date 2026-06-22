@@ -1,11 +1,29 @@
 <?php
 
-function HistoryController() {
-    $response = null;
+function HistoryController()
+{
+    
+    $currentPage  = $_GET['page'] ?? 1;
+    $limit        = 10;
+    $search       = $_GET['search'] ?? '';
+    $filterDate   = $_GET['filter_date'] ?? '';
+    $filterType   = $_GET['filter_type'] ?? '';
+    $filterAcct   = $_GET['filter_acct'] ?? '';
+    $dateFrom     = $_GET['date_from'] ?? '';
+    $dateTo       = $_GET['date_to'] ?? '';
+    $clientUID    = $_SESSION['uid'] ?? null;
 
-    $currentPage = $_GET['page'] ?? '1';
+    $response = HistoryModel::getInstance()->getHistory(
+        $currentPage,
+        $limit,
+        $search,
+        $filterDate,
+        $filterType,
+        $filterAcct,
+        $dateFrom,
+        $dateTo,
+        $clientUID
+    );
 
-    $response = HistoryModel::getInstance()->getHistoryByUid($currentPage, 10, $_SESSION['uid']);
-
-    return $response; 
+    return $response;
 }

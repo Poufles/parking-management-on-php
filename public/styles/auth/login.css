@@ -7,3 +7,17 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
+#login div:has(#forgot-password) {
+    position: relative;
+}
+
+#login #forgot-password {
+    color: var(--accent-color);
+    text-decoration: none;
+    position: absolute;
+    font-size: 13px;
+    top:  7px;
+    right: 15px;
+    z-index: 10;
+}

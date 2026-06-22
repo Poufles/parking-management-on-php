@@ -16,6 +16,11 @@ if ($totalPages != 0 && $currentPage > $totalPages || $currentPage < 1) {
 $vehicleTypesData = VehicleModel::getInstance()->getAllVehicleTypes();
 $vehicleTypes = $vehicleTypesData['results']['rows'];
 
+$editVariables = $response['response']['rows'] ?? null;
+$editHours = $editVariables['hours_id'] ?? null;
+$editVehicleType = $editVariables['vehicle_type_id'] ?? null;
+$editFee = $editVariables['fee'] ?? null;
+
 ?>
 
 <h4 class="page-title">Manage Rates</h4>
@@ -94,13 +99,13 @@ $vehicleTypes = $vehicleTypesData['results']['rows'];
                     <label for="">Choose an hour</label>
                     <div class="radio-options">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" value="1" name="hours-id" id="12-hrs" checked>
+                            <input class="form-check-input" type="radio" value="1" name="hours-id" id="12-hrs" checked  <?php if (isset($_GET['edit'])) echo 'disabled'; ?> <?php if (isset($editHours) && $editHours == 1) echo 'checked' ?>>
                             <label class="form-check-label" for="12-hrs">
                                 12 Hours
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" value="2" name="hours-id" id="24-hrs">
+                            <input class="form-check-input" type="radio" value="2" name="hours-id" id="24-hrs" <?php if (isset($_GET['edit'])) echo 'disabled'; ?> <?php if (isset($editHours) && $editHours == 2) echo 'checked' ?> >
                             <label class="form-check-label" for="24-hrs">
                                 24 Hours
                             </label>
@@ -108,9 +113,13 @@ $vehicleTypes = $vehicleTypesData['results']['rows'];
                     </div>
                 </div>
                 <div class="form-floating mb-3">
-                    <select class="form-select" id="vehicle-type-id" name="vehicle-type-id">
-                        <?php foreach ($vehicleTypes as $index => $vehicle) : ?>
-                            <option value="<?= $vehicle['VEHICLE_TYPE_ID'] ?>" <?php if ($index == 0) echo 'selected'; ?>><?= $vehicle['VEHICLE_TYPE'] ?>
+                    <select class="form-select" id="vehicle-type-id" name="vehicle-type-id" <?php if (isset($_GET['edit'])) echo 'disabled' ?>>
+                        <?php foreach ($vehicleTypes as $index => $vehicle) : 
+                                $vehicleTypeID = $vehicle['VEHICLE_TYPE_ID'];
+                                $vehicleType = $vehicle['VEHICLE_TYPE'];
+                                $isVehicleToEdit = isset($editVehicleType) && $editVehicleType == $vehicle['VEHICLE_TYPE_ID'];
+                        ?>
+                            <option value="<?= $vehicleTypeID ?>" <?php if ($index == 0) echo 'selected'; ?> <?php if ($isVehicleToEdit) echo 'selected' ?>><?= $vehicleType ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -119,7 +128,7 @@ $vehicleTypes = $vehicleTypesData['results']['rows'];
                 <div class="input-group has-validation mb-3">
                     <div class="form-floating <?php if (isset($response) && !$response['status']) echo 'is-invalid'; ?>">
                         <input type="text" class="form-control" id="input-fee"
-                            placeholder="" name="fee">
+                            placeholder="" name="fee" value="<?= $editFee ?? null ?>">
                         <label for="input-fee">Rate Fee</label>
                     </div>
                     <div class="invalid-feedback">

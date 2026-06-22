@@ -4,6 +4,7 @@
 $results = $response['results'] ?? null;
 $usernameValidation = $results['username'] ?? null;
 $passwordValidation = $results['password'] ?? null;
+
 ?>
 
 <div class="view-content">
@@ -33,6 +34,7 @@ $passwordValidation = $results['password'] ?? null;
                     </div>
                 </div>
                 <div class="input-group has-validation mb-3">
+                    <a href="<?= APP_URL . 'auth/forgot-password' ?>" id="forgot-password">Forgot Password ?</a>
                     <div class="form-floating <?php if (!$passwordValidation['status']) echo 'is-invalid'; ?>">
                         <input type="password" class="form-control" id="input-password" placeholder="******" name="password" value=<?= $_POST['password'] ?? null ?>>
                         <label for="input-password">Password</label>

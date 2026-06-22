@@ -54,6 +54,19 @@ return [
         'page' => 'register-details',
         'title' => TITLE . "Registration: Details"
     ],
+    'auth/forgot-password' => [
+        'controller' => __DIR__ . "/../app/controllers/auth/forgot-password.php",
+        'model' => [
+            __DIR__ . "/../app/models/AccountModel.php",
+            __DIR__ . "/../app/utils/Validation.php",
+            __DIR__ . "/../app/services/MailService.php"
+        ],
+        'action' => 'ForgotPasswordController',
+        'view' => __DIR__ . "/../app/views/auth/forgot-password.php",
+        'css' => APP_URL . "styles/auth/login.css",
+        'page' => 'forgot-password',
+        'title' => TITLE . "Forgot Password"
+    ],
     'client/vehicles' => [
         'controller' => __DIR__ . "/../app/controllers/client/manage-vehicles.php",
         'model' => [
@@ -133,8 +146,7 @@ return [
         ],
         'action' => 'AccountSettingsController',
         'view' => __DIR__ . "/../app/views/client/account-settings.php",
-        // 'css' => "../public/styles/client/config.css",
-        'css' => APP_URL . "styles/index.css",
+        'css' => APP_URL . "styles/config.css",
         'page' => 'client-settings',
         'title' => TITLE . "Account Settings"
     ],

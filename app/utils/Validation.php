@@ -21,7 +21,7 @@ class Validation
         $results = [];
 
         foreach ($arrValues as $key => $field) {
-            if (!isset($field)) {
+            if (empty($field)) {
                 $isEmpty--;
 
                 $results[$key] = [
