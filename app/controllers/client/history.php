@@ -5,7 +5,7 @@ function HistoryController() {
 
     $currentPage = $_GET['page'] ?? '1';
 
-    $response = HistoryModel::getInstance()->getHistoryByUid($currentPage, 10, $_SESSION['uid']);
+    $response = HistoryModel::getInstance()->getHistory($currentPage, 10, $_SESSION['uid']);
 
     return $response; 
 }

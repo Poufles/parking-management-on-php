@@ -23,6 +23,7 @@ $queryParams = $_GET;
                 <tr>
                     <th>#</th>
                     <th>Client Name</th>
+                    <th>Parking Slot</th>
                     <th>Plate Number</th>
                     <th>Vehicle Type</th>
                     <th>Time in</th>
@@ -39,6 +40,7 @@ $queryParams = $_GET;
                     <tr>
                         <td><?= $rowNumber ?></td>
                         <td><?= $data['name'] ?></td>
+                        <td><?= $data['parking_slot'] ?></td>
                         <td><?= $data['plate_number'] ?></td>
                         <td><?= $data['vehicle_type'] ?></td>
                         <td><?= date('d M, Y | h:i A', $data['time_in']) ?></td>

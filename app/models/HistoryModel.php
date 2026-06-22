@@ -4,7 +4,7 @@ class HistoryModel
 {
     private static ?HistoryModel $instance = null;
     private mysqli $connect;
-    private const TABLE = 'tbl_payment_history';
+    private const TABLE = 'tbl_parking_history';
 
     private function __construct()
     {
@@ -20,24 +20,22 @@ class HistoryModel
         return self::$instance;
     }
 
-    public function getHistoryByUid($page = 1, $limit = 10, $uid = null)
+    public function getHistory($page = 1, $limit = 10, $name = null)
     {
         try {
             $page = max(1, $page);
             $offset = ($page - 1) * $limit;
 
             $sql = "SELECT 
-                a.NAME AS name,
-                v.PLATE_NUMBER AS plate_number,
-                vt.VEHICLE_TYPE AS vehicle_type,
-                h.TIME_IN AS time_in,
-                h.TIME_OUT AS time_out,
-                h.AMOUNT_TO_PAY AS amount_to_pay,
-                h.PAYMENT AS payment
-            FROM " . self::TABLE . " h
-            INNER JOIN " . AccountModel::TABLE . " a ON a.UID = h.UID
-            INNER JOIN " . VehicleModel::TABLE . " v ON v.VEHICLE_ID = h.VEHICLE_ID
-            INNER JOIN " . VehicleModel::TABLE_VEHICLE_TYPES . " vt ON vt.VEHICLE_TYPE_ID = v.VEHICLE_TYPE_ID
+                NAME AS name,
+                PARKING_SLOT as parking_slot,
+                PLATE_NUMBER AS plate_number,
+                VEHICLE_TYPE AS vehicle_type,
+                TIME_IN AS time_in,
+                TIME_OUT AS time_out,
+                AMOUNT_TO_PAY AS amount_to_pay,
+                PAYMENT AS payment
+            FROM " . self::TABLE . "
             ";
 
             $params = [$limit, $offset];
@@ -45,7 +43,7 @@ class HistoryModel
 
             if (isset($uid)) {
                 $sql .= "
-                WHERE h.UID = ?
+                WHERE NAME = ?
                 ";
 
                 $types = 'i' . $types;
@@ -53,7 +51,7 @@ class HistoryModel
             }
 
             $sql .= "
-            ORDER BY h.TIME_IN DESC
+            ORDER BY TIME_IN DESC
             LIMIT ? OFFSET ?
             ";
 
@@ -64,7 +62,7 @@ class HistoryModel
             $result = $stmt->get_result();
             $history = $result->fetch_all(MYSQLI_ASSOC);
             $stmt->close();
-            
+
             $countSql = "
             SELECT COUNT(*) AS total
             FROM " . self::TABLE . "

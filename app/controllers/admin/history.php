@@ -6,7 +6,7 @@ function HistoryController()
 
     $currentPage = $_GET['page'] ?? '1';
 
-    $response = HistoryModel::getInstance()->getHistoryByUid($currentPage);
+    $response = HistoryModel::getInstance()->getHistory($currentPage);
 
     $totalPages = $response['results']['total_pages'];
 
