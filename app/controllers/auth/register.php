@@ -79,8 +79,6 @@ function RegisterController()
             $altBody
         );
 
-        var_dump($emailSent);
-
         if ($emailSent['status']) {
             header('location: ' . APP_URL . "auth/register/otp");
             exit;

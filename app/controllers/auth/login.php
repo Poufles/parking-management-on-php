@@ -10,8 +10,6 @@ function LoginController()
     $response = null;
 
     if (isset($_POST['login'])) {
-        // ADD VALIDATORS LATER
-
         $username = $_POST['username'] ?? null;
         $password = $_POST['password'] ?? null;
 

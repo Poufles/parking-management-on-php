@@ -465,4 +465,46 @@ class AccountModel
             ];
         }
     }
+
+    public function isEmailExist($email) {
+        try {
+            $query = "
+            SELECT 
+                uid,
+                username,
+                account_type,
+                email_address
+            FROM ". self::TABLE ."
+            WHERE email_address = '$email'
+            ";
+
+            $results = $this->connect->query($query);
+            $rows = $results->fetch_assoc();
+
+            $uid = $rows['uid'];
+            $username = $rows['username'];
+            $account_type = $rows['account_type'];
+            $email = $rows['email_address'];
+
+            $isEmailExist = !empty($uid);
+
+            return [
+                'status' => $isEmailExist,
+                'message' => $isEmailExist
+                    ? ''
+                    : 'Email does not exist !',
+                'results' => [
+                    'uid' => $uid,
+                    'username' => $username,
+                    'account_type' => $account_type,
+                    'email' => $email
+                ]
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage()
+            ];
+        }
+    }
 }
