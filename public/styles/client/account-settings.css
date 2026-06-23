@@ -1,0 +1,50 @@
+@import '../config.css';
+
+.profile-header,
+.w-button button,
+.w-button a {
+    background: var(--secondary-color) !important;
+    color: white !important;
+}
+
+
+.profile-header button {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+}
+
+.card-body {
+    color: var(--secondary-color) !important;
+}
+
+.card-body .text-muted {
+    font-weight: bold;
+    color: var(--secondary-color) !important;
+}
+
+.info-row {
+    padding: 12px 0 !important;
+    border-bottom: 1px solid #eee !important;
+}
+
+.info-row:last-child {
+    border-bottom: none !important;
+}
+
+#file {
+    display: none !important;
+}
+
+#edit .header-green {
+    background-color: var(--secondary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+#edit label,
+#edit input {
+    color: var(--secondary-color) !important;
+}
+
+#edit label {
+    font-weight: bold;
+}

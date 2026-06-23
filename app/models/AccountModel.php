@@ -507,4 +507,34 @@ class AccountModel
             ];
         }
     }
+
+    public function getAccountInfo($uid) {
+        try {
+            $query = "
+            SELECT
+                name,
+                username,
+                email_address,
+                gender,
+                phone,
+                licence
+            FROM ". self::TABLE ."
+            WHERE uid = $uid
+            ";
+
+            $results = $this->connect->query($query);
+            $accountDetails = $results->fetch_assoc();
+
+            return [
+                'status' => true,
+                'message' => 'Fetched account',
+                'account' => $accountDetails 
+            ];
+        } catch (Exception $err) {
+            return [
+                'status' => false,
+                'message' => $err->getMessage()
+            ];
+        }
+    }
 }
