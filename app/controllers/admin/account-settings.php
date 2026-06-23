@@ -1,7 +1,7 @@
 <?php
 
 function AccountSettingsController() {
-    
+
     if (isset($_POST['logout'])) {
         AccountModel::getInstance()->logoutAccount($_SESSION['uid']);
 

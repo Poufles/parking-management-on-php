@@ -99,13 +99,13 @@ $editFee = $editVariables['fee'] ?? null;
                     <label for="">Choose an hour</label>
                     <div class="radio-options">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" value="1" name="hours-id" id="12-hrs" checked  <?php if (isset($_GET['edit'])) echo 'disabled'; ?> <?php if (isset($editHours) && $editHours == 1) echo 'checked' ?>>
+                            <input class="form-check-input" type="radio" value="1" name="hours-id" id="12-hrs" checked <?php if (isset($_GET['edit'])) echo 'disabled'; ?> <?php if (isset($editHours) && $editHours == 1) echo 'checked' ?>>
                             <label class="form-check-label" for="12-hrs">
                                 12 Hours
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" value="2" name="hours-id" id="24-hrs" <?php if (isset($_GET['edit'])) echo 'disabled'; ?> <?php if (isset($editHours) && $editHours == 2) echo 'checked' ?> >
+                            <input class="form-check-input" type="radio" value="2" name="hours-id" id="24-hrs" <?php if (isset($_GET['edit'])) echo 'disabled'; ?> <?php if (isset($editHours) && $editHours == 2) echo 'checked' ?>>
                             <label class="form-check-label" for="24-hrs">
                                 24 Hours
                             </label>
@@ -114,10 +114,10 @@ $editFee = $editVariables['fee'] ?? null;
                 </div>
                 <div class="form-floating mb-3">
                     <select class="form-select" id="vehicle-type-id" name="vehicle-type-id" <?php if (isset($_GET['edit'])) echo 'disabled' ?>>
-                        <?php foreach ($vehicleTypes as $index => $vehicle) : 
-                                $vehicleTypeID = $vehicle['VEHICLE_TYPE_ID'];
-                                $vehicleType = $vehicle['VEHICLE_TYPE'];
-                                $isVehicleToEdit = isset($editVehicleType) && $editVehicleType == $vehicle['VEHICLE_TYPE_ID'];
+                        <?php foreach ($vehicleTypes as $index => $vehicle) :
+                            $vehicleTypeID = $vehicle['VEHICLE_TYPE_ID'];
+                            $vehicleType = $vehicle['VEHICLE_TYPE'];
+                            $isVehicleToEdit = isset($editVehicleType) && $editVehicleType == $vehicle['VEHICLE_TYPE_ID'];
                         ?>
                             <option value="<?= $vehicleTypeID ?>" <?php if ($index == 0) echo 'selected'; ?> <?php if ($isVehicleToEdit) echo 'selected' ?>><?= $vehicleType ?>
                             </option>

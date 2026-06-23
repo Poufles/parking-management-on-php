@@ -9,7 +9,7 @@ $passwordValidation = $response['results']['password'] ?? null;
 
 <div class="view-content">
     <div class="sides img-container" id="left-content">
-        <img src="<?= APP_URL . "assets/images/reid-naaykens-kKyqSiu_KAs-unsplash.jpg" ?>" alt="">
+        <img src="<?= APP_URL . "assets/images/pexels-bylukemiller-28986830 (1).jpg" ?>" alt="">
     </div>
     <div class="sides interface-container" id="right-content">
         <div class="form-wrapper">
