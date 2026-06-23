@@ -47,9 +47,9 @@ $accountDetails = $results['account'];
             <div class="info-row d-flex justify-content-between align-items-center w-button">
                 <span class="text-muted">Licence</span>
                 <?php if ($accountDetails['licence'] ?? null) : ?>
-                    <button class="btn btn-sm d-flex align-items-center gap-2">
+                    <a href="<?= APP_URL . 'client/account-settings/licence?view=' . $accountDetails['licence'] ?>" target="_blank" class="btn btn-sm d-flex align-items-center gap-2">
                         View
-                    </button>
+                    </a>
                 <?php else : ?>
                     <a href="<?= APP_URL . 'client/account-settings/edit' ?>" class="btn btn-sm d-flex align-items-center gap-2">
                         Add Licence

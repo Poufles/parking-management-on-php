@@ -110,6 +110,17 @@ class FileModel
             );
 
             $results = $stmt->execute();
+            $fileId = $stmt->insert_id;
+
+            if (!isset($vehicle_id)) {
+                $query = "
+                UPDATE " . AccountModel::getInstance()::TABLE . "
+                SET licence = $fileId
+                WHERE uid = $uid
+                ";
+
+                $results = $this->connect->query($query);
+            }
 
             $fileTmpPath = $file['tmp_name'];
             $uploadFolder = __DIR__ . "/../uploads/$uid/";
@@ -117,7 +128,7 @@ class FileModel
             if (!is_dir($uploadFolder)) {
                 mkdir($uploadFolder, 0755, true);
             }
-
+            
             $safeFileName = $filename;
             $destination = $uploadFolder . $safeFileName;
 
