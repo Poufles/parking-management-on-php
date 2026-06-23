@@ -67,7 +67,7 @@ class FileModel
             $result = $stmt->get_result();
 
             if ($result->num_rows === 0) {
-                echo "Aucun fichier trouvé.";
+                // echo "Aucun fichier trouvé.";
                 return null;
             }
 
@@ -128,7 +128,7 @@ class FileModel
             if (!is_dir($uploadFolder)) {
                 mkdir($uploadFolder, 0755, true);
             }
-            
+
             $safeFileName = $filename;
             $destination = $uploadFolder . $safeFileName;
 
@@ -150,11 +150,11 @@ class FileModel
         }
     }
 
-    public function deleteFile($uid, $vehicle_id = null)
+    public function deleteFile($uid, $upload_id = null, $vehicle_id = null)
     {
         try {
             $query = "
-            SELECT uploaded_file
+            SELECT uploaded_file 
             FROM " . self::TABLE . "
             WHERE uid = ?
             ";
@@ -163,52 +163,81 @@ class FileModel
             $types = 'i';
 
             if (isset($vehicle_id)) {
-                $query .= "AND vehicle_id = ?";
+                $query .= " AND vehicle_id = ?";
                 $types .= "i";
-                array_push($params, $vehicle_id);
+                $params[] = $vehicle_id;
+            } else {
+                $query .= " AND upload_id = ?";
+                $types .= 'i';
+                $params[] = $upload_id;
             }
 
             $stmt = $this->connect->prepare($query);
             $stmt->bind_param($types, ...$params);
-
             $stmt->execute();
 
-            $row = $stmt->get_result()->fetch_assoc();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+
+            if (!$row || empty($row['uploaded_file'])) {
+                $this->deleteFromDatabase($uid, $vehicle_id ?? null, $upload_id ?? null);
+
+                return [
+                    'status' => false,
+                    'message' => 'No file found.'
+                ];
+            }
+
             $filename = $row['uploaded_file'];
-
             $uploadFolder = __DIR__ . "/../uploads/$uid/";
-
             $destination = $uploadFolder . $filename;
 
-            unlink($destination);
-
-            $query = "
-            DELETE FROM " . self::TABLE . "
-            WHERE uid = ?
-            ";
-
-            $params = [$uid];
-            $types = 'i';
-
-            if (isset($vehicle_id)) {
-                $query .= "AND vehicle_id = ?";
-                $types .= "i";
-                array_push($params, $vehicle_id);
+            $fileDeleted = false;
+            if (file_exists($destination) && is_file($destination)) {
+                $fileDeleted = unlink($destination);
             }
 
-            $stmt = $this->connect->prepare($query);
-            $stmt->bind_param($types, ...$params);
-            $stmt->execute();
+            $deletedFromDb = $this->deleteFromDatabase($uid, $vehicle_id ?? null, $upload_id ?? null);
 
-            return [
-                'status' => true,
-                'message' => 'Successfully deleted !'
-            ];
+            if ($fileDeleted || $deletedFromDb) {
+                return [
+                    'status' => true,
+                    'message' => 'File deleted successfully !'
+                ];
+            } else {
+                return [
+                    'status' => false,
+                    'message' => 'File can\'t be deleted'
+                ];
+            }
         } catch (Exception $err) {
             return [
                 'status' => false,
                 'message' => $err->getMessage()
             ];
         }
+    }
+
+    private function deleteFromDatabase($uid, $vehicle_id = null, $upload_id = null)
+    {
+        $query = "DELETE FROM " . self::TABLE . " WHERE uid = ?";
+        $params = [$uid];
+        $types = 'i';
+
+        if (isset($vehicle_id)) {
+            $query .= " AND vehicle_id = ?";
+            $types .= "i";
+            $params[] = $vehicle_id;
+        } elseif (isset($upload_id)) {
+            $query .= " AND upload_id = ?";
+            $types .= 'i';
+            $params[] = $upload_id;
+        }
+
+        $stmt = $this->connect->prepare($query);
+        $stmt->bind_param($types, ...$params);
+        $stmt->execute();
+
+        return $stmt->affected_rows > 0;
     }
 }

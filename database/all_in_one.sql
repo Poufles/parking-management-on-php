@@ -1,0 +1,214 @@
+CREATE DATABASE DB_PARCHEGGIAMO;
+
+USE DB_PARCHEGGIAMO;
+
+CREATE TABLE tbl_accounts (
+    UID INT AUTO_INCREMENT PRIMARY KEY,
+    NAME VARCHAR(255),
+    USERNAME VARCHAR(255),
+    EMAIL_ADDRESS VARCHAR(255),
+    GENDER VARCHAR(10),
+    PHONE VARCHAR(30),
+    PASSWORD VARCHAR(50),
+    ACCOUNT_TYPE VARCHAR(10),
+    LICENCE VARCHAR(255) NULL,
+    STATUS TINYINT
+);
+
+CREATE TABLE tbl_vehicles (
+    VEHICLE_ID INT AUTO_INCREMENT PRIMARY KEY,
+    UID INT,
+    PLATE_NUMBER VARCHAR(10),
+    VEHICLE_TYPE_ID VARCHAR(20)
+);
+
+CREATE TABLE tbl_file_types (
+    FILE_TYPE_ID INT AUTO_INCREMENT PRIMARY KEY,
+    FILE_TYPE VARCHAR(50)
+);
+
+CREATE TABLE tbl_uploads (
+    UPLOAD_ID INT AUTO_INCREMENT PRIMARY KEY,
+    UID INT,
+    VEHICLE_ID INT NULL,
+    FILE_TYPE_ID INT,
+    UPLOADED_FILE VARCHAR(255)
+);
+
+CREATE TABLE tbl_hours (
+    HOURS_ID INT AUTO_INCREMENT PRIMARY KEY,
+    HOURS INT
+);
+
+CREATE TABLE tbl_vehicle_types (
+    VEHICLE_TYPE_ID INT AUTO_INCREMENT PRIMARY KEY,
+    VEHICLE_TYPE VARCHAR(20)
+);
+
+CREATE TABLE tbl_rates (
+    RATE_ID INT AUTO_INCREMENT PRIMARY KEY,
+    HOURS_ID INT,
+    VEHICLE_TYPE_ID VARCHAR(20),
+    FEE INT
+);
+
+CREATE TABLE tbl_slots (
+    SLOT_ID INT AUTO_INCREMENT PRIMARY KEY,
+    LEVEL VARCHAR(2),
+    SECTION VARCHAR(1),
+    SLOT_NUMBER INT,
+    VEHICLE_ID INT NULL,
+    TIME_IN VARCHAR(20) NULL,
+    TIME_OUT VARCHAR(20) NULL
+);
+
+CREATE TABLE tbl_parking_history (
+    HISTORY_ID INT AUTO_INCREMENT PRIMARY KEY,
+    NAME VARCHAR(255),
+    PARKING_SLOT VARCHAR(10),
+    PLATE_NUMBER VARCHAR(10),
+    VEHCILE_TYPE VARCHAR(50),
+    TIME_IN VARCHAR(20),
+    TIME_OUT VARCHAR(20),
+    AMOUNT_TO_PAY INT,
+    PAYMENT INT
+);
+
+USE DB_PARCHEGGIAMO;
+
+INSERT INTO tbl_vehicle_types (VEHICLE_TYPE) VALUES
+('Motorcycle'),
+('Car'),
+('SUV'),
+('Pickup');
+
+USE DB_PARCHEGGIAMO;
+
+INSERT INTO tbl_slots (level, section, slot_number, vehicle_id, time_in, time_out)
+VALUES 
+-- Level 1
+(1, 'A', 1, NULL, NULL, NULL),
+(1, 'A', 2, NULL, NULL, NULL),
+(1, 'A', 3, NULL, NULL, NULL),
+(1, 'A', 4, NULL, NULL, NULL),
+(1, 'A', 5, NULL, NULL, NULL),
+(1, 'A', 6, NULL, NULL, NULL),
+(1, 'A', 7, NULL, NULL, NULL),
+(1, 'A', 8, NULL, NULL, NULL),
+(1, 'A', 9, NULL, NULL, NULL),
+(1, 'A', 10, NULL, NULL, NULL),
+
+(1, 'B', 1, NULL, NULL, NULL),
+(1, 'B', 2, NULL, NULL, NULL),
+(1, 'B', 3, NULL, NULL, NULL),
+(1, 'B', 4, NULL, NULL, NULL),
+(1, 'B', 5, NULL, NULL, NULL),
+(1, 'B', 6, NULL, NULL, NULL),
+(1, 'B', 7, NULL, NULL, NULL),
+(1, 'B', 8, NULL, NULL, NULL),
+(1, 'B', 9, NULL, NULL, NULL),
+(1, 'B', 10, NULL, NULL, NULL),
+
+(1, 'C', 1, NULL, NULL, NULL),
+(1, 'C', 2, NULL, NULL, NULL),
+(1, 'C', 3, NULL, NULL, NULL),
+(1, 'C', 4, NULL, NULL, NULL),
+(1, 'C', 5, NULL, NULL, NULL),
+(1, 'C', 6, NULL, NULL, NULL),
+(1, 'C', 7, NULL, NULL, NULL),
+(1, 'C', 8, NULL, NULL, NULL),
+(1, 'C', 9, NULL, NULL, NULL),
+(1, 'C', 10, NULL, NULL, NULL),
+
+-- Level 2
+(2, 'A', 1, NULL, NULL, NULL),
+(2, 'A', 2, NULL, NULL, NULL),
+(2, 'A', 3, NULL, NULL, NULL),
+(2, 'A', 4, NULL, NULL, NULL),
+(2, 'A', 5, NULL, NULL, NULL),
+(2, 'A', 6, NULL, NULL, NULL),
+(2, 'A', 7, NULL, NULL, NULL),
+(2, 'A', 8, NULL, NULL, NULL),
+(2, 'A', 9, NULL, NULL, NULL),
+(2, 'A', 10, NULL, NULL, NULL),
+
+(2, 'B', 1, NULL, NULL, NULL),
+(2, 'B', 2, NULL, NULL, NULL),
+(2, 'B', 3, NULL, NULL, NULL),
+(2, 'B', 4, NULL, NULL, NULL),
+(2, 'B', 5, NULL, NULL, NULL),
+(2, 'B', 6, NULL, NULL, NULL),
+(2, 'B', 7, NULL, NULL, NULL),
+(2, 'B', 8, NULL, NULL, NULL),
+(2, 'B', 9, NULL, NULL, NULL),
+(2, 'B', 10, NULL, NULL, NULL),
+
+(2, 'C', 1, NULL, NULL, NULL),
+(2, 'C', 2, NULL, NULL, NULL),
+(2, 'C', 3, NULL, NULL, NULL),
+(2, 'C', 4, NULL, NULL, NULL),
+(2, 'C', 5, NULL, NULL, NULL),
+(2, 'C', 6, NULL, NULL, NULL),
+(2, 'C', 7, NULL, NULL, NULL),
+(2, 'C', 8, NULL, NULL, NULL),
+(2, 'C', 9, NULL, NULL, NULL),
+(2, 'C', 10, NULL, NULL, NULL),
+
+-- Level 3
+(3, 'A', 1, NULL, NULL, NULL),
+(3, 'A', 2, NULL, NULL, NULL),
+(3, 'A', 3, NULL, NULL, NULL),
+(3, 'A', 4, NULL, NULL, NULL),
+(3, 'A', 5, NULL, NULL, NULL),
+(3, 'A', 6, NULL, NULL, NULL),
+(3, 'A', 7, NULL, NULL, NULL),
+(3, 'A', 8, NULL, NULL, NULL),
+(3, 'A', 9, NULL, NULL, NULL),
+(3, 'A', 10, NULL, NULL, NULL),
+
+(3, 'B', 1, NULL, NULL, NULL),
+(3, 'B', 2, NULL, NULL, NULL),
+(3, 'B', 3, NULL, NULL, NULL),
+(3, 'B', 4, NULL, NULL, NULL),
+(3, 'B', 5, NULL, NULL, NULL),
+(3, 'B', 6, NULL, NULL, NULL),
+(3, 'B', 7, NULL, NULL, NULL),
+(3, 'B', 8, NULL, NULL, NULL),
+(3, 'B', 9, NULL, NULL, NULL),
+(3, 'B', 10, NULL, NULL, NULL),
+
+(3, 'C', 1, NULL, NULL, NULL),
+(3, 'C', 2, NULL, NULL, NULL),
+(3, 'C', 3, NULL, NULL, NULL),
+(3, 'C', 4, NULL, NULL, NULL),
+(3, 'C', 5, NULL, NULL, NULL),
+(3, 'C', 6, NULL, NULL, NULL),
+(3, 'C', 7, NULL, NULL, NULL),
+(3, 'C', 8, NULL, NULL, NULL),
+(3, 'C', 9, NULL, NULL, NULL),
+(3, 'C', 10, NULL, NULL, NULL);
+
+USE DB_PARCHEGGIAMO;
+
+INSERT INTO tbl_rates (HOURS_ID, VEHICLE_TYPE_ID, FEE) VALUES
+(1, 1, 300),
+(1, 2, 500),
+(1, 3, 750),
+(1, 4, 800),
+
+(2, 1, 500),
+(2, 2, 800),
+(2, 3, 1100),
+(2, 4, 1300);
+
+USE DB_PARCHEGGIAMO;
+
+INSERT INTO tbl_hours (HOURS) VALUES
+(12),
+(24);
+
+USE DB_PARCHEGGIAMO;
+
+INSERT INTO tbl_file_types (FILE_TYPE) VALUES
+('Licence'),
+('Vehicle Document');

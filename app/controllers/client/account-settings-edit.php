@@ -12,6 +12,7 @@ function AccountSettingsEditController()
         $gender = $_POST['gender'] ?? null;
         $phone = $_POST['phone'] ?? null;
         $licence = $_FILES['licence'] ?? null;
+        $upload_id = $_POST['upload-id'] ?? null;
         $password = $_POST['password'] ?? null;
 
         $response = Validation::getInstance()->areFieldsEmpty([
@@ -41,9 +42,10 @@ function AccountSettingsEditController()
         AccountModel::getInstance()->editAccount($_SESSION['uid'], $name, $username, $email, $gender, $phone);
 
         if (isset($licence)) {
-            AccountModel::getInstance()->uploadLicence($_SESSION['uid'], $licence['name']);
             FileModel::getInstance()->uploadFile($_SESSION['uid'], 1, $licence);
-        }
+
+            if (isset($upload_id)) FileModel::getInstance()->deleteFile($_SESSION['uid'], $upload_id);
+        } 
 
         if (!empty($password)) {
 

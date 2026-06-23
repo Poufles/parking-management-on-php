@@ -4,6 +4,8 @@
 
 $results = AccountModel::getInstance()->getAccountInfo($_SESSION['uid']) ?? null;
 $accountDetails = $results['account'];
+$file = FileModel::getInstance()->getFile($_SESSION['uid'], $accountDetails['licence'], 'upload_id');
+$filename = $file['response']['filename'] ?? null;
 
 $validations = $response['results'] ?? null;
 $nameValidation = $validations['name'] ?? null;
@@ -84,8 +86,9 @@ $passwordValidation = $validations['password'] ?? null;
                         No File Uploaded
                     </small>
                 <?php else : ?>
+                    <input type="hidden" name="upload-id" value="<?= $accountDetails['licence'] ?? null ?>">
                     <small class="text-muted current-file mt-1 d-block">
-                        Actual File : <?= $accountDetails['licence'] ?>
+                        Actual File : <?= $filename ?>
                     </small>
                 <?php endif; ?>
             </div>
