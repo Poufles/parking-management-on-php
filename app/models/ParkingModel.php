@@ -319,19 +319,20 @@ class ParkingModel
             $result = $stmt->get_result();
             $slot = $result->fetch_assoc();
             $stmt->close();
-
+            
             if (!$slot) {
                 return [
                     'status'  => false,
                     'message' => 'Slot not found.',
                     'results' => []
-                ];
-            }
-
-            $this->connect->begin_transaction();
+                    ];
+                    }
+                    
+                    $this->connect->begin_transaction();
+                    var_dump($slot);
 
             $stmt = $this->connect->prepare("
-                INSERT INTO ". ParkingModel::TABLE ." 
+                INSERT INTO ". HistoryModel::TABLE ." 
                 (NAME, PARKING_SLOT, PLATE_NUMBER, VEHICLE_TYPE, TIME_IN, TIME_OUT, AMOUNT_TO_PAY, PAYMENT) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ");

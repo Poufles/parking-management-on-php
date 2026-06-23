@@ -191,7 +191,7 @@ class FileModel
             $filename = $row['uploaded_file'];
             $uploadFolder = __DIR__ . "/../uploads/$uid/";
             $destination = $uploadFolder . $filename;
-
+            
             $fileDeleted = false;
             if (file_exists($destination) && is_file($destination)) {
                 $fileDeleted = unlink($destination);

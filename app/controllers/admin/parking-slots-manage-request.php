@@ -25,10 +25,10 @@ function ParkingSlotsManageRequestController()
 
             return $response;
         }
-
+        
         $response = ParkingModel::getInstance()->processPayment($slot_id, $payment, $amount_to_pay, $uid);
 
-        if($response['status']) {
+        if ($response['status']) {
             header('location: ' . APP_URL . "admin/parking-slots");
             exit;
         }

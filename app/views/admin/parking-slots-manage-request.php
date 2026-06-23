@@ -50,7 +50,14 @@ $paymentValidation = $response['results']['payment'] ?? null;
         <div class="row">
             <label for="" class="col-sm-5 col-form-label">Duration</label>
             <div class="col-sm-7">
-                <input type="text" readonly class="form-control-plaintext" id="" value="<?= date('g', $details['time_out'] - $details['time_in']) . " hour(s)" ?>">
+                <input type="text" readonly class="form-control-plaintext" id="" value="<?php
+                                                                                        $dateTimeIn = new DateTime('@' . $details['time_in']);
+                                                                                        $dateTimeOut = new DateTime('@' . $details['time_out']);
+
+                                                                                        $interval = $dateTimeIn->diff($dateTimeOut);
+
+                                                                                        echo $interval->format('%aD : %hH : %iM');
+                                                                                        ?>">
             </div>
         </div>
         <hr>
