@@ -55,7 +55,7 @@ class Validation
     public function isPhoneValid($phone)
     {
         $isValid =  preg_match("/^\+?[0-9]{11,15}$/", $phone);
-        
+
         return [
             'status' => $isValid,
             'message' => $isValid

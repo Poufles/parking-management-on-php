@@ -403,7 +403,7 @@ class AccountModel
         };
     }
 
-    public function uploadLicence($uid, $licence)
+    public function uploadLicence($uid, $licence_id)
     {
         try {
             $query = "

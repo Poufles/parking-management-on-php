@@ -1,7 +1,17 @@
 <?php
 
+/** @var array $response */
+
 $results = AccountModel::getInstance()->getAccountInfo($_SESSION['uid']) ?? null;
 $accountDetails = $results['account'];
+
+$validations = $response['results'] ?? null;
+$nameValidation = $validations['name'] ?? null;
+$usernameValidation = $validations['username'] ?? null;
+$emailValidation = $validations['email'] ?? null;
+$genderValidation = $validations['gender'] ?? null;
+$phoneValidation = $validations['phone'] ?? null;
+$passwordValidation = $validations['password'] ?? null;
 
 ?>
 
@@ -11,38 +21,38 @@ $accountDetails = $results['account'];
 
     <div class="card" style="max-width: 420px; width: 100%;">
 
-        <form action="<?= APP_URL . 'client/account-settings-edit' ?>" method="post" enctype="multipart/form-data" class="card-body p-4">
+        <form action="<?= APP_URL . 'client/account-settings/edit' ?>" method="post" enctype="multipart/form-data" class="card-body p-4">
 
             <div class="input-group has-validation mb-3">
-                <div class="form-floating <?php if (isset($plateNumberValidation) && !$plateNumberValidation['status']) echo 'is-invalid'; ?>">
+                <div class="form-floating <?php if (isset($nameValidation) && !$nameValidation['status']) echo 'is-invalid'; ?>">
                     <input type="text" class="form-control" id="input-name"
                         placeholder="Jeffrex" name="name" value="<?= $accountDetails['name'] ?? null ?>">
                     <label for="input-name">Name</label>
                 </div>
                 <div class="invalid-feedback">
-                    <?= $plateNumberValidation['message'] ?? null ?>
+                    <?= $nameValidation['message'] ?? null ?>
                 </div>
             </div>
 
             <div class="input-group has-validation mb-3">
-                <div class="form-floating <?php if (isset($plateNumberValidation) && !$plateNumberValidation['status']) echo 'is-invalid'; ?>">
+                <div class="form-floating <?php if (isset($usernameValidation) && !$usernameValidation['status']) echo 'is-invalid'; ?>">
                     <input type="text" class="form-control" id="input-username"
                         placeholder="Jeffrex" name="username" value="<?= $accountDetails['username'] ?? null ?>">
                     <label for="input-username">Username</label>
                 </div>
                 <div class="invalid-feedback">
-                    <?= $plateNumberValidation['message'] ?? null ?>
+                    <?= $usernameValidation['message'] ?? null ?>
                 </div>
             </div>
 
             <div class="input-group has-validation mb-3">
-                <div class="form-floating <?php if (isset($plateNumberValidation) && !$plateNumberValidation['status']) echo 'is-invalid'; ?>">
+                <div class="form-floating <?php if (isset($emailValidation) && !$emailValidation['status']) echo 'is-invalid'; ?>">
                     <input type="text" class="form-control" id="input-email"
                         placeholder="Jeffrex" name="email" value="<?= $accountDetails['email_address'] ?? null ?>">
                     <label for="input-email">Email Address</label>
                 </div>
                 <div class="invalid-feedback">
-                    <?= $plateNumberValidation['message'] ?? null ?>
+                    <?= $emailValidation['message'] ?? null ?>
                 </div>
             </div>
 
@@ -56,19 +66,19 @@ $accountDetails = $results['account'];
             </div>
 
             <div class="input-group has-validation mb-3">
-                <div class="form-floating <?php if (isset($plateNumberValidation) && !$plateNumberValidation['status']) echo 'is-invalid'; ?>">
+                <div class="form-floating <?php if (isset($phoneValidation) && !$phoneValidation['status']) echo 'is-invalid'; ?>">
                     <input type="text" class="form-control" id="input-phone"
                         placeholder="Jeffrex" name="phone" value="<?= $accountDetails['phone'] ?? null ?>">
                     <label for="input-phone">Phone No.</label>
                 </div>
                 <div class="invalid-feedback">
-                    <?= $plateNumberValidation['message'] ?? null ?>
+                    <?= $phoneValidation['message'] ?? null ?>
                 </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Licence</label>
-                <input type="file" id="licence" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+                <input type="file" name="licence" id="licence" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
                 <?php if ($accountDetails['licence'] == null) : ?>
                     <small class="text-muted current-file mt-1 d-block">
                         No File Uploaded
@@ -80,14 +90,20 @@ $accountDetails = $results['account'];
                 <?php endif; ?>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="text" id="password" placeholder="New Password" class="form-control" value="">
+            <div class="input-group has-validation mb-3">
+                <div class="form-floating <?php if (isset($passwordValidation) && !$passwordValidation['status']) echo 'is-invalid'; ?>">
+                    <input type="text" class="form-control" id="input-password"
+                        placeholder="Jeffrex" name="password" value="<?= $accountDetails['password'] ?? null ?>">
+                    <label for="input-password">Password</label>
+                </div>
+                <div class="invalid-feedback">
+                    <?= $passwordValidation['message'] ?? null ?>
+                </div>
             </div>
 
-            <button type="submit" class="btn w-100 mb-3 py-3 fw-bold" id="save" style="background-color: var(--secondary-color); color: var(--primary-color)">
+            <button type="submit" name="save" class="btn w-100 mb-3 py-3 fw-bold" id="save" style="background-color: var(--secondary-color); color: var(--primary-color)">
                 Save Changes
             </button>
-                </form>
+        </form>
     </div>
 </section>

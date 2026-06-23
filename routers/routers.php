@@ -154,14 +154,25 @@ return [
         'controller' => __DIR__ . "/../app/controllers/client/account-settings-edit.php",
         'model' => [
             __DIR__ . "/../app/models/AccountModel.php",
-            __DIR__ . "/../app/models/VehicleModel.php",
-            __DIR__ . "/../app/models/ParkingModel.php"
+            __DIR__ . "/../app/models/FileModel.php",
+            __DIR__ . "/../app/utils/Validation.php"
         ],
         'action' => 'AccountSettingsEditController',
         'view' => __DIR__ . "/../app/views/client/account-settings-edit.php",
         'css' => APP_URL . "styles/client/account-settings.css",
         'page' => 'client-settings-edit',
         'title' => TITLE . "Edit Account"
+    ],
+    'client/account-settings/licence' => [
+        'controller' => __DIR__ . "/../app/controllers/client/account-settings-licence.php",
+        'model' => [
+            __DIR__ . "/../app/models/FileModel.php",
+        ],
+        'action' => 'AccountSettingsLicenceController',
+        'view' => __DIR__ . "/../app/views/client/account-settings-licence.php",
+        'css' => APP_URL . "styles/client/account-settings.css",
+        'page' => 'client-settings-licence',
+        'title' => TITLE . "View Licence"
     ],
     'admin/parking-slots' => [
         'controller' => __DIR__ . "/../app/controllers/admin/parking-slots.php",
