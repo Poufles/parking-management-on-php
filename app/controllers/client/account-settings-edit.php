@@ -41,7 +41,7 @@ function AccountSettingsEditController()
 
         AccountModel::getInstance()->editAccount($_SESSION['uid'], $name, $username, $email, $gender, $phone);
 
-        if (isset($licence)) {
+        if (isset($licence) && !empty($licence['name'])) {
             if (isset($upload_id)) FileModel::getInstance()->deleteFile($_SESSION['uid'], $upload_id);
             FileModel::getInstance()->uploadFile($_SESSION['uid'], 1, $licence);
         }

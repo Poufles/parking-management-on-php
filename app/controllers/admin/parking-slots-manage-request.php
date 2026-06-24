@@ -6,7 +6,7 @@ function ParkingSlotsManageRequestController()
 
     if (isset($_POST['register'])) {
         $slot_id = $_POST['slot_id'];
-        $uid = $_POST['uid'];
+        $uid = $_SESSION['uid'];
         $amount_to_pay = $_POST['amount_to_pay'];
         $payment = $_POST['payment'] ?? null;
 
@@ -26,7 +26,7 @@ function ParkingSlotsManageRequestController()
             return $response;
         }
         
-        $response = ParkingModel::getInstance()->processPayment($slot_id, $payment, $amount_to_pay, $uid);
+        $response = ParkingModel::getInstance()->processPayment($slot_id, $payment, $amount_to_pay);
 
         if ($response['status']) {
             header('location: ' . APP_URL . "admin/parking-slots");

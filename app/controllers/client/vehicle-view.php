@@ -2,9 +2,10 @@
 
 function VehicleViewController()
 {
+
     $uid = $_SESSION['uid'] ?? null;
     $vehicle_id = $_GET['vehicle_id'] ?? null;
-
+    
     $response = FileModel::getInstance()->getFile($uid, $vehicle_id, 'vehicle_id');
 
     if (!$response || empty($response['response']['filename'])) {
@@ -15,18 +16,18 @@ function VehicleViewController()
 
     $filename = $response['response']['filename'];
 
-    $baseDir = __DIR__ . '/../../uploads/' . $uid . '/';
+    $baseDir = __DIR__ . '/../../uploads/' . $response['response']['uid'] . '/';
     $filepath = $baseDir . $filename;
 
     if (!file_exists($filepath)) {
         http_response_code(404);
-        echo "Fichier introuvable.";
+        echo "File does not exist !";
         exit;
     }
 
     if (strpos(realpath($filepath), realpath($baseDir)) !== 0) {
         http_response_code(403);
-        echo "Accès interdit.";
+        echo "Access Prohibited !";
         exit;
     }
 
