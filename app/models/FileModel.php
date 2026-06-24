@@ -54,10 +54,10 @@ class FileModel
     {
         try {
             $sql = "
-            SELECT uploaded_file 
+            SELECT uid, uploaded_file 
             FROM " . self::TABLE . " 
             WHERE uid = ? 
-            AND " . $typeId . " = ?
+            OR " . $typeId . " = ?
             ";
 
             $stmt = $this->connect->prepare($sql);
@@ -67,7 +67,6 @@ class FileModel
             $result = $stmt->get_result();
 
             if ($result->num_rows === 0) {
-                // echo "Aucun fichier trouvé.";
                 return null;
             }
 
@@ -77,6 +76,7 @@ class FileModel
                 'status' => $result,
                 'message' => 'File retrieved !',
                 'response' => [
+                    'uid' => $row['uid'],
                     'filename' => $row['uploaded_file']
                 ]
             ];

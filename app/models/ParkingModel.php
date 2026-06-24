@@ -296,11 +296,12 @@ class ParkingModel
         }
     }
 
-    public function processPayment($slot_id, $payment, $amount_to_pay, $uid)
+    public function processPayment($slot_id, $payment, $amount_to_pay)
     {
         try {
             $stmt = $this->connect->prepare("
-            SELECT 
+            SELECT
+            a.UID,
             a.NAME,
             CONCAT(s.LEVEL, ' - ', s.SECTION, s.SLOT_NUMBER) as PARKING_SLOT, 
             v.PLATE_NUMBER,
@@ -332,17 +333,19 @@ class ParkingModel
 
             $stmt = $this->connect->prepare("
                 INSERT INTO " . HistoryModel::TABLE . " 
-                (NAME, PARKING_SLOT, PLATE_NUMBER, VEHICLE_TYPE, TIME_IN, TIME_OUT, AMOUNT_TO_PAY, PAYMENT) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                (UID, NAME, PARKING_SLOT, PLATE_NUMBER, VEHICLE_TYPE, TIME_IN, TIME_OUT, AMOUNT_TO_PAY, PAYMENT) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
 
+            $uid = $slot['UID'];
             $name = $slot['NAME'];
             $parking_slot = $slot['PARKING_SLOT'];
             $plate_number = $slot['PLATE_NUMBER'];
             $vehicle_type = $slot['VEHICLE_TYPE'];
 
             $stmt->bind_param(
-                "ssssiiii",
+                "issssiiii",
+                $uid,
                 $name,
                 $parking_slot,
                 $plate_number,
@@ -398,93 +401,6 @@ class ParkingModel
             ];
         }
     }
-    // public function processPayment($slot_id, $payment, $amount_to_pay, $uid)
-    // {
-    //     try {
-    //         $stmt = $this->connect->prepare("
-    //             SELECT SLOT_ID, VEHICLE_ID, TIME_IN, TIME_OUT 
-    //             FROM " . self::TABLE . " 
-    //             WHERE SLOT_ID = ?
-    //         ");
-
-    //         $stmt->bind_param("i", $slot_id);
-    //         $stmt->execute();
-    //         $result = $stmt->get_result();
-    //         $slot = $result->fetch_assoc();
-    //         $stmt->close();
-
-    //         if (!$slot) {
-    //             return [
-    //                 'status'  => false,
-    //                 'message' => 'Slot not found.',
-    //                 'results' => []
-    //             ];
-    //         }
-
-    //         $this->connect->begin_transaction();
-
-    //         $stmt = $this->connect->prepare("
-    //             INSERT INTO tbl_payment_history 
-    //             (UID, SLOT_ID, VEHICLE_ID, TIME_IN, TIME_OUT, AMOUNT_TO_PAY, PAYMENT) 
-    //             VALUES (?, ?, ?, ?, ?, ?, ?)
-    //         ");
-
-    //         $stmt->bind_param(
-    //             "iiisssd",
-    //             $uid,
-    //             $slot_id,
-    //             $slot['VEHICLE_ID'],
-    //             $slot['TIME_IN'],
-    //             $slot['TIME_OUT'],
-    //             $amount_to_pay,
-    //             $payment
-    //         );
-
-    //         $stmt->execute();
-    //         $history_id = $this->connect->insert_id;
-    //         $stmt->close();
-
-    //         $stmt = $this->connect->prepare("
-    //             UPDATE tbl_slots 
-    //             SET VEHICLE_ID = NULL,
-    //                 TIME_IN = NULL,
-    //                 TIME_OUT = NULL 
-    //             WHERE SLOT_ID = ?
-    //         ");
-
-    //         $stmt->bind_param("i", $slot_id);
-    //         $stmt->execute();
-    //         $stmt->close();
-
-    //         $this->connect->commit();
-
-    //         $data = [
-    //             'history_id'    => $history_id,
-    //             'slot_id'       => $slot_id,
-    //             'vehicle_id'    => $slot['VEHICLE_ID'],
-    //             'amount_to_pay' => $amount_to_pay,
-    //             'payment'       => $payment,
-    //             'change'        => round($payment - $amount_to_pay, 2),
-    //             'timestamp'     => date('Y-m-d H:i:s')
-    //         ];
-
-    //         return [
-    //             'status'  => true,
-    //             'message' => '',
-    //             'results' => [
-    //                 'details' => $data
-    //             ]
-    //         ];
-    //     } catch (Exception $err) {
-    //         $this->connect->rollback();
-
-    //         return [
-    //             'status'  => false,
-    //             'message' => $err->getMessage(),
-    //             'results' => []
-    //         ];
-    //     }
-    // }
 
     private function calculateParkingFee($vehicleTypeId, $timeIn, $timeOut = null)
     {
