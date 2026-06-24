@@ -481,10 +481,10 @@ class AccountModel
             $results = $this->connect->query($query);
             $rows = $results->fetch_assoc();
 
-            $uid = $rows['uid'];
-            $username = $rows['username'];
-            $account_type = $rows['account_type'];
-            $email = $rows['email_address'];
+            $uid = $rows['uid'] ?? null;
+            $username = $rows['username'] ?? null;
+            $account_type = $rows['account_type'] ?? null;
+            $email = $rows['email_address'] ?? null;
 
             $isEmailExist = !empty($uid);
 

@@ -308,31 +308,30 @@ class ParkingModel
             s.TIME_IN, 
             s.TIME_OUT 
             FROM " . self::TABLE . " s
-            INNER JOIN ". VehicleModel::TABLE ." v ON s.VEHICLE_ID = v.VEHICLE_ID
-            INNER JOIN ". AccountModel::TABLE ." a ON v.UID = a.UID
-            INNER JOIN ". VehicleModel::TABLE_VEHICLE_TYPES ." vt ON v.VEHICLE_TYPE_ID = vt.VEHICLE_TYPE_ID
+            INNER JOIN " . VehicleModel::TABLE . " v ON s.VEHICLE_ID = v.VEHICLE_ID
+            INNER JOIN " . AccountModel::TABLE . " a ON v.UID = a.UID
+            INNER JOIN " . VehicleModel::TABLE_VEHICLE_TYPES . " vt ON v.VEHICLE_TYPE_ID = vt.VEHICLE_TYPE_ID
             WHERE SLOT_ID = ?
             ");
-            
+
             $stmt->bind_param("i", $slot_id);
             $stmt->execute();
             $result = $stmt->get_result();
             $slot = $result->fetch_assoc();
             $stmt->close();
-            
+
             if (!$slot) {
                 return [
                     'status'  => false,
                     'message' => 'Slot not found.',
                     'results' => []
-                    ];
-                    }
-                    
-                    $this->connect->begin_transaction();
-                    var_dump($slot);
+                ];
+            }
+
+            $this->connect->begin_transaction();
 
             $stmt = $this->connect->prepare("
-                INSERT INTO ". HistoryModel::TABLE ." 
+                INSERT INTO " . HistoryModel::TABLE . " 
                 (NAME, PARKING_SLOT, PLATE_NUMBER, VEHICLE_TYPE, TIME_IN, TIME_OUT, AMOUNT_TO_PAY, PAYMENT) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ");
@@ -340,7 +339,7 @@ class ParkingModel
             $name = $slot['NAME'];
             $parking_slot = $slot['PARKING_SLOT'];
             $plate_number = $slot['PLATE_NUMBER'];
-            $vehicle_type= $slot['VEHICLE_TYPE'];
+            $vehicle_type = $slot['VEHICLE_TYPE'];
 
             $stmt->bind_param(
                 "ssssiiii",
@@ -359,7 +358,7 @@ class ParkingModel
             $stmt->close();
 
             $stmt = $this->connect->prepare("
-                UPDATE ". self::TABLE ." 
+                UPDATE " . self::TABLE . " 
                 SET VEHICLE_ID = NULL,
                     TIME_IN = NULL,
                     TIME_OUT = NULL 
