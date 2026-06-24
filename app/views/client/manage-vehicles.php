@@ -91,7 +91,7 @@ $vehicleDocumentValidation = $results['vehicle_document'] ?? null;
                 </div>
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Vehicle Document</label>
-                    <input class="form-control" name="vehicle-document" type="file" id="formFile">
+                    <input class="form-control" name="vehicle-document" type="file" id="formFile"  accept=".pdf,.jpg,.jpeg,.png">
                     <?php if (isset($vehicleDocumentValidation) && !$vehicleDocumentValidation['status']) : ?>
                     <div style="color: red; font-size: 14px; margin-top: 5px">
                         <?= $vehicleDocumentValidation['message'] ?? null ?>

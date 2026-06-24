@@ -194,6 +194,7 @@ return [
             __DIR__ . "/../app/models/AccountModel.php",
             __DIR__ . "/../app/models/VehicleModel.php",
             __DIR__ . "/../app/models/ParkingModel.php",
+            __DIR__ . "/../app/models/HistoryModel.php",
             __DIR__ . "/../app/models/RateModel.php",
             __DIR__ . "/../app/utils/Validation.php"
         ],

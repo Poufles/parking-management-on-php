@@ -16,7 +16,7 @@ function ParkingSlotsController() {
     $uid = $_SESSION['uid'];
     $level = $_GET['level'];
     $section = $_GET['section'];
-    
+
     $response = ParkingModel::getInstance()->ParkingTableForClient($uid, $level, $section);
 
     return $response;

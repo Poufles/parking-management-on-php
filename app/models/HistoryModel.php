@@ -4,7 +4,7 @@ class HistoryModel
 {
     private static ?HistoryModel $instance = null;
     private mysqli $connect;
-    private const TABLE = 'tbl_parking_history';
+    public const TABLE = 'tbl_parking_history';
 
     private function __construct()
     {

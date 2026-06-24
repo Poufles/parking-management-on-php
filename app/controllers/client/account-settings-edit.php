@@ -12,6 +12,7 @@ function AccountSettingsEditController()
         $gender = $_POST['gender'] ?? null;
         $phone = $_POST['phone'] ?? null;
         $licence = $_FILES['licence'] ?? null;
+        $upload_id = $_POST['upload-id'] ?? null;
         $password = $_POST['password'] ?? null;
 
         $response = Validation::getInstance()->areFieldsEmpty([
@@ -41,7 +42,7 @@ function AccountSettingsEditController()
         AccountModel::getInstance()->editAccount($_SESSION['uid'], $name, $username, $email, $gender, $phone);
 
         if (isset($licence)) {
-            AccountModel::getInstance()->uploadLicence($_SESSION['uid'], $licence['name']);
+            if (isset($upload_id)) FileModel::getInstance()->deleteFile($_SESSION['uid'], $upload_id);
             FileModel::getInstance()->uploadFile($_SESSION['uid'], 1, $licence);
         }
 
@@ -51,14 +52,14 @@ function AccountSettingsEditController()
 
             if (!$passwordValidator['status']) {
                 $response['results']['password'] = $passwordValidator;
-                
+
                 return $response;
             }
 
             AccountModel::getInstance()->editAccountPassword($_SESSION['uid'], $password);
         }
 
-        // header('location: ' . APP_URL . 'client/account-settings');
-        // exit;
+        header('location: ' . APP_URL . 'client/account-settings');
+        exit;
     }
 }
